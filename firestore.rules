@@ -1,0 +1,112 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Only users registered in the `admins` collection may write catalogue data.
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Prices are never stored — the catalogue is enquiry based.
+    function hasNoPriceFields() {
+      return !request.resource.data.keys().hasAny([
+        'price', 'salePrice', 'mrp', 'discount', 'sellingPrice', 'costPrice'
+      ]);
+    }
+
+    // ------------------------------------------------------------------
+    // Admin registry (bootstrapped from the Firebase console)
+    // ------------------------------------------------------------------
+    match /admins/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // ------------------------------------------------------------------
+    // Products — public catalogue, admin managed, never any price fields
+    // ------------------------------------------------------------------
+    match /products/{productId} {
+      allow read: if true;
+
+      allow create: if isAdmin()
+        && hasNoPriceFields()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.categoryId is string
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 10
+        && request.resource.data.description.size() <= 4000
+        && request.resource.data.availability in ['in-stock', 'limited', 'out-of-stock']
+        && request.resource.data.featured is bool;
+
+      allow update: if isAdmin()
+        && hasNoPriceFields()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 10;
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------
+    // Categories — public catalogue, admin managed
+    // ------------------------------------------------------------------
+    match /categories/{categoryId} {
+      allow read: if true;
+
+      allow create: if isAdmin()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 100;
+
+      allow update: if isAdmin()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 100;
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------
+    // Enquiries — anyone can submit a new enquiry, only admins can read
+    // and update the status of existing ones.
+    // ------------------------------------------------------------------
+    match /enquiries/{enquiryId} {
+      allow read: if isAdmin();
+
+      allow create: if
+        request.resource.data.keys().hasOnly([
+          'name', 'phone', 'productId', 'productName', 'quantity', 'message', 'status', 'createdAt'
+        ])
+        && request.resource.data.status == 'new'
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 7
+        && request.resource.data.phone.size() <= 25
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 5
+        && request.resource.data.message.size() <= 2000;
+
+      allow update: if isAdmin()
+        && request.resource.data.status in ['new', 'contacted', 'completed']
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+
+      allow delete: if isAdmin();
+    }
+
+    // Everything else stays private.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

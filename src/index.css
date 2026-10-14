@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-navy-950: #080f1c;
+  --color-navy-900: #0c1526;
+  --color-navy-800: #12203a;
+  --color-navy-700: #1a3054;
+  --color-navy-600: #244374;
+  --color-navy-500: #2f5a9c;
+  --color-navy-400: #4a7ac0;
+
+  --color-steel-50: #f7f9fb;
+  --color-steel-100: #eef2f6;
+  --color-steel-200: #dde4ec;
+  --color-steel-300: #c3ceda;
+  --color-steel-400: #97a6b8;
+  --color-steel-500: #6b7c92;
+  --color-steel-600: #515f72;
+  --color-steel-700: #3c4757;
+  --color-steel-800: #262e3a;
+  --color-steel-900: #151a22;
+  --color-steel-950: #0b0e13;
+
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-steel-800);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-navy-800);
+    color: #ffffff;
+  }
+}
+
+@keyframes pt-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@keyframes pt-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.animate-ring {
+  animation: pt-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-steel-100) 25%, var(--color-steel-200) 37%, var(--color-steel-100) 63%);
+  background-size: 800px 100%;
+  animation: pt-shimmer 1.4s ease-in-out infinite;
+}
+
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.09) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
