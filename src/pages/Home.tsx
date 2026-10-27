@@ -1,5 +1,5 @@
 import { ArrowRight, Boxes, HardHat, MessageCircle, PackageSearch, ShieldCheck } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryCard from "../components/CategoryCard";
 import ProductCard from "../components/ProductCard";

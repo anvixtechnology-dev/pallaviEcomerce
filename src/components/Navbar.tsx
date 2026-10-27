@@ -124,16 +124,21 @@ export default function Navbar() {
             {/* Contact link — desktop */}
             <Link
               to="/contact"
-              className="hidden md:inline-flex btn-glass-secondary !py-2 !px-4 text-sm"
+              className={cn(
+                "hidden md:inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition duration-200",
+                isTransparent
+                  ? "border border-white/40 text-white hover:bg-white/15"
+                  : "border border-white/25 text-white hover:bg-white/10",
+              )}
             >
               Contact
             </Link>
 
-            {/* WhatsApp CTA — desktop, liquid glass pill */}
+            {/* WhatsApp CTA — desktop, glowing pill */}
             <button
               type="button"
               onClick={() => openWhatsApp()}
-              className="hidden md:inline-flex btn-glass-whatsapp !py-2 !px-4 text-sm"
+              className="hidden md:inline-flex items-center gap-2 bg-whatsapp hover:shadow-[0px_0px_24px_8px] shadow-[0px_0px_18px_5px] shadow-whatsapp/40 hover:shadow-whatsapp/60 text-white px-4 py-2 rounded-full text-sm font-semibold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
             >
               <WhatsAppIcon className="h-4 w-4" />
               WhatsApp
@@ -200,14 +205,14 @@ export default function Navbar() {
           <div className="mt-4 flex flex-col gap-3">
             <Link
               to="/contact"
-              className="btn-glass-secondary w-full justify-center"
+              className="inline-flex items-center justify-center border border-white/25 hover:bg-white/10 px-4 py-3 rounded-full text-base font-medium text-white transition"
             >
               Contact
             </Link>
             <button
               type="button"
               onClick={() => openWhatsApp()}
-              className="btn-glass-whatsapp w-full justify-center"
+              className="inline-flex items-center justify-center gap-2 bg-whatsapp shadow-[0px_0px_18px_5px] shadow-whatsapp/40 px-4 py-3 rounded-full text-base font-semibold text-white transition hover:opacity-90"
             >
               <WhatsAppIcon className="h-5 w-5" />
               Contact on WhatsApp
