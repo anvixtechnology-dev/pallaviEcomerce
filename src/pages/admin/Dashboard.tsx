@@ -59,7 +59,7 @@ export default function Dashboard() {
           <p className="mt-1 text-sm text-steel-grey">Overview of products, categories and enquiries.</p>
         </div>
         <Link
-          to="/admin/products/new"
+          to="/admin/products/add"
           className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
@@ -94,18 +94,18 @@ export default function Dashboard() {
         <h2 className="mb-4 font-display text-lg font-bold uppercase text-charcoal">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <Link
-            to="/admin/products/new"
+            to="/admin/products/add"
             className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
           >
             <Package className="h-4 w-4" aria-hidden="true" />
             New Product
           </Link>
           <Link
-            to="/admin/categories/new"
+            to="/admin/categories"
             className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
           >
             <Boxes className="h-4 w-4" aria-hidden="true" />
-            New Category
+            Manage Categories
           </Link>
           <Link
             to="/admin/enquiries"

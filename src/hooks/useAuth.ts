@@ -1,10 +1,11 @@
-import { onAuthStateChanged, type User } from "firebase/auth";
+import { onAuthStateChanged, signOut as firebaseSignOut, type User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth } from "../lib/firebase";
 
 interface AuthState {
   user: User | null;
   loading: boolean;
+  signOut: () => Promise<void>;
 }
 
 export function useAuth(): AuthState {
@@ -27,5 +28,7 @@ export function useAuth(): AuthState {
     return () => unsubscribe();
   }, []);
 
-  return { user, loading };
+  const signOut = () => firebaseSignOut(auth);
+
+  return { user, loading, signOut };
 }

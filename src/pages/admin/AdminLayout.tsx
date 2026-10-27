@@ -26,7 +26,7 @@ export default function AdminLayout() {
 
   async function handleSignOut() {
     await signOut();
-    navigate("/");
+    navigate("/admin/login", { replace: true });
   }
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
