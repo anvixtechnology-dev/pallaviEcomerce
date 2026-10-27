@@ -1,5 +1,5 @@
 import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { openWhatsApp } from "../lib/whatsapp";
@@ -16,13 +16,16 @@ const NAV_LINKS = [
 function BrandMark() {
   return (
     <span className="flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-600 shadow-inner">
-        <svg viewBox="0 0 64 64" className="h-5 w-5" aria-hidden="true">
-          <path d="M16 14h32v8H36v20h12v8H16v-8h12V22H16z" fill="#ffffff" />
-        </svg>
-      </span>
-      <span className="font-display text-2xl leading-none font-bold tracking-wide text-white uppercase">
-        Pallavi<span className="text-accent-500">Traders</span>
+      <img
+        src="/images/pallavi-traders-logo.png"
+        alt="Pallavi Iron Traders logo"
+        width={32}
+        height={32}
+        className="h-8 w-8 rounded-md object-contain bg-white/5"
+        loading="eager"
+      />
+      <span className="font-display text-xl leading-none font-bold tracking-wide text-white uppercase">
+        Pallavi<span className="text-brand-orange">Traders</span>
       </span>
     </span>
   );
@@ -30,7 +33,16 @@ function BrandMark() {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  // Detect scroll to toggle transparent ↔ charcoal background
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll(); // run once on mount
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -43,82 +55,125 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
+  // On the home page the navbar starts transparent; on other pages always charcoal
+  const isHome = location.pathname === "/";
+  const isTransparent = isHome && !scrolled;
+
   return (
-    <header className="sticky top-0 z-50 border-b border-navy-700/60 bg-navy-950/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-[70px] lg:px-8">
-        <Link to="/" aria-label="PallaviTraders home" className="shrink-0">
-          <BrandMark />
-        </Link>
+    <>
+      {/* ── Floating pill navbar — fixed so it hovers above the hero video ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">
+        <nav
+          className={cn(
+            "pointer-events-auto flex w-full max-w-5xl items-center justify-between px-5 py-3 rounded-full text-white text-sm transition-all duration-500",
+            isTransparent
+              ? // Transparent mode — floats over the video
+                "border border-white/20 bg-white/5 backdrop-blur-sm shadow-none"
+              : // Scrolled / non-home mode — solid charcoal pill
+                "border border-white/15 bg-charcoal/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.45)]",
+          )}
+        >
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
-          {NAV_LINKS.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.to === "/"}
-              className={({ isActive }) =>
-                cn(
-                  "relative px-3 py-2 text-sm font-medium tracking-wide transition",
-                  isActive ? "text-white" : "text-steel-300 hover:text-white",
-                )
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {link.label}
-                  <span
-                    className={cn(
-                      "absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent-500 transition-opacity",
-                      isActive ? "opacity-100" : "opacity-0",
+          {/* ── Logo (left) ── */}
+          <Link to="/" aria-label="PallaviTraders home" className="shrink-0">
+            <BrandMark />
+          </Link>
+
+          {/* ── Desktop nav links with slide-up hover effect (center) ── */}
+          <nav className="hidden md:flex items-center gap-6 ml-7" aria-label="Main navigation">
+            {NAV_LINKS.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "relative overflow-hidden h-6 group text-sm font-medium transition-colors",
+                    isActive
+                      ? "text-white"
+                      : isTransparent
+                        ? "text-white/75 hover:text-white"
+                        : "text-steel-grey hover:text-white",
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {/* Static orange dot for active link */}
+                    {isActive && (
+                      <span
+                        className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-orange"
+                        aria-hidden="true"
+                      />
                     )}
-                    aria-hidden="true"
-                  />
-                </>
-              )}
-            </NavLink>
-          ))}
+                    {/* Slide-up hover animation */}
+                    <span className="block group-hover:-translate-y-full transition-transform duration-300">
+                      {link.label}
+                    </span>
+                    <span className="block absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300 text-white">
+                      {link.label}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* ── Right side CTAs + hamburger ── */}
+          <div className="flex items-center gap-3">
+            {/* Contact link — desktop */}
+            <Link
+              to="/contact"
+              className="hidden md:inline-flex btn-glass-secondary !py-2 !px-4 text-sm"
+            >
+              Contact
+            </Link>
+
+            {/* WhatsApp CTA — desktop, liquid glass pill */}
+            <button
+              type="button"
+              onClick={() => openWhatsApp()}
+              className="hidden md:inline-flex btn-glass-whatsapp !py-2 !px-4 text-sm"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              WhatsApp
+            </button>
+
+            {/* Hamburger — mobile */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/20 text-steel-grey hover:bg-white/10 transition"
+              aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
+          </div>
         </nav>
+      </header>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => openWhatsApp()}
-            className="hidden items-center gap-2 rounded-md bg-whatsapp px-4 py-2 text-sm font-semibold text-white transition hover:bg-whatsapp-dark focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 focus-visible:outline-none sm:inline-flex"
-          >
-            <WhatsAppIcon className="h-4 w-4" />
-            WhatsApp
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setMobileOpen((open) => !open)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-navy-700 text-steel-200 transition hover:bg-navy-800 lg:hidden"
-            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={mobileOpen}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile drawer */}
+      {/* ── Mobile drawer ── */}
       <div
-        className={cn("fixed inset-0 z-40 lg:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
+        className={cn("fixed inset-0 z-40 md:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
         aria-hidden={!mobileOpen}
       >
+        {/* Backdrop */}
         <button
           type="button"
           tabIndex={mobileOpen ? 0 : -1}
           onClick={() => setMobileOpen(false)}
           className={cn(
-            "absolute inset-0 bg-steel-950/70 transition-opacity duration-300",
+            "absolute inset-0 bg-near-black/70 transition-opacity duration-300",
             mobileOpen ? "opacity-100" : "opacity-0",
           )}
           aria-label="Close navigation menu"
         />
+
+        {/* Drawer panel */}
         <nav
           className={cn(
-            "absolute top-0 right-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 overflow-y-auto border-l border-navy-700 bg-navy-900 p-5 pt-20 shadow-2xl transition-transform duration-300",
+            "absolute top-0 right-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 overflow-y-auto border-l border-white/10 bg-charcoal p-5 pt-20 shadow-2xl transition-transform duration-300",
             mobileOpen ? "translate-x-0" : "translate-x-full",
           )}
           aria-label="Mobile navigation"
@@ -130,8 +185,10 @@ export default function Navbar() {
               end={link.to === "/"}
               className={({ isActive }) =>
                 cn(
-                  "rounded-md px-4 py-3 text-base font-medium transition",
-                  isActive ? "bg-navy-800 text-white" : "text-steel-300 hover:bg-navy-800/60 hover:text-white",
+                  "rounded-full px-4 py-3 text-base font-medium transition",
+                  isActive
+                    ? "bg-brand-orange text-white"
+                    : "text-steel-grey hover:bg-white/8 hover:text-white",
                 )
               }
             >
@@ -139,20 +196,29 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          <button
-            type="button"
-            onClick={() => openWhatsApp()}
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-md bg-whatsapp px-4 py-3 text-base font-semibold text-white transition hover:bg-whatsapp-dark"
-          >
-            <WhatsAppIcon className="h-5 w-5" />
-            Contact on WhatsApp
-          </button>
+          {/* Mobile CTAs */}
+          <div className="mt-4 flex flex-col gap-3">
+            <Link
+              to="/contact"
+              className="btn-glass-secondary w-full justify-center"
+            >
+              Contact
+            </Link>
+            <button
+              type="button"
+              onClick={() => openWhatsApp()}
+              className="btn-glass-whatsapp w-full justify-center"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+              Contact on WhatsApp
+            </button>
+          </div>
 
-          <p className="mt-auto px-4 pt-6 text-xs leading-relaxed text-steel-500">
+          <p className="mt-auto px-4 pt-6 text-xs leading-relaxed text-steel-grey">
             Quality Iron &amp; Steel Materials for Every Construction Need.
           </p>
         </nav>
       </div>
-    </header>
+    </>
   );
 }

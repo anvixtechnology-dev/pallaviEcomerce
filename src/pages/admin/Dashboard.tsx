@@ -1,182 +1,191 @@
-import { ArrowRight, CheckCircle2, FolderTree, Inbox, Package, Plus, Star } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Boxes, MessageSquare, Package, Plus, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { TableSkeleton } from "../../components/Loading";
-import { EmptyState, ErrorState } from "../../components/StateMessage";
+import { ErrorState } from "../../components/StateMessage";
 import { useSeo } from "../../hooks/useSeo";
-import { getErrorMessage, formatTimestamp, cn } from "../../lib/utils";
-import { getCategories } from "../../services/categoryService";
-import { getEnquiries } from "../../services/enquiryService";
-import { getProducts } from "../../services/productService";
-import { ENQUIRY_STATUS_LABELS, type Enquiry, type EnquiryStatus } from "../../types/enquiry";
-
-interface Stats {
-  totalProducts: number;
-  totalCategories: number;
-  availableProducts: number;
-  featuredProducts: number;
-  newEnquiries: number;
-}
-
-const STATUS_STYLES: Record<EnquiryStatus, string> = {
-  new: "border-blue-200 bg-blue-50 text-blue-700",
-  contacted: "border-amber-200 bg-amber-50 text-amber-700",
-  completed: "border-emerald-200 bg-emerald-50 text-emerald-700",
-};
+import { useCategories } from "../../hooks/useCategories";
+import { useEnquiries } from "../../hooks/useEnquiries";
+import { useProducts } from "../../hooks/useProducts";
+import { formatTimestamp } from "../../lib/utils";
 
 export default function Dashboard() {
-  useSeo("Admin Dashboard | PallaviTraders");
+  useSeo("Dashboard | PallaviTraders Admin", "");
 
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [recent, setRecent] = useState<Enquiry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading: productsLoading } = useProducts();
+  const { categories, loading: categoriesLoading } = useCategories();
+  const { enquiries, loading: enquiriesLoading, error: enquiriesError } = useEnquiries();
 
-  const reload = () => {
-    setLoading(true);
-    setError(null);
+  const featuredCount = products.filter((p) => p.featured).length;
+  const inStockCount = products.filter((p) => p.availability === "in-stock").length;
+  const recentEnquiries = enquiries.slice(0, 6);
 
-    Promise.all([getProducts(), getCategories(), getEnquiries()])
-      .then(([products, categories, enquiries]) => {
-        setStats({
-          totalProducts: products.length,
-          totalCategories: categories.length,
-          availableProducts: products.filter((product) => product.availability === "in-stock").length,
-          featuredProducts: products.filter((product) => product.featured).length,
-          newEnquiries: enquiries.filter((enquiry) => enquiry.status === "new").length,
-        });
-        setRecent(enquiries.slice(0, 5));
-      })
-      .catch((caught) => setError(getErrorMessage(caught)))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(reload, []);
-
-  const cards = [
-    { label: "Total Products", value: stats?.totalProducts ?? 0, icon: Package, accent: "text-navy-700", to: "/admin/products" },
-    { label: "Total Categories", value: stats?.totalCategories ?? 0, icon: FolderTree, accent: "text-violet-600", to: "/admin/categories" },
-    { label: "Available Products", value: stats?.availableProducts ?? 0, icon: CheckCircle2, accent: "text-emerald-600", to: "/admin/products" },
-    { label: "Featured Products", value: stats?.featuredProducts ?? 0, icon: Star, accent: "text-amber-500", to: "/admin/products" },
-    { label: "New Enquiries", value: stats?.newEnquiries ?? 0, icon: Inbox, accent: "text-red-500", to: "/admin/enquiries" },
+  const stats = [
+    {
+      label: "Total Products",
+      value: productsLoading ? "—" : products.length,
+      sub: productsLoading ? "" : `${featuredCount} featured · ${inStockCount} in stock`,
+      icon: Package,
+      to: "/admin/products",
+    },
+    {
+      label: "Categories",
+      value: categoriesLoading ? "—" : categories.length,
+      sub: "Product categories",
+      icon: Boxes,
+      to: "/admin/categories",
+    },
+    {
+      label: "Enquiries",
+      value: enquiriesLoading ? "—" : enquiries.length,
+      sub: "All time",
+      icon: MessageSquare,
+      to: "/admin/enquiries",
+    },
+    {
+      label: "Featured",
+      value: productsLoading ? "—" : featuredCount,
+      sub: "Showcased on homepage",
+      icon: TrendingUp,
+      to: "/admin/products",
+    },
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-steel-900 uppercase sm:text-3xl">Dashboard</h1>
-          <p className="mt-1 text-sm text-steel-600">Live statistics from your Firestore database.</p>
+          <h1 className="font-display text-2xl font-bold uppercase text-charcoal sm:text-3xl">Dashboard</h1>
+          <p className="mt-1 text-sm text-steel-grey">Overview of products, categories and enquiries.</p>
         </div>
+        <Link
+          to="/admin/products/new"
+          className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
+        >
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Add Product
+        </Link>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {stats.map(({ label, value, sub, icon: Icon, to }) => (
+          <Link
+            key={label}
+            to={to}
+            className="group rounded-lg border border-border-grey bg-white p-5 transition hover:border-charcoal/30 hover:shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold tracking-wide text-steel-grey uppercase">{label}</p>
+                <p className="mt-1.5 font-display text-3xl font-bold text-charcoal">{value}</p>
+                {sub ? <p className="mt-1 text-xs text-steel-grey">{sub}</p> : null}
+              </div>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-warm-white text-brand-orange transition group-hover:bg-brand-orange group-hover:text-white">
+                <Icon className="h-5 w-5" aria-hidden="true" />
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Quick actions */}
+      <div>
+        <h2 className="mb-4 font-display text-lg font-bold uppercase text-charcoal">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <Link
-            to="/admin/products/add"
-            className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            to="/admin/products/new"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
           >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Add Product
+            <Package className="h-4 w-4" aria-hidden="true" />
+            New Product
+          </Link>
+          <Link
+            to="/admin/categories/new"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+          >
+            <Boxes className="h-4 w-4" aria-hidden="true" />
+            New Category
           </Link>
           <Link
             to="/admin/enquiries"
-            className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
           >
-            View enquiries
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <MessageSquare className="h-4 w-4" aria-hidden="true" />
+            View Enquiries
+          </Link>
+          <Link
+            to="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+          >
+            <TrendingUp className="h-4 w-4" aria-hidden="true" />
+            View Live Site
           </Link>
         </div>
       </div>
 
-      {error ? (
-        <ErrorState message={error} onRetry={reload} />
-      ) : loading || !stats ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="rounded-lg border border-steel-200 bg-white p-5">
-              <div className="skeleton h-4 w-24 rounded" />
-              <div className="skeleton mt-4 h-8 w-16 rounded" />
-              <div className="skeleton mt-3 h-3 w-32 rounded" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-          {cards.map((card) => (
-            <Link
-              key={card.label}
-              to={card.to}
-              className="group rounded-lg border border-steel-200 bg-white p-5 transition hover:border-navy-600/40 hover:shadow-md"
-            >
-              <div className="flex items-center justify-between">
-                <span className={cn("flex h-10 w-10 items-center justify-center rounded-md bg-steel-100", card.accent)}>
-                  <card.icon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <ArrowRight className="h-4 w-4 text-steel-300 transition group-hover:text-navy-700" aria-hidden="true" />
-              </div>
-              <p className="mt-4 font-display text-3xl leading-none font-bold text-steel-900">{card.value}</p>
-              <p className="mt-1.5 text-xs font-semibold tracking-wide text-steel-500 uppercase">{card.label}</p>
-            </Link>
-          ))}
-        </div>
-      )}
-
       {/* Recent enquiries */}
-      <section className="rounded-lg border border-steel-200 bg-white">
-        <div className="flex items-center justify-between border-b border-steel-200 px-5 py-4">
-          <h2 className="font-display text-lg font-bold text-steel-900 uppercase">Recent Enquiries</h2>
-          <Link to="/admin/enquiries" className="text-sm font-semibold text-navy-700 transition hover:text-navy-900">
-            View all
+      <div>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-display text-lg font-bold uppercase text-charcoal">Recent Enquiries</h2>
+          <Link
+            to="/admin/enquiries"
+            className="text-xs font-semibold text-brand-orange transition hover:text-brand-orange-dark"
+          >
+            View all →
           </Link>
         </div>
 
-        {loading ? (
-          <div className="p-5">
-            <TableSkeleton rows={4} />
-          </div>
-        ) : recent.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-left text-sm">
-              <thead className="bg-steel-50 text-[11px] tracking-wider text-steel-500 uppercase">
-                <tr>
-                  <th scope="col" className="px-5 py-3 font-semibold">Customer</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Product</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Status</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-steel-100">
-                {recent.map((enquiry) => (
-                  <tr key={enquiry.id}>
-                    <td className="px-5 py-3.5">
-                      <p className="font-medium text-steel-900">{enquiry.name}</p>
-                      <p className="text-xs text-steel-500">{enquiry.phone}</p>
-                    </td>
-                    <td className="px-5 py-3.5 text-steel-600">{enquiry.productName || "—"}</td>
-                    <td className="px-5 py-3.5">
-                      <span
-                        className={cn(
-                          "inline-block rounded border px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase",
-                          STATUS_STYLES[enquiry.status],
-                        )}
-                      >
-                        {ENQUIRY_STATUS_LABELS[enquiry.status]}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-steel-500">{formatTimestamp(enquiry.createdAt)}</td>
+        {enquiriesLoading ? (
+          <TableSkeleton rows={5} />
+        ) : enquiriesError ? (
+          <ErrorState message={enquiriesError} />
+        ) : recentEnquiries.length > 0 ? (
+          <div className="overflow-hidden rounded-lg border border-border-grey bg-white">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border-grey bg-warm-white">
+                    <th className="px-4 py-3 text-left text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                      Name
+                    </th>
+                    <th className="hidden px-4 py-3 text-left text-xs font-semibold tracking-wide text-steel-grey uppercase sm:table-cell">
+                      Phone
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                      Message
+                    </th>
+                    <th className="hidden px-4 py-3 text-left text-xs font-semibold tracking-wide text-steel-grey uppercase md:table-cell">
+                      Received
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border-grey">
+                  {recentEnquiries.map((enquiry) => (
+                    <tr key={enquiry.id} className="hover:bg-warm-white/50 transition">
+                      <td className="px-4 py-3 font-medium text-charcoal">{enquiry.name}</td>
+                      <td className="hidden px-4 py-3 text-steel-600 sm:table-cell">{enquiry.phone}</td>
+                      <td className="max-w-xs px-4 py-3 text-steel-600">
+                        <p className="truncate">{enquiry.message}</p>
+                      </td>
+                      <td className="hidden px-4 py-3 text-steel-grey md:table-cell">
+                        {formatTimestamp(enquiry.createdAt)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ) : (
-          <div className="p-5">
-            <EmptyState
-              icon={Inbox}
-              title="No enquiries yet"
-              description="Customer enquiries from the contact form will appear here."
-            />
+          <div className="rounded-lg border border-dashed border-border-grey bg-white px-6 py-10 text-center">
+            <MessageSquare className="mx-auto h-8 w-8 text-steel-grey" aria-hidden="true" />
+            <p className="mt-3 text-sm text-steel-grey">No enquiries yet.</p>
           </div>
         )}
-      </section>
+      </div>
     </div>
   );
 }

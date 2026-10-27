@@ -3,41 +3,40 @@ import { Link } from "react-router-dom";
 import CategoryCard from "../components/CategoryCard";
 import { CategoryGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState } from "../components/StateMessage";
-import WhatsAppIcon from "../components/WhatsAppIcon";
 import { useSeo } from "../hooks/useSeo";
 import { useCategories } from "../hooks/useCategories";
-import { openWhatsApp } from "../lib/whatsapp";
 
 export default function Categories() {
   useSeo(
-    "Categories | PallaviTraders — Iron & Steel Materials",
-    "Browse all iron and steel material categories: TMT bars, MS angles, channels, beams, plates, pipes, sheets and more.",
+    "Product Categories | PallaviTraders — Iron & Steel",
+    "Browse all iron and steel product categories — TMT bars, MS angles, channels, plates, pipes and more. Bhimavaram's trusted iron traders.",
   );
 
   const { categories, loading, error, reload } = useCategories();
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-navy-700 bg-navy-950 py-12 text-white sm:py-14">
-        <div className="blueprint-grid absolute inset-0 opacity-50" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal py-12 text-white sm:py-14">
+        <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="text-xs text-steel-400" aria-label="Breadcrumb">
+          <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
             <Link to="/" className="transition hover:text-white">
               Home
             </Link>
             <span className="mx-2" aria-hidden="true">
               /
             </span>
-            <span className="text-steel-200">Categories</span>
+            <span className="text-steel-300">Categories</span>
           </nav>
           <h1 className="mt-3 font-display text-4xl font-bold uppercase sm:text-5xl">Product Categories</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-400 sm:text-base">
-            Find the right iron and steel material for your project. Select a category to view all products under it.
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
+            Explore our full range of iron and steel product categories. Click any category to browse the available
+            products and enquire on WhatsApp.
           </p>
         </div>
       </section>
 
-      <section className="bg-steel-50 py-8 sm:py-12">
+      <section className="bg-near-black py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {loading ? (
             <CategoryGridSkeleton count={8} />
@@ -53,16 +52,14 @@ export default function Categories() {
             <EmptyState
               icon={Boxes}
               title="No categories yet"
-              description="Our categories are being updated. Contact us on WhatsApp and we will help you find the material you need."
+              description="Categories are being set up. Contact us directly to learn about available iron and steel products."
             >
-              <button
-                type="button"
-                onClick={() => openWhatsApp()}
-                className="inline-flex items-center gap-2 rounded-md bg-whatsapp px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-whatsapp-dark"
+              <Link
+                to="/contact"
+                className="btn-glass-primary"
               >
-                <WhatsAppIcon className="h-4 w-4" />
-                Contact on WhatsApp
-              </button>
+                Contact us
+              </Link>
             </EmptyState>
           )}
         </div>

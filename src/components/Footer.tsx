@@ -14,14 +14,14 @@ const QUICK_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-navy-700/50 bg-navy-950 text-steel-300">
+    <footer className="border-t border-white/10 bg-charcoal text-steel-grey">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <p className="font-display text-3xl leading-none font-bold tracking-wide text-white uppercase">
-              Pallavi<span className="text-accent-500">Traders</span>
+              Pallavi<span className="text-brand-orange">Traders</span>
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-steel-400">
+            <p className="mt-3 text-sm leading-relaxed text-steel-grey">
               Quality Iron &amp; Steel Materials for Every Construction Need.
             </p>
             <a
@@ -40,7 +40,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="text-sm text-steel-400 transition hover:text-white">
+                  <Link to={link.to} className="text-sm text-steel-grey transition hover:text-white">
                     {link.label}
                   </Link>
                 </li>
@@ -50,7 +50,7 @@ export default function Footer() {
 
           <div>
             <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Products</h2>
-            <ul className="mt-4 space-y-2.5 text-sm text-steel-400">
+            <ul className="mt-4 space-y-2.5 text-sm text-steel-grey">
               <li>TMT Bars</li>
               <li>MS Angles, Channels &amp; Beams</li>
               <li>MS Plates, Flats &amp; Rods</li>
@@ -61,9 +61,9 @@ export default function Footer() {
 
           <div>
             <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Contact</h2>
-            <ul className="mt-4 space-y-3 text-sm text-steel-400">
+            <ul className="mt-4 space-y-3 text-sm text-steel-grey">
               <li className="flex items-start gap-2.5">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" aria-hidden="true" />
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                 <a href={`tel:${BUSINESS.phoneDial}`} className="transition hover:text-white">
                   {BUSINESS.phone}
                 </a>
@@ -80,17 +80,17 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" aria-hidden="true" />
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                 <a href={`mailto:${BUSINESS.email}`} className="break-all transition hover:text-white">
                   {BUSINESS.email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" aria-hidden="true" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                 <span>{BUSINESS.address}</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" aria-hidden="true" />
+                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                 <span>{BUSINESS.hours}</span>
               </li>
             </ul>
@@ -98,8 +98,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-navy-800">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-steel-500 sm:flex-row sm:px-6 lg:px-8">
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-steel-grey sm:flex-row sm:px-6 lg:px-8">
           <p>© 2026 PallaviTraders. All rights reserved.</p>
           <p>Iron &amp; Steel Materials Catalogue — Enquire on WhatsApp for quotations.</p>
         </div>

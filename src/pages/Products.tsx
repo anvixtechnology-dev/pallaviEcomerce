@@ -28,7 +28,7 @@ const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
 ];
 
 const SELECT_CLASSES =
-  "w-full rounded-md border border-steel-300 bg-white px-3 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none";
+  "w-full rounded-md border border-white/10 bg-navy-800 px-3 py-2.5 text-sm text-white focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
 
 export default function Products() {
   useSeo(
@@ -63,33 +63,33 @@ export default function Products() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-navy-700 bg-navy-950 py-12 text-white sm:py-14">
-        <div className="blueprint-grid absolute inset-0 opacity-50" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal py-12 text-white sm:py-14">
+        <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="text-xs text-steel-400" aria-label="Breadcrumb">
+          <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
             <Link to="/" className="transition hover:text-white">
               Home
             </Link>
             <span className="mx-2" aria-hidden="true">
               /
             </span>
-            <span className="text-steel-200">Products</span>
+            <span className="text-steel-300">Products</span>
           </nav>
           <h1 className="mt-3 font-display text-4xl font-bold uppercase sm:text-5xl">Our Products</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-400 sm:text-base">
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
             Browse the full iron and steel catalogue. Prices are shared on request — enquire on WhatsApp for
             availability and quotation.
           </p>
         </div>
       </section>
 
-      <section className="bg-steel-50 py-8 sm:py-10">
+      <section className="bg-near-black py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Filters */}
-          <div className="rounded-lg border border-steel-200 bg-white p-4 shadow-sm sm:p-5">
+          <div className="rounded-lg border border-white/10 bg-charcoal p-4 shadow-sm sm:p-5">
             <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
               <div>
-                <label htmlFor="product-search" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+                <label htmlFor="product-search" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
                   Search
                 </label>
                 <SearchBar
@@ -101,7 +101,7 @@ export default function Products() {
               </div>
 
               <div>
-                <label htmlFor="category-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+                <label htmlFor="category-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
                   Category
                 </label>
                 <select
@@ -120,7 +120,7 @@ export default function Products() {
               </div>
 
               <div>
-                <label htmlFor="availability-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+                <label htmlFor="availability-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
                   Availability
                 </label>
                 <select
@@ -138,7 +138,7 @@ export default function Products() {
               </div>
 
               <div>
-                <label htmlFor="sort-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+                <label htmlFor="sort-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
                   Sort by
                 </label>
                 <select
@@ -156,7 +156,7 @@ export default function Products() {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-steel-100 pt-4">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/8 pt-4">
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
@@ -165,17 +165,17 @@ export default function Products() {
                   className={cn(
                     "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition",
                     featuredOnly
-                      ? "border-accent-600 bg-accent-600 text-white"
-                      : "border-steel-300 bg-white text-steel-600 hover:border-navy-700 hover:text-navy-800",
+                      ? "border-brand-orange bg-brand-orange text-white"
+                      : "border-white/15 bg-white/5 text-steel-grey hover:border-brand-orange/50 hover:text-white",
                   )}
                 >
                   <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
                   Featured only
                 </button>
 
-                <p className="text-xs text-steel-500" role="status">
-                  Showing <span className="font-semibold text-steel-800">{filtered.length}</span> of{" "}
-                  <span className="font-semibold text-steel-800">{products.length}</span> products
+                <p className="text-xs text-steel-grey" role="status">
+                  Showing <span className="font-semibold text-white">{filtered.length}</span> of{" "}
+                  <span className="font-semibold text-white">{products.length}</span> products
                 </p>
               </div>
 
@@ -183,13 +183,13 @@ export default function Products() {
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-700 transition hover:text-navy-900"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-orange transition hover:text-brand-orange-dark"
                 >
                   <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                   Clear filters
                 </button>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs text-steel-400">
+                <span className="inline-flex items-center gap-1.5 text-xs text-steel-grey">
                   <Filter className="h-3.5 w-3.5" aria-hidden="true" />
                   Use search and filters to narrow the catalogue
                 </span>
@@ -223,7 +223,7 @@ export default function Products() {
                   <button
                     type="button"
                     onClick={resetFilters}
-                    className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+                    className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
                   >
                     <RotateCcw className="h-4 w-4" aria-hidden="true" />
                     Clear filters
@@ -231,7 +231,7 @@ export default function Products() {
                 ) : null}
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-navy-700"
+                  className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
                 >
                   Send an enquiry
                 </Link>
