@@ -254,7 +254,7 @@ export default function AdminEnquiries() {
             onClick={() => setTarget(null)}
             aria-label="Cancel"
           />
-          <div className="relative w-full max-w-md rounded-xl border border-steel-200 bg-white p-6 shadow-2xl">
+          <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-xl border border-steel-200 bg-white p-5 shadow-2xl sm:p-6">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-red-50">
               <Trash2 className="h-5 w-5 text-red-600" aria-hidden="true" />
             </div>

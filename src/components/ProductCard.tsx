@@ -38,25 +38,25 @@ export default function ProductCard({ product }: { product: Product }) {
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex min-w-0 flex-1 flex-col p-4">
         <p className="text-[11px] font-semibold tracking-[0.14em] text-brand-orange uppercase">
           {product.categoryName || "Iron & Steel"}
         </p>
-        <h3 className="mt-1 font-display text-xl leading-tight font-bold text-white uppercase">
+        <h3 className="mt-1 font-display text-xl leading-tight font-bold break-words text-white uppercase">
           <Link to={detailsUrl} className="transition group-hover:text-brand-orange">
             {product.name}
           </Link>
         </h3>
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-steel-grey">{product.description}</p>
 
-        <dl className="mt-3 space-y-1.5 text-xs text-steel-grey">
+        <dl className="mt-3 mb-4 space-y-1.5 text-xs text-steel-grey">
           {product.material ? (
             <div className="flex gap-2">
               <dt className="flex shrink-0 items-center gap-1 font-semibold text-steel-grey/80">
                 <Layers className="h-3.5 w-3.5" aria-hidden="true" />
                 Material:
               </dt>
-              <dd className="truncate">{product.material}</dd>
+              <dd className="min-w-0 truncate">{product.material}</dd>
             </div>
           ) : null}
           {product.sizes ? (
@@ -65,7 +65,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <Ruler className="h-3.5 w-3.5" aria-hidden="true" />
                 Available Sizes:
               </dt>
-              <dd className="truncate">{product.sizes}</dd>
+              <dd className="min-w-0 truncate">{product.sizes}</dd>
             </div>
           ) : null}
         </dl>
@@ -73,7 +73,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           type="button"
           onClick={() => openWhatsApp(product.name)}
-          className="btn-glass-whatsapp mt-4 w-full"
+          className="btn-glass-whatsapp mt-auto w-full"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
           Enquire on WhatsApp

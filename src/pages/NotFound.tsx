@@ -7,13 +7,13 @@ export default function NotFound() {
   useSeo("Page Not Found | PallaviTraders");
 
   return (
-    <section className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-4 py-20 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-steel-100">
-        <SearchX className="h-8 w-8 text-steel-500" aria-hidden="true" />
+    <section className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-4 pt-below-nav pb-20 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/5">
+        <SearchX className="h-8 w-8 text-steel-grey" aria-hidden="true" />
       </div>
-      <p className="mt-6 font-display text-7xl font-bold text-navy-900">404</p>
-      <h1 className="mt-2 font-display text-3xl font-bold text-steel-900 uppercase">Page not found</h1>
-      <p className="mt-3 max-w-md text-sm leading-relaxed text-steel-600">
+      <p className="mt-6 font-display text-7xl font-bold text-brand-orange">404</p>
+      <h1 className="mt-2 font-display text-3xl font-bold text-white uppercase">Page not found</h1>
+      <p className="mt-3 max-w-md text-sm leading-relaxed text-steel-grey">
         The page you are looking for does not exist or may have been moved. Browse our catalogue or get in touch on
         WhatsApp.
       </p>

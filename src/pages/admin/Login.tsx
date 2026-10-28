@@ -65,7 +65,7 @@ export default function Login() {
           Back to PallaviTraders website
         </Link>
 
-        <div className="rounded-xl border border-navy-700/70 bg-white p-8 shadow-2xl">
+        <div className="rounded-xl border border-navy-700/70 bg-white p-6 shadow-2xl sm:p-8">
           <div className="flex flex-col items-center text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-md bg-navy-900 text-accent-500">
               <LockKeyhole className="h-6 w-6" aria-hidden="true" />

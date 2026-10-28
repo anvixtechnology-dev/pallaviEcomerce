@@ -24,7 +24,7 @@ export default function CategoryProducts() {
 
   if (loading) {
     return (
-      <div className="bg-steel-50">
+      <div className="bg-steel-50 pt-below-nav">
         <PageLoader label="Loading category…" />
       </div>
     );
@@ -32,7 +32,7 @@ export default function CategoryProducts() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16">
+      <div className="mx-auto max-w-3xl px-4 pt-below-nav pb-16">
         <ErrorState message={error} onRetry={reload} />
       </div>
     );
@@ -40,7 +40,7 @@ export default function CategoryProducts() {
 
   if (!category) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16">
+      <div className="mx-auto max-w-3xl px-4 pt-below-nav pb-16">
         <EmptyState
           icon={Boxes}
           title="Category not found"
@@ -63,8 +63,8 @@ export default function CategoryProducts() {
       {/* Category banner */}
       <section className="relative overflow-hidden border-b border-navy-700 bg-navy-950 text-white">
         <div className="blueprint-grid absolute inset-0 opacity-50" aria-hidden="true" />
-        <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-          <div>
+        <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-below-nav pb-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+          <div className="min-w-0">
             <nav className="text-xs text-steel-400" aria-label="Breadcrumb">
               <Link to="/" className="transition hover:text-white">
                 Home
@@ -80,7 +80,7 @@ export default function CategoryProducts() {
               </span>
               <span className="text-steel-200">{category.name}</span>
             </nav>
-            <h1 className="mt-3 font-display text-4xl font-bold uppercase sm:text-5xl">{category.name}</h1>
+            <h1 className="mt-3 font-display text-[2rem] font-bold break-words uppercase xs:text-4xl sm:text-5xl">{category.name}</h1>
             {category.description ? (
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-400 sm:text-base">
                 {category.description}
@@ -107,7 +107,7 @@ export default function CategoryProducts() {
               key={item.id}
               to={`/categories/${item.id}`}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition",
+                "inline-flex min-h-9 shrink-0 items-center rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition",
                 item.id === category.id
                   ? "border-navy-800 bg-navy-900 text-white"
                   : "border-steel-300 bg-white text-steel-600 hover:border-navy-700 hover:text-navy-800",

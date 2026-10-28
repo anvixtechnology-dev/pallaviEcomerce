@@ -10,26 +10,36 @@ interface SectionHeaderProps {
   to?: string;
   actionLabel?: string;
   align?: "left" | "center";
+  /** Background the header sits on: "dark" (default) or "light" sections. */
+  tone?: "dark" | "light";
 }
 
-export function SectionHeader({ eyebrow, title, description, to, actionLabel, align = "left" }: SectionHeaderProps) {
+export function SectionHeader({ eyebrow, title, description, to, actionLabel, align = "left", tone = "dark" }: SectionHeaderProps) {
   const centered = align === "center";
+  const light = tone === "light";
 
   return (
     <div className={cn("mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", centered && "sm:flex-col sm:items-center sm:text-center")}>
-      <div className={cn(centered && "text-center")}>
+      <div className={cn("min-w-0", centered && "text-center")}>
         {eyebrow ? (
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">{eyebrow}</p>
         ) : null}
-        <h2 className="font-display text-3xl leading-tight font-bold text-charcoal uppercase sm:text-4xl">
+        <h2 className={cn("font-display text-3xl leading-tight font-bold uppercase sm:text-4xl", light ? "text-charcoal" : "text-white")}>
           {title}
         </h2>
-        {description ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-600 sm:text-base">{description}</p> : null}
+        {description ? (
+          <p className={cn("mt-2 max-w-2xl text-sm leading-relaxed sm:text-base", light ? "text-steel-600" : "text-steel-grey")}>{description}</p>
+        ) : null}
       </div>
       {to && actionLabel ? (
         <Link
           to={to}
-          className="btn-glass-secondary shrink-0 !py-2 !px-4 text-sm"
+          className={cn(
+            "shrink-0 self-start sm:self-auto",
+            light
+              ? "inline-flex items-center justify-center rounded-full border border-border-grey bg-white px-4 py-2 text-sm font-semibold text-charcoal transition hover:border-charcoal"
+              : "btn-glass-secondary !py-2 !px-4 text-sm",
+          )}
         >
           {actionLabel}
         </Link>

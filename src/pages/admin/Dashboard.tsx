@@ -68,15 +68,15 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map(({ label, value, sub, icon: Icon, to }) => (
           <Link
             key={label}
             to={to}
-            className="group rounded-lg border border-border-grey bg-white p-5 transition hover:border-charcoal/30 hover:shadow-sm"
+            className="group min-w-0 rounded-lg border border-border-grey bg-white p-4 transition sm:p-5 hover:border-charcoal/30 hover:shadow-sm"
           >
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold tracking-wide text-steel-grey uppercase">{label}</p>
                 <p className="mt-1.5 font-display text-3xl font-bold text-charcoal">{value}</p>
                 {sub ? <p className="mt-1 text-xs text-steel-grey">{sub}</p> : null}

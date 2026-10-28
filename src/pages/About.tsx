@@ -55,7 +55,7 @@ export default function About() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal py-16 text-white sm:py-20">
+      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal pt-below-nav pb-16 text-white sm:pb-20">
         <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
@@ -69,7 +69,7 @@ export default function About() {
           </nav>
           <div className="mt-4 max-w-3xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Our Story</p>
-            <h1 className="mt-2 font-display text-4xl font-bold uppercase sm:text-5xl">
+            <h1 className="mt-2 font-display text-[2rem] font-bold break-words uppercase xs:text-4xl sm:text-5xl">
               Bhimavaram's Trusted Iron Traders
             </h1>
             <p className="mt-4 text-base leading-relaxed text-steel-grey sm:text-lg">
@@ -77,7 +77,7 @@ export default function About() {
               fabricators, and infrastructure projects across the Krishna-Godavari delta since 2003.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-col gap-3 xs:flex-row xs:flex-wrap sm:gap-4">
             <button
               type="button"
               onClick={() => openWhatsApp()}
@@ -127,7 +127,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 content-start">
+            <div className="grid grid-cols-2 gap-3 content-start sm:gap-4">
               {[
                 { icon: Building2, stat: "20+", label: "Years in Business" },
                 { icon: Users, stat: "5,000+", label: "Customers Served" },
@@ -136,13 +136,13 @@ export default function About() {
               ].map(({ icon: Icon, stat, label }) => (
                 <div
                   key={label}
-                  className="flex flex-col items-start gap-3 rounded-lg border border-white/10 bg-charcoal p-5"
+                  className="flex min-w-0 flex-col items-start gap-3 rounded-lg border border-white/10 bg-charcoal p-4 sm:p-5"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-md bg-brand-orange/15 text-brand-orange">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="font-display text-2xl font-bold text-white">{stat}</p>
+                    <p className="font-display text-xl font-bold break-words text-white xs:text-2xl">{stat}</p>
                     <p className="text-xs text-steel-grey">{label}</p>
                   </div>
                 </div>
@@ -214,7 +214,7 @@ export default function About() {
             Share your material list on WhatsApp for a quick quote, or visit our yard in Bhimavaram. We're here Monday
             to Saturday, 9 AM – 7 PM.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <div className="mt-6 flex flex-col items-stretch gap-3 xs:flex-row xs:flex-wrap xs:justify-center sm:gap-4">
             <button
               type="button"
               onClick={() => openWhatsApp()}

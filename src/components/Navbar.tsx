@@ -1,5 +1,5 @@
 import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { openWhatsApp } from "../lib/whatsapp";
@@ -14,6 +14,10 @@ const NAV_LINKS = [
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
+
+// Contact and WhatsApp are desktop-only in the navbar; on mobile they stay
+// reachable through the footer, page CTAs and the floating WhatsApp button.
+const MOBILE_NAV_LINKS = NAV_LINKS.filter((link) => link.to !== "/contact");
 
 function BrandMark() {
   return (
@@ -32,6 +36,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -49,15 +54,34 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
+  // Close on Escape (returning focus to the toggle) and when resizing up to the desktop layout.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 48rem)");
+    const onBreakpoint = () => { if (desktop.matches) setMobileOpen(false); };
+    window.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", onBreakpoint);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", onBreakpoint);
+    };
+  }, [mobileOpen]);
+
   const isHome = location.pathname === "/";
-  const isTransparent = isHome && !scrolled;
+  const isTransparent = isHome && !scrolled && !mobileOpen;
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-3 pt-3 pb-2 pointer-events-none sm:px-4 md:pt-4">
         <nav
           className={cn(
-            "pointer-events-auto flex w-full max-w-5xl items-center justify-between px-5 py-3 rounded-full text-white text-sm transition-all duration-500",
+            "pointer-events-auto flex w-full max-w-5xl items-center justify-between rounded-full py-2 pr-2 pl-4 text-white text-sm transition-all duration-500 md:py-3 md:px-4 lg:px-5",
             isTransparent
               ? "border border-white/20 bg-white/5 backdrop-blur-sm shadow-none"
               : "border border-white/15 bg-charcoal/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.45)]",
@@ -67,7 +91,7 @@ export default function Navbar() {
             <BrandMark />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 ml-7" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center gap-4 ml-4 lg:gap-6 lg:ml-7" aria-label="Main navigation">
             {NAV_LINKS.map((link) => (
               <NavLink
                 key={link.to}
@@ -75,7 +99,7 @@ export default function Navbar() {
                 end={link.to === "/"}
                 className={({ isActive }) =>
                   cn(
-                    "relative overflow-hidden h-6 group text-sm font-medium transition-colors",
+                    "relative overflow-hidden h-6 group whitespace-nowrap text-sm font-medium transition-colors",
                     isActive ? "text-white" : isTransparent ? "text-white/75 hover:text-white" : "text-steel-grey hover:text-white",
                   )
                 }
@@ -94,53 +118,68 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link to="/contact" className="hidden md:inline-flex btn-glass-secondary !py-2 !px-4 text-sm">Contact</Link>
-            <button type="button" onClick={() => openWhatsApp()} className="hidden md:inline-flex btn-glass-whatsapp !py-2 !px-4 text-sm">
-              <WhatsAppIcon className="h-4 w-4" />
-              WhatsApp
-            </button>
+            {/* Hidden via a wrapper: the unlayered .btn-glass-* display rule overrides a `hidden` utility on the buttons themselves. */}
+            <div className="hidden md:flex items-center gap-3">
+              <Link to="/contact" className="btn-glass-secondary !py-2 !px-4 text-sm">Contact</Link>
+              <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp !py-2 !px-4 text-sm">
+                <WhatsAppIcon className="h-4 w-4" />
+                WhatsApp
+              </button>
+            </div>
             <button
+              ref={toggleRef}
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-full border border-white/20 text-steel-grey hover:bg-white/10 transition"
+              className="relative md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-white/20 text-white/85 hover:bg-white/10 hover:text-white transition"
               aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
             >
-              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <Menu className={cn("absolute h-5 w-5 transition duration-200", mobileOpen ? "rotate-90 scale-50 opacity-0" : "opacity-100")} aria-hidden="true" />
+              <X className={cn("absolute h-5 w-5 transition duration-200", mobileOpen ? "opacity-100" : "-rotate-90 scale-50 opacity-0")} aria-hidden="true" />
             </button>
           </div>
         </nav>
       </header>
 
-      <div className={cn("fixed inset-0 z-40 md:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")} aria-hidden={!mobileOpen}>
+      <div
+        className={cn("fixed inset-0 z-40 md:hidden", mobileOpen ? "pointer-events-auto" : "pointer-events-none")}
+        aria-hidden={!mobileOpen}
+        inert={!mobileOpen}
+      >
         <button
           type="button"
-          tabIndex={mobileOpen ? 0 : -1}
+          tabIndex={-1}
           onClick={() => setMobileOpen(false)}
-          className={cn("absolute inset-0 bg-near-black/70 transition-opacity duration-300", mobileOpen ? "opacity-100" : "opacity-0")}
+          className={cn("absolute inset-0 bg-near-black/70 backdrop-blur-[2px] transition-opacity duration-300", mobileOpen ? "opacity-100" : "opacity-0")}
           aria-label="Close navigation menu"
         />
         <nav
-          className={cn("absolute top-0 right-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 overflow-y-auto border-l border-white/10 bg-charcoal p-5 pt-20 shadow-2xl transition-transform duration-300", mobileOpen ? "translate-x-0" : "translate-x-full")}
+          id="mobile-navigation"
+          className={cn(
+            "absolute top-0 right-0 flex h-full w-72 max-w-[85vw] flex-col gap-1 overflow-y-auto overscroll-contain border-l border-white/10 bg-charcoal px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[calc(var(--nav-h)+1rem)] shadow-2xl transition-transform duration-300 ease-out",
+            mobileOpen ? "translate-x-0" : "translate-x-full",
+          )}
           aria-label="Mobile navigation"
         >
-          {NAV_LINKS.map((link) => (
+          {MOBILE_NAV_LINKS.map((link, index) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.to === "/"}
-              className={({ isActive }) => cn("rounded-full px-4 py-3 text-base font-medium transition", isActive ? "bg-brand-orange text-white" : "text-steel-grey hover:bg-white/8 hover:text-white")}
+              onClick={() => setMobileOpen(false)}
+              style={{ transitionDelay: mobileOpen ? `${80 + index * 40}ms` : "0ms" }}
+              className={({ isActive }) =>
+                cn(
+                  "flex min-h-12 items-center rounded-xl px-4 text-base font-medium transition duration-300",
+                  mobileOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0",
+                  isActive ? "bg-brand-orange text-white" : "text-steel-grey hover:bg-white/8 hover:text-white",
+                )
+              }
             >
               {link.label}
             </NavLink>
           ))}
-          <div className="mt-4 flex flex-col gap-3">
-            <Link to="/contact" className="btn-glass-secondary w-full justify-center">Contact</Link>
-            <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp w-full justify-center">
-              <WhatsAppIcon className="h-5 w-5" />
-              Contact on WhatsApp
-            </button>
-          </div>
           <p className="mt-auto px-4 pt-6 text-xs leading-relaxed text-steel-grey">
             Quality Iron &amp; Steel Materials for Every Construction Need.
           </p>

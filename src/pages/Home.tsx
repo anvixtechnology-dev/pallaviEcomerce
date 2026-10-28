@@ -43,39 +43,48 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ── */}
+      {/* The hero fills the viewport minus 72px (keeping the ticker peeking above the fold).
+          Video fit is handled by .hero-media in index.css: full width on landscape screens,
+          cover on portrait ones. The blurred still fills any band left on landscape screens. */}
       <section
         className="relative w-full overflow-hidden"
-        style={{ minHeight: "100svh", background: "#0B0D10", marginTop: "-72px" }}
+        style={{ minHeight: "calc(100svh - 72px)", background: "#0B0D10" }}
       >
-        {(prefersReduced || videoFailed) && (
-          <img src="/images/pallavi-hero.jpg" alt="" aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-            style={{ objectFit: "cover", objectPosition: "center 15%" }}
+        <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+          <img src="/images/pallavi-hero.jpg" alt=""
+            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl"
             draggable={false}
           />
-        )}
-        {!prefersReduced && (
-          <video ref={videoRef} src="/videos/pallavi-hero-bg.mp4"
-            autoPlay muted loop playsInline preload="metadata"
-            onError={() => setVideoFailed(true)} aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-            style={{ display: videoFailed ? "none" : "block", objectFit: "cover", objectPosition: "center center" }}
-          />
-        )}
+          {(prefersReduced || videoFailed) && (
+            <img src="/images/pallavi-hero.jpg" alt=""
+              className="hero-media"
+              draggable={false}
+            />
+          )}
+          {!prefersReduced && (
+            <video ref={videoRef} src="/videos/pallavi-hero-bg.mp4"
+              autoPlay muted loop playsInline preload="metadata"
+              onError={() => setVideoFailed(true)}
+              className="hero-media"
+              style={{ display: videoFailed ? "none" : "block" }}
+            />
+          )}
+        </div>
         <div aria-hidden="true" className="absolute inset-0" style={{ background: "rgba(11,13,16,0.55)" }} />
         <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-full"
           style={{ height: "120px", background: "linear-gradient(to bottom, transparent 0%, #0B0D10 100%)" }}
         />
 
-        {/* Hero content */}
-        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8"
-          style={{ paddingTop: "88px", paddingBottom: "60px" }}>
+        {/* Hero content — the top padding clears the fixed navbar so the badge and heading
+            never sit under it, even on short laptop screens. */}
+        <div className="relative z-10 flex min-h-[calc(100svh-72px)] flex-col items-center justify-center px-4 pt-[calc(var(--nav-h)+1rem)] text-center sm:px-6 lg:px-8"
+          style={{ paddingBottom: "60px" }}>
 
           <span className="mb-4 inline-block rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand-orange uppercase">
             Iron &amp; Steel Specialists
           </span>
 
-          <h1 className="font-display text-4xl font-bold leading-tight text-white uppercase sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="max-w-full font-display text-[2.125rem] font-bold leading-tight break-words text-white uppercase xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
             Quality Iron &amp;{" "}
             <span className="text-brand-orange">Steel</span>
             <br className="hidden sm:block" />
@@ -87,7 +96,7 @@ export default function Home() {
             quotation on WhatsApp instantly.
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
             <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp">
               <WhatsAppIcon className="h-5 w-5" />
               Get a Quote on WhatsApp
@@ -98,7 +107,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-8 sm:gap-12">
+          <div className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-4 sm:mt-12 sm:gap-12">
             {[{ value: "500+", label: "Products" }, { value: "10+", label: "Categories" }, { value: "Fast", label: "WhatsApp Response" }].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="font-display text-2xl font-bold text-brand-orange sm:text-3xl">{stat.value}</div>
@@ -130,7 +139,7 @@ export default function Home() {
           {categoriesLoading ? <CategoryGridSkeleton count={8} />
             : categoriesError ? <ErrorState message={categoriesError} onRetry={reloadCategories} />
             : visibleCategories.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {visibleCategories.map((category) => <CategoryCard key={category.id} category={category} />)}
               </div>
             ) : (
@@ -189,13 +198,13 @@ export default function Home() {
       <section className="relative overflow-hidden bg-charcoal py-14 text-white sm:py-16">
         <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
         <div className="relative mx-auto flex max-w-4xl flex-col items-center px-4 text-center sm:px-6">
-          <h2 className="font-display text-3xl font-bold leading-tight uppercase sm:text-4xl">
+          <h2 className="font-display text-[1.75rem] font-bold leading-tight uppercase xs:text-3xl sm:text-4xl">
             Need a quotation for iron &amp; steel materials?
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
             Tell us the material, size and quantity you need. We will share the price, availability and details on WhatsApp.
           </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
             <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp">
               <WhatsAppIcon className="h-5 w-5" />Request a Quote
             </button>

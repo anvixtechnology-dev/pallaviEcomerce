@@ -38,7 +38,7 @@ export default function SearchBar({
         <button
           type="button"
           onClick={() => onChange("")}
-          className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-steel-400 transition hover:bg-steel-100 hover:text-steel-700"
+          className="absolute top-1/2 right-1 -translate-y-1/2 rounded p-2 text-steel-400 transition hover:bg-steel-100 hover:text-steel-700"
           aria-label="Clear search"
         >
           <X className="h-4 w-4" />

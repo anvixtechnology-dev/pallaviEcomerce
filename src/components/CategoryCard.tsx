@@ -19,12 +19,12 @@ export default function CategoryCard({ category }: { category: Category }) {
         <span className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-near-black/80 to-transparent" aria-hidden="true" />
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-display text-lg leading-tight font-bold text-white uppercase transition group-hover:text-brand-orange">
+      <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
+        <h3 className="font-display text-base leading-tight font-bold break-words text-white uppercase transition group-hover:text-brand-orange sm:text-lg">
           {category.name}
         </h3>
         {category.description ? (
-          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-steel-grey">{category.description}</p>
+          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-steel-grey sm:text-sm">{category.description}</p>
         ) : null}
         <span className="mt-auto inline-flex items-center gap-1.5 pt-3 text-xs font-semibold tracking-wide text-brand-orange uppercase">
           View products

@@ -1,10 +1,11 @@
 import WhatsAppIcon from "./WhatsAppIcon";
 import { openWhatsApp } from "../lib/whatsapp";
 
-/** Floating WhatsApp button, visible on all public-facing pages. */
+/** Floating WhatsApp button, visible on all public-facing pages.
+ * Sits below the mobile navigation drawer (z-40) and clears the iOS home indicator. */
 export default function WhatsAppButton() {
   return (
-    <div className="group fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
+    <div className="group fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 sm:right-6 sm:bottom-6">
       <span className="animate-ring absolute inset-0 rounded-full bg-whatsapp" aria-hidden="true" />
       <button
         type="button"

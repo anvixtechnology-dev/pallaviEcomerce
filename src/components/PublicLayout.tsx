@@ -9,9 +9,9 @@ export default function PublicLayout() {
     <div className="flex min-h-screen flex-col bg-near-black">
       <ScrollToTop />
       <Navbar />
-      {/* No top padding here — the Home hero bleeds behind the fixed navbar
-          using negative margin-top, and all other page sections have their
-          own py-12/py-14 top spacing that clears the navbar naturally. */}
+      {/* No top padding here — the Home hero starts at the top of the page behind
+          the fixed navbar, and every other page's first section uses the
+          `pt-below-nav` utility (see index.css) to clear the navbar. */}
       <main className="flex-1">
         <Outlet />
       </main>

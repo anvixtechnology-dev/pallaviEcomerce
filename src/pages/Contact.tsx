@@ -43,7 +43,7 @@ export default function Contact() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal py-16 text-white sm:py-20">
+      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal pt-below-nav pb-16 text-white sm:pb-20">
         <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
@@ -57,7 +57,7 @@ export default function Contact() {
           </nav>
           <div className="mt-4 max-w-3xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Get in Touch</p>
-            <h1 className="mt-2 font-display text-4xl font-bold uppercase sm:text-5xl">Contact Us</h1>
+            <h1 className="mt-2 font-display text-[2rem] font-bold uppercase xs:text-4xl sm:text-5xl">Contact Us</h1>
             <p className="mt-4 text-base leading-relaxed text-steel-grey sm:text-lg">
               Share your material requirements on WhatsApp for the fastest response, or use the form below and we'll
               get back to you within the day.
@@ -70,7 +70,7 @@ export default function Contact() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
             {/* Contact info */}
-            <div className="space-y-6">
+            <div className="min-w-0 space-y-6">
               <div>
                 <h2 className="font-display text-2xl font-bold uppercase text-white">Find Us</h2>
                 <p className="mt-1 text-sm text-steel-grey">
@@ -118,7 +118,7 @@ export default function Contact() {
               }) => (
                 <div
                   key={label}
-                  className="flex gap-4 rounded-lg border border-white/10 bg-charcoal p-4"
+                  className="flex gap-3 rounded-lg border border-white/10 bg-charcoal p-4 sm:gap-4"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-orange/15 text-brand-orange">
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -128,7 +128,7 @@ export default function Contact() {
                     {href ? (
                       <a
                         href={href}
-                        className="mt-0.5 block text-sm font-medium text-white transition hover:text-brand-orange"
+                        className="mt-0.5 block text-sm font-medium break-words text-white transition hover:text-brand-orange"
                       >
                         {value}
                       </a>
@@ -138,13 +138,13 @@ export default function Contact() {
                         <button
                           type="button"
                           onClick={action}
-                          className="text-xs font-semibold text-brand-orange transition hover:text-brand-orange-dark"
+                          className="inline-flex min-h-8 items-center text-xs font-semibold text-brand-orange transition hover:text-brand-orange-dark"
                         >
                           {actionLabel} →
                         </button>
                       </div>
                     ) : (
-                      <p className="mt-0.5 text-sm text-white/80">{value}</p>
+                      <p className="mt-0.5 text-sm break-words text-white/80">{value}</p>
                     )}
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function Contact() {
             </div>
 
             {/* Contact form */}
-            <div className="rounded-xl border border-white/10 bg-charcoal p-6 shadow-sm sm:p-8">
+            <div className="min-w-0 rounded-xl border border-white/10 bg-charcoal p-5 shadow-sm sm:p-8">
               {sent ? (
                 <div className="flex flex-col items-center py-10 text-center">
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-900/50 border border-emerald-700/50">
@@ -246,7 +246,7 @@ export default function Contact() {
                     </div>
 
                     {error ? (
-                      <p className="rounded-md bg-red-900/40 border border-red-700/50 px-4 py-2.5 text-sm text-red-400" role="alert">
+                      <p className="rounded-md bg-red-900/40 border border-red-700/50 px-4 py-2.5 text-sm break-words text-red-400" role="alert">
                         {error}
                       </p>
                     ) : null}

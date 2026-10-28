@@ -8,8 +8,8 @@ import {
   Package,
   X,
 } from "lucide-react";
-import { useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const NAV_ITEMS = [
@@ -23,6 +23,25 @@ export default function AdminLayout() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [pathname]);
+
+  // Lock page scroll and close on Escape while the mobile drawer is open.
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setDrawerOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [drawerOpen]);
 
   async function handleSignOut() {
     await signOut();
@@ -78,8 +97,8 @@ export default function AdminLayout() {
       </aside>
 
       {/* Mobile header + drawer */}
-      <div className="flex flex-1 flex-col">
-        <header className="flex h-14 items-center justify-between border-b border-border-grey bg-white px-4 lg:hidden">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border-grey bg-white px-4 lg:hidden">
           <Link to="/" className="flex items-center">
             <img
               src="/images/pallavi-traders-logo.png"
@@ -91,27 +110,29 @@ export default function AdminLayout() {
             type="button"
             onClick={() => setDrawerOpen(true)}
             aria-label="Open navigation"
-            className="rounded-md p-2 text-charcoal hover:bg-warm-white"
+            aria-expanded={drawerOpen}
+            className="-mr-1.5 inline-flex h-11 w-11 items-center justify-center rounded-md text-charcoal hover:bg-warm-white"
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
         </header>
 
         {/* Mobile drawer overlay */}
-        {drawerOpen ? (
-          <div
-            className="fixed inset-0 z-40 bg-near-black/60 lg:hidden"
-            aria-hidden="true"
-            onClick={() => setDrawerOpen(false)}
-          />
-        ) : null}
+        <div
+          className={`fixed inset-0 z-40 bg-near-black/60 transition-opacity duration-300 lg:hidden ${
+            drawerOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          aria-hidden="true"
+          onClick={() => setDrawerOpen(false)}
+        />
 
         {/* Mobile drawer */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy-950 transition-transform lg:hidden ${
+          className={`fixed inset-y-0 left-0 z-50 flex w-64 max-w-[85vw] flex-col bg-navy-950 transition-transform duration-300 lg:hidden ${
             drawerOpen ? "translate-x-0" : "-translate-x-full"
           }`}
           aria-label="Mobile admin navigation"
+          inert={!drawerOpen}
         >
           <div className="flex h-14 items-center justify-between border-b border-navy-800 px-4">
             <img
@@ -123,7 +144,7 @@ export default function AdminLayout() {
               type="button"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close navigation"
-              className="rounded-md p-1.5 text-navy-300 hover:text-white"
+              className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-navy-300 hover:text-white"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -158,7 +179,7 @@ export default function AdminLayout() {
         </aside>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto">
+        <main className="min-w-0 flex-1 overflow-auto">
           {/* Desktop breadcrumb strip */}
           <div className="hidden border-b border-border-grey bg-white px-6 py-3 lg:flex items-center gap-1 text-xs text-steel-grey">
             <Link to="/" className="hover:text-charcoal transition">

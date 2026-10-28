@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-charcoal text-steel-grey">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <p className="font-display text-3xl leading-none font-bold tracking-wide text-white uppercase">
               Pallavi<span className="text-brand-orange">Traders</span>
@@ -99,7 +99,8 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-steel-grey sm:flex-row sm:px-6 lg:px-8">
+        {/* Extra bottom/right padding keeps the text clear of the floating WhatsApp button. */}
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 pt-5 pb-24 text-center text-xs text-steel-grey sm:flex-row sm:pr-24 sm:pb-5 sm:pl-6 sm:text-left lg:pl-8">
           <p>© 2026 PallaviTraders. All rights reserved.</p>
           <p>Iron &amp; Steel Materials Catalogue — Enquire on WhatsApp for quotations.</p>
         </div>

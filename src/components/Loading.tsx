@@ -50,7 +50,7 @@ export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
 
 export function CategoryGridSkeleton({ count = 8 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, index) => (
         <div key={index} className="overflow-hidden rounded-lg border border-border-grey bg-white">
           <div className="skeleton aspect-[16/10] w-full" />

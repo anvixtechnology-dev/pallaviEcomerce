@@ -43,11 +43,33 @@
   /* WhatsApp preserved */
   --color-whatsapp: #25d366;
   --color-whatsapp-dark: #128c7e;
+
+  /* Extra-small breakpoint for standard phones (≥360px) */
+  --breakpoint-xs: 22.5rem;
+}
+
+/* Height of the fixed public navbar (header top offset + pill), used to keep
+   page content clear of it. Matches the Navbar's mobile / md+ sizing. */
+:root {
+  --nav-h: 4.75rem;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --nav-h: 5.25rem;
+  }
+}
+
+/* Top padding for the first section of a public page so the fixed navbar
+   never covers breadcrumbs or headings. */
+@utility pt-below-nav {
+  padding-top: calc(var(--nav-h) + 2rem);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-h);
   }
 
   body {
@@ -61,6 +83,44 @@
   ::selection {
     background-color: var(--color-brand-orange);
     color: #ffffff;
+  }
+}
+
+/* Home hero video / fallback still (both 16:9).
+   Landscape: fit to the hero's width so the left and right edges are never clipped,
+   centred vertically (a little top/bottom is trimmed on screens wider than 16:9).
+   Portrait: a 16:9 frame cannot fill a tall screen without gaps, so cover the hero
+   and keep the centre of the frame in view. */
+.hero-media {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  transform: translateY(-50%);
+}
+
+@media (orientation: portrait) {
+  .hero-media {
+    top: 0;
+    height: 100%;
+    aspect-ratio: auto;
+    transform: none;
+  }
+}
+
+/* iOS Safari zooms the page when a focused field has a font-size below 16px.
+   Keep form controls at 16px on phones; the text-sm utilities apply from sm up.
+   Unlayered on purpose so it wins over the utility classes. */
+@media (max-width: 39.99rem) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea {
+    font-size: 1rem;
   }
 }
 
@@ -194,6 +254,7 @@
   line-height: 1;
   color: #ffffff;
   white-space: nowrap;
+  max-width: 100%;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
@@ -373,6 +434,19 @@
     inset 0 2px 6px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(180, 255, 210, 0.35),
     0 2px 8px rgba(37, 211, 102, 0.2);
+}
+
+/* ── Narrow phones — tighter padding, allow long labels to wrap ── */
+@media (max-width: 29.99rem) {
+  .btn-glass-primary,
+  .btn-glass-secondary,
+  .btn-glass-whatsapp {
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
 }
 
 /* ── Disabled state (all variants) ── */

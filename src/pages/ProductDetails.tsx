@@ -17,7 +17,7 @@ const AVAILABILITY_STYLES = {
 } as const;
 
 export default function ProductDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { productId: id } = useParams<{ productId: string }>();
   const { data: product, loading, error } = useProduct(id);
   const { products: categoryProducts } = useProductsByCategory(product?.categoryId);
   const related = categoryProducts.filter((p) => p.id !== id).slice(0, 4);
@@ -28,8 +28,13 @@ export default function ProductDetails() {
     product?.description ?? "Iron and steel product details — Pallavi Iron Traders, Bhimavaram.",
   );
 
-  if (loading) return <PageLoader label="Loading product…" />;
-  if (error || !product) return <ErrorState message={error ?? "Product not found."} />;
+  if (loading || error || !product) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 pt-below-nav pb-16">
+        {loading ? <PageLoader label="Loading product…" /> : <ErrorState message={error ?? "Product not found."} />}
+      </div>
+    );
+  }
 
   const images = product.imageUrl ? [product.imageUrl, ...(product.additionalImages ?? [])] : [];
 
@@ -42,10 +47,10 @@ export default function ProductDetails() {
 
   return (
     <>
-      <section className="bg-warm-white py-10 sm:py-14">
+      <section className="bg-warm-white pt-below-nav pb-10 sm:pb-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="mb-6 flex items-center gap-1 text-xs text-steel-grey" aria-label="Breadcrumb">
+          <nav className="mb-6 flex flex-wrap items-center gap-1 text-xs text-steel-grey" aria-label="Breadcrumb">
             <Link to="/" className="transition hover:text-brand-orange">
               Home
             </Link>
@@ -62,7 +67,7 @@ export default function ProductDetails() {
               </>
             ) : null}
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="text-charcoal font-medium truncate max-w-[160px]">{product.name}</span>
+            <span className="min-w-0 max-w-[160px] truncate font-medium text-charcoal sm:max-w-xs">{product.name}</span>
           </nav>
 
           {/* Back link */}
@@ -74,9 +79,9 @@ export default function ProductDetails() {
             Back to Products
           </Link>
 
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-8 lg:gap-12">
             {/* Images */}
-            <div>
+            <div className="min-w-0">
               <div className="overflow-hidden rounded-lg border border-border-grey bg-white aspect-[4/3]">
                 <SmartImage
                   src={images[activeImage]}
@@ -92,7 +97,7 @@ export default function ProductDetails() {
                       key={index}
                       type="button"
                       onClick={() => setActiveImage(index)}
-                      className={`h-16 w-16 shrink-0 overflow-hidden rounded border-2 transition ${
+                      className={`h-16 w-16 shrink-0 overflow-hidden rounded border-2 transition sm:h-20 sm:w-20 ${
                         index === activeImage
                           ? "border-brand-orange"
                           : "border-border-grey hover:border-charcoal"
@@ -112,18 +117,18 @@ export default function ProductDetails() {
             </div>
 
             {/* Info */}
-            <div>
+            <div className="min-w-0">
               {product.categoryName ? (
                 <span className="inline-block rounded-full border border-brand-orange/30 bg-brand-orange/10 px-3 py-0.5 text-xs font-semibold tracking-wide text-brand-orange uppercase">
                   {product.categoryName}
                 </span>
               ) : null}
 
-              <h1 className="mt-2 font-display text-3xl font-bold uppercase text-charcoal sm:text-4xl">
+              <h1 className="mt-2 font-display text-3xl font-bold break-words uppercase text-charcoal sm:text-4xl">
                 {product.name}
               </h1>
 
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-3 flex flex-wrap items-center gap-3">
                 <span
                   className={`rounded border px-2.5 py-1 text-xs font-semibold tracking-wide uppercase ${AVAILABILITY_STYLES[product.availability]}`}
                 >
@@ -136,16 +141,16 @@ export default function ProductDetails() {
                 ) : null}
               </div>
 
-              <p className="mt-4 text-sm leading-relaxed text-steel-600 sm:text-base">{product.description}</p>
+              <p className="mt-4 text-sm leading-relaxed break-words whitespace-pre-line text-steel-600 sm:text-base">{product.description}</p>
 
               {specs.length > 0 ? (
-                <dl className="mt-6 space-y-3 rounded-lg border border-border-grey bg-white p-5">
+                <dl className="mt-6 space-y-3 rounded-lg border border-border-grey bg-white p-4 sm:p-5">
                   {specs.map(({ icon: Icon, label, value }) => (
                     <div key={label} className="flex items-start gap-3">
                       <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
-                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-sm">
+                      <div className="flex min-w-0 flex-wrap gap-x-3 gap-y-0.5 text-sm">
                         <dt className="font-semibold text-charcoal">{label}:</dt>
-                        <dd className="text-steel-600">{value}</dd>
+                        <dd className="min-w-0 break-words text-steel-600">{value}</dd>
                       </div>
                     </div>
                   ))}
@@ -178,6 +183,7 @@ export default function ProductDetails() {
         <section className="bg-white py-14 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeader
+              tone="light"
               eyebrow="More Products"
               title="Related Products"
               to="/products"
