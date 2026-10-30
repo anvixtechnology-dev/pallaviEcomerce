@@ -55,24 +55,24 @@ export default function About() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal pt-below-nav pb-16 text-white sm:pb-20">
-        <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-border-light bg-white pt-below-nav pb-16 sm:pb-20">
+        <div className="blueprint-grid absolute inset-0 opacity-40" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
-            <Link to="/" className="transition hover:text-white">
+          <nav className="text-xs text-text-secondary" aria-label="Breadcrumb">
+            <Link to="/" className="transition hover:text-charcoal">
               Home
             </Link>
             <span className="mx-2" aria-hidden="true">
               /
             </span>
-            <span className="text-steel-300">About Us</span>
+            <span className="text-charcoal">About Us</span>
           </nav>
           <div className="mt-4 max-w-3xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Our Story</p>
-            <h1 className="mt-2 font-display text-[2rem] font-bold break-words uppercase xs:text-4xl sm:text-5xl">
+            <h1 className="mt-2 font-display text-[2rem] font-bold break-words text-charcoal uppercase xs:text-4xl sm:text-5xl">
               Bhimavaram's Trusted Iron Traders
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-steel-grey sm:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg">
               Pallavi Iron Traders has been supplying quality iron and steel materials to construction professionals,
               fabricators, and infrastructure projects across the Krishna-Godavari delta since 2003.
             </p>
@@ -98,15 +98,15 @@ export default function About() {
       </section>
 
       {/* Story */}
-      <section className="bg-near-black py-14 sm:py-20">
+      <section className="bg-surface-cream py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
               <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Who We Are</p>
-              <h2 className="font-display text-3xl font-bold uppercase text-white sm:text-4xl">
+              <h2 className="font-display text-3xl font-bold uppercase text-charcoal sm:text-4xl">
                 Two Decades of Steel
               </h2>
-              <div className="mt-5 space-y-4 text-sm leading-relaxed text-steel-grey sm:text-base">
+              <div className="mt-5 space-y-4 text-sm leading-relaxed text-text-secondary sm:text-base">
                 <p>
                   Founded in 2003, Pallavi Iron Traders started as a small stockist serving local construction needs in
                   Bhimavaram. Over two decades, we have grown into one of the region's most dependable iron and steel
@@ -136,14 +136,14 @@ export default function About() {
               ].map(({ icon: Icon, stat, label }) => (
                 <div
                   key={label}
-                  className="flex min-w-0 flex-col items-start gap-3 rounded-lg border border-white/10 bg-charcoal p-4 sm:p-5"
+                  className="flex min-w-0 flex-col items-start gap-3 rounded-lg border border-border-light bg-white p-4 shadow-sm sm:p-5"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-brand-orange/15 text-brand-orange">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-light-orange text-brand-orange">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="font-display text-xl font-bold break-words text-white xs:text-2xl">{stat}</p>
-                    <p className="text-xs text-steel-grey">{label}</p>
+                    <p className="font-display text-xl font-bold break-words text-charcoal xs:text-2xl">{stat}</p>
+                    <p className="text-xs text-text-secondary">{label}</p>
                   </div>
                 </div>
               ))}
@@ -153,20 +153,20 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="bg-charcoal py-14 sm:py-20">
+      <section className="bg-white py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-center">
             <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Why Choose Us</p>
-            <h2 className="font-display text-3xl font-bold uppercase text-white sm:text-4xl">Our Commitments</h2>
+            <h2 className="font-display text-3xl font-bold uppercase text-charcoal sm:text-4xl">Our Commitments</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="rounded-lg border border-white/10 bg-near-black p-6">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-md bg-brand-orange/15 text-brand-orange">
+              <div key={title} className="rounded-lg border border-border-light bg-surface-cream p-6 shadow-sm">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-md bg-light-orange text-brand-orange">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </div>
-                <h3 className="font-display text-lg font-bold uppercase text-white">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-steel-grey">{description}</p>
+                <h3 className="font-display text-lg font-bold uppercase text-charcoal">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{description}</p>
               </div>
             ))}
           </div>
@@ -174,12 +174,12 @@ export default function About() {
       </section>
 
       {/* Products we carry */}
-      <section className="bg-near-black py-14 sm:py-20">
+      <section className="bg-surface-cream py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Our Range</p>
-            <h2 className="font-display text-3xl font-bold uppercase text-white sm:text-4xl">What We Stock</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
+            <h2 className="font-display text-3xl font-bold uppercase text-charcoal sm:text-4xl">What We Stock</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
               We maintain a wide inventory to serve diverse construction and fabrication needs.
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function About() {
             {PRODUCT_CATEGORIES.map((cat) => (
               <span
                 key={cat}
-                className="rounded-full border border-white/15 bg-charcoal px-4 py-1.5 text-sm font-medium text-steel-grey transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
+                className="rounded-full border border-border-light bg-white px-4 py-1.5 text-sm font-medium text-text-secondary shadow-sm transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
               >
                 {cat}
               </span>
@@ -206,11 +206,11 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-charcoal py-14 text-white sm:py-16">
+      <section className="bg-brand-orange py-14 text-white sm:py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">Get in Touch</p>
+          <p className="text-xs font-semibold tracking-[0.2em] text-white/70 uppercase">Get in Touch</p>
           <h2 className="mt-2 font-display text-3xl font-bold uppercase sm:text-4xl">Ready to Order?</h2>
-          <p className="mt-3 text-sm leading-relaxed text-steel-grey sm:text-base">
+          <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base">
             Share your material list on WhatsApp for a quick quote, or visit our yard in Bhimavaram. We're here Monday
             to Saturday, 9 AM – 7 PM.
           </p>
@@ -225,7 +225,7 @@ export default function About() {
             </button>
             <Link
               to="/contact"
-              className="btn-glass-secondary"
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/60 bg-white/10 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
             >
               Contact Page
             </Link>

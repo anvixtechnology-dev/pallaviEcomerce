@@ -24,7 +24,7 @@ export default function CategoryProducts() {
 
   if (loading) {
     return (
-      <div className="bg-steel-50 pt-below-nav">
+      <div className="bg-surface-cream pt-below-nav">
         <PageLoader label="Loading category…" />
       </div>
     );
@@ -48,7 +48,7 @@ export default function CategoryProducts() {
         >
           <Link
             to="/categories"
-            className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="inline-flex items-center gap-2 rounded-md bg-charcoal px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-charcoal/80"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             All categories
@@ -61,34 +61,34 @@ export default function CategoryProducts() {
   return (
     <>
       {/* Category banner */}
-      <section className="relative overflow-hidden border-b border-navy-700 bg-navy-950 text-white">
-        <div className="blueprint-grid absolute inset-0 opacity-50" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-border-light bg-white text-charcoal">
+        <div className="blueprint-grid absolute inset-0 opacity-40" aria-hidden="true" />
         <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-below-nav pb-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <div className="min-w-0">
-            <nav className="text-xs text-steel-400" aria-label="Breadcrumb">
-              <Link to="/" className="transition hover:text-white">
+            <nav className="text-xs text-text-secondary" aria-label="Breadcrumb">
+              <Link to="/" className="transition hover:text-charcoal">
                 Home
               </Link>
               <span className="mx-2" aria-hidden="true">
                 /
               </span>
-              <Link to="/categories" className="transition hover:text-white">
+              <Link to="/categories" className="transition hover:text-charcoal">
                 Categories
               </Link>
               <span className="mx-2" aria-hidden="true">
                 /
               </span>
-              <span className="text-steel-200">{category.name}</span>
+              <span className="text-charcoal">{category.name}</span>
             </nav>
-            <h1 className="mt-3 font-display text-[2rem] font-bold break-words uppercase xs:text-4xl sm:text-5xl">{category.name}</h1>
+            <h1 className="mt-3 font-display text-[2rem] font-bold break-words text-charcoal uppercase xs:text-4xl sm:text-5xl">{category.name}</h1>
             {category.description ? (
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-400 sm:text-base">
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
                 {category.description}
               </p>
             ) : null}
           </div>
 
-          <div className="hidden h-32 w-44 shrink-0 overflow-hidden rounded-lg border border-navy-700 md:block">
+          <div className="hidden h-32 w-44 shrink-0 overflow-hidden rounded-lg border border-border-light md:block">
             <SmartImage
               src={category.imageUrl}
               alt={category.name}
@@ -100,7 +100,7 @@ export default function CategoryProducts() {
       </section>
 
       {/* Category switcher */}
-      <div className="border-b border-steel-200 bg-white">
+      <div className="border-b border-border-light bg-white">
         <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 sm:px-6 lg:px-8">
           {categories.map((item) => (
             <Link
@@ -109,8 +109,8 @@ export default function CategoryProducts() {
               className={cn(
                 "inline-flex min-h-9 shrink-0 items-center rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition",
                 item.id === category.id
-                  ? "border-navy-800 bg-navy-900 text-white"
-                  : "border-steel-300 bg-white text-steel-600 hover:border-navy-700 hover:text-navy-800",
+                  ? "border-charcoal bg-charcoal text-white"
+                  : "border-border-light bg-white text-text-secondary hover:border-charcoal/50 hover:text-charcoal",
               )}
             >
               {item.name}
@@ -119,16 +119,16 @@ export default function CategoryProducts() {
         </div>
       </div>
 
-      <section className="bg-steel-50 py-8 sm:py-12">
+      <section className="bg-surface-cream py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-display text-2xl font-bold text-steel-900 uppercase sm:text-3xl">
+            <h2 className="font-display text-2xl font-bold text-charcoal uppercase sm:text-3xl">
               {products.length} {products.length === 1 ? "Product" : "Products"}
             </h2>
             <button
               type="button"
               onClick={() => openWhatsApp(category.name)}
-              className="inline-flex items-center gap-2 rounded-md bg-whatsapp px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-whatsapp-dark"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-whatsapp px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-whatsapp-dark sm:w-auto sm:justify-start"
             >
               <WhatsAppIcon className="h-4 w-4" />
               Enquire about this category
@@ -160,7 +160,7 @@ export default function CategoryProducts() {
               </button>
               <Link
                 to="/products"
-                className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-5 py-2.5 text-sm font-semibold text-navy-800 transition hover:border-navy-700"
+                className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal"
               >
                 Browse all products
               </Link>

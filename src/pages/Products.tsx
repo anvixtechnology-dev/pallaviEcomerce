@@ -28,7 +28,7 @@ const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
 ];
 
 const SELECT_CLASSES =
-  "w-full min-w-0 rounded-md border border-white/10 bg-navy-800 px-3 py-2.5 text-sm text-white focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
+  "w-full min-w-0 rounded-md border border-border-light bg-white px-3 py-2.5 text-sm text-charcoal focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
 
 export default function Products() {
   useSeo(
@@ -63,33 +63,33 @@ export default function Products() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-charcoal pt-below-nav pb-12 text-white sm:pb-14">
-        <div className="blueprint-grid absolute inset-0 opacity-30" aria-hidden="true" />
+      <section className="relative overflow-hidden border-b border-border-light bg-white pt-below-nav pb-12 sm:pb-14">
+        <div className="blueprint-grid absolute inset-0 opacity-40" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav className="text-xs text-steel-grey" aria-label="Breadcrumb">
-            <Link to="/" className="transition hover:text-white">
+          <nav className="text-xs text-text-secondary" aria-label="Breadcrumb">
+            <Link to="/" className="transition hover:text-charcoal">
               Home
             </Link>
             <span className="mx-2" aria-hidden="true">
               /
             </span>
-            <span className="text-steel-300">Products</span>
+            <span className="text-charcoal">Products</span>
           </nav>
-          <h1 className="mt-3 font-display text-[2rem] font-bold uppercase xs:text-4xl sm:text-5xl">Our Products</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
+          <h1 className="mt-3 font-display text-[2rem] font-bold uppercase text-charcoal xs:text-4xl sm:text-5xl">Our Products</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
             Browse the full iron and steel catalogue. Prices are shared on request — enquire on WhatsApp for
             availability and quotation.
           </p>
         </div>
       </section>
 
-      <section className="bg-near-black py-8 sm:py-10">
+      <section className="bg-surface-cream py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Filters */}
-          <div className="rounded-lg border border-white/10 bg-charcoal p-4 shadow-sm sm:p-5">
+          <div className="rounded-lg border border-border-light bg-white p-4 shadow-sm sm:p-5">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
               <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-                <label htmlFor="product-search" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                <label htmlFor="product-search" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
                   Search
                 </label>
                 <SearchBar
@@ -101,7 +101,7 @@ export default function Products() {
               </div>
 
               <div className="min-w-0">
-                <label htmlFor="category-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                <label htmlFor="category-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
                   Category
                 </label>
                 <select
@@ -120,7 +120,7 @@ export default function Products() {
               </div>
 
               <div className="min-w-0">
-                <label htmlFor="availability-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                <label htmlFor="availability-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
                   Availability
                 </label>
                 <select
@@ -138,7 +138,7 @@ export default function Products() {
               </div>
 
               <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-                <label htmlFor="sort-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
+                <label htmlFor="sort-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
                   Sort by
                 </label>
                 <select
@@ -156,7 +156,7 @@ export default function Products() {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/8 pt-4">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border-light pt-4">
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
@@ -166,16 +166,16 @@ export default function Products() {
                     "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition",
                     featuredOnly
                       ? "border-brand-orange bg-brand-orange text-white"
-                      : "border-white/15 bg-white/5 text-steel-grey hover:border-brand-orange/50 hover:text-white",
+                      : "border-border-light bg-white text-text-secondary hover:border-brand-orange/50 hover:text-charcoal",
                   )}
                 >
                   <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
                   Featured only
                 </button>
 
-                <p className="text-xs text-steel-grey" role="status">
-                  Showing <span className="font-semibold text-white">{filtered.length}</span> of{" "}
-                  <span className="font-semibold text-white">{products.length}</span> products
+                <p className="text-xs text-text-secondary" role="status">
+                  Showing <span className="font-semibold text-charcoal">{filtered.length}</span> of{" "}
+                  <span className="font-semibold text-charcoal">{products.length}</span> products
                 </p>
               </div>
 
@@ -189,7 +189,7 @@ export default function Products() {
                   Clear filters
                 </button>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs text-steel-grey">
+                <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
                   <Filter className="h-3.5 w-3.5" aria-hidden="true" />
                   Use search and filters to narrow the catalogue
                 </span>
@@ -231,7 +231,7 @@ export default function Products() {
                 ) : null}
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal"
                 >
                   Send an enquiry
                 </Link>

@@ -4,17 +4,28 @@
   --font-display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Brand palette — Industrial Orange / Charcoal / Warm White */
-  --color-brand-orange: #F36B12;
-  --color-brand-orange-dark: #d45b0a;
-  --color-brand-orange-light: #f8943e;
-  --color-charcoal: #17191D;
-  --color-near-black: #0B0D10;
-  --color-warm-white: #F8F6F2;
-  --color-steel-grey: #858B93;
-  --color-border-grey: #E5E1DB;
+  /* ── WHITE & ORANGE BRAND PALETTE ── */
+  --color-brand-orange: #F36B21;
+  --color-brand-orange-dark: #D95316;
+  --color-brand-orange-light: #FF8C42;
+  --color-light-orange: #FFE5D2;
 
-  /* Legacy navy kept for admin sidebar continuity (maps to charcoal range) */
+  /* Light theme surfaces */
+  --color-surface-white: #FFFFFF;
+  --color-surface-cream: #FFF7F0;
+
+  /* Text */
+  --color-charcoal: #202124;
+  --color-text-secondary: #666666;
+
+  /* Borders */
+  --color-border-light: #E8E8E8;
+
+  /* Keep near-black for footer and admin */
+  --color-near-black: #1A1A1A;
+  --color-near-black-alt: #111111;
+
+  /* Legacy kept for admin sidebar */
   --color-navy-950: #0B0D10;
   --color-navy-900: #17191D;
   --color-navy-800: #21242a;
@@ -23,10 +34,13 @@
   --color-navy-500: #555c6b;
   --color-navy-400: #717884;
 
-  /* Steel greys (unchanged for compatibility) */
+  /* Steel greys kept for admin compatibility */
+  --color-steel-grey: #666666;
+  --color-warm-white: #FFF7F0;
+  --color-border-grey: #E8E8E8;
   --color-steel-50: #f7f9fb;
   --color-steel-100: #eef2f6;
-  --color-steel-200: #dde4ec;
+  --color-steel-200: #E8E8E8;
   --color-steel-300: #c3ceda;
   --color-steel-400: #97a6b8;
   --color-steel-500: #6b7c92;
@@ -36,20 +50,13 @@
   --color-steel-900: #151a22;
   --color-steel-950: #0b0e13;
 
-  /* Accent = Industrial Orange */
-  --color-accent-500: #F36B12;
-  --color-accent-600: #d45b0a;
-
   /* WhatsApp preserved */
   --color-whatsapp: #25d366;
   --color-whatsapp-dark: #128c7e;
 
-  /* Extra-small breakpoint for standard phones (≥360px) */
   --breakpoint-xs: 22.5rem;
 }
 
-/* Height of the fixed public navbar (header top offset + pill), used to keep
-   page content clear of it. Matches the Navbar's mobile / md+ sizing. */
 :root {
   --nav-h: 4.75rem;
 }
@@ -60,8 +67,6 @@
   }
 }
 
-/* Top padding for the first section of a public page so the fixed navbar
-   never covers breadcrumbs or headings. */
 @utility pt-below-nav {
   padding-top: calc(var(--nav-h) + 2rem);
 }
@@ -73,8 +78,8 @@
   }
 
   body {
-    background-color: #0B0D10;
-    color: #e8e6e3;
+    background-color: #FFFFFF;
+    color: #202124;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -86,36 +91,6 @@
   }
 }
 
-/* Home hero video / fallback still (both 16:9).
-   Landscape: fit to the hero's width so the left and right edges are never clipped,
-   centred vertically (a little top/bottom is trimmed on screens wider than 16:9).
-   Portrait: a 16:9 frame cannot fill a tall screen without gaps, so cover the hero
-   and keep the centre of the frame in view. */
-.hero-media {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: center;
-  transform: translateY(-50%);
-}
-
-@media (orientation: portrait) {
-  .hero-media {
-    top: 0;
-    height: 100%;
-    aspect-ratio: auto;
-    transform: none;
-  }
-}
-
-/* iOS Safari zooms the page when a focused field has a font-size below 16px.
-   Keep form controls at 16px on phones; the text-sm utilities apply from sm up.
-   Unlayered on purpose so it wins over the utility classes. */
 @media (max-width: 39.99rem) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
   select,
@@ -125,37 +100,20 @@
 }
 
 @keyframes pt-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
 }
 
 @keyframes pt-shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }
 
-/* ── Animated border — conic-gradient spin ────────────────────────────────────
-   Usage: wrap the real button in <span class="btn-border-anim rounded-[inherit]">
-   The real button sits inside at z-index 1; the pseudo-element spins behind it.
-   The --bba-r custom property lets callers override the corner radius.
-   Respects prefers-reduced-motion: stops the spin but keeps the border visible.
-────────────────────────────────────────────────────────────────────────────── */
 @keyframes pt-border-spin {
   0%   { --bba-angle: 0deg;   }
   100% { --bba-angle: 360deg; }
 }
 
-/* Register the custom property so the browser can interpolate it */
 @property --bba-angle {
   syntax: "<angle>";
   inherits: false;
@@ -163,83 +121,59 @@
 }
 
 .btn-border-anim {
-  --bba-r: 8px;           /* border-radius; override per site (e.g. 9999px for pill) */
-  --bba-w: 2px;           /* border width */
-  --bba-speed: 3s;        /* rotation duration */
-
+  --bba-r: 8px;
+  --bba-w: 2px;
+  --bba-speed: 3s;
   position: relative;
   display: inline-flex;
   border-radius: var(--bba-r);
-  /* Thin static orange ring fallback (also gives shape before JS paints) */
   padding: var(--bba-w);
   background: conic-gradient(
     from var(--bba-angle),
-    #F36B12 0deg,
-    #F36B12 60deg,
-    #2d3139 120deg,
-    #858B93 180deg,
-    #2d3139 240deg,
-    #F36B12 300deg,
-    #F36B12 360deg
+    #F36B21 0deg, #F36B21 60deg, #E8E8E8 120deg,
+    #999999 180deg, #E8E8E8 240deg, #F36B21 300deg, #F36B21 360deg
   );
   animation: pt-border-spin var(--bba-speed) linear infinite;
 }
 
-/* The content slot — hides the conic background, shows the actual button */
 .btn-border-anim > * {
   position: relative;
   z-index: 1;
   border-radius: calc(var(--bba-r) - var(--bba-w));
-  /* Ensures the child fills the wrapper completely */
   width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn-border-anim {
-    animation: none;
-    /* Keep a static orange outline */
-    background: #F36B12;
-  }
+  .btn-border-anim { animation: none; background: #F36B21; }
 }
 
 .animate-ring {
   animation: pt-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Light skeleton shimmer */
 .skeleton {
-  background: linear-gradient(90deg, #21242a 25%, #2d3139 37%, #21242a 63%);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
   background-size: 800px 100%;
   animation: pt-shimmer 1.4s ease-in-out infinite;
 }
 
+/* Blueprint grid — light orange tint on white bg */
 .blueprint-grid {
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.09) 1px, transparent 1px);
+    linear-gradient(rgba(243, 107, 33, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 107, 33, 0.06) 1px, transparent 1px);
   background-size: 44px 44px;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* ───────────────────────────────────────────────────────────────────────────
+   LIQUID GLASS BUTTON SYSTEM — Animations & interactions fully preserved.
+   Only the fill colors updated for the white/orange theme.
+─────────────────────────────────────────────────────────────────────────────*/
 
-/* ── Liquid Glass Button System ───────────────────────────────────────────────
-   iPhone-inspired translucent glass controls floating over the hero video.
-   Three variants:
-     .btn-glass-primary   — orange-tinted glass CTA
-     .btn-glass-secondary — clear glass (secondary / ghost)
-     .btn-glass-whatsapp  — WhatsApp green glass
-   All share the base hover / press behaviour defined on .btn-glass-primary,
-   .btn-glass-secondary, and .btn-glass-whatsapp directly.
-   A moving light sweep uses ::after. Respects prefers-reduced-motion.
-─────────────────────────────────────────────────────────────────────────────── */
-
-/* ── Shared structure ── */
 .btn-glass-primary,
 .btn-glass-secondary,
 .btn-glass-whatsapp {
@@ -249,7 +183,7 @@
   justify-content: center;
   gap: 8px;
   border-radius: 9999px;
-  font-size: 0.875rem;     /* 14px */
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;
   color: #ffffff;
@@ -258,31 +192,27 @@
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  /* Smooth lift + opacity transitions */
   transition:
     transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.22s ease,
     background 0.22s ease,
     border-color 0.22s ease;
-  /* Accessible keyboard focus ring */
   outline: none;
 }
 
 .btn-glass-primary:focus-visible,
 .btn-glass-secondary:focus-visible,
 .btn-glass-whatsapp:focus-visible {
-  outline: 2px solid rgba(243, 107, 18, 0.8);
+  outline: 2px solid rgba(243, 107, 33, 0.8);
   outline-offset: 3px;
 }
 
-/* Hover — lift */
 .btn-glass-primary:hover,
 .btn-glass-secondary:hover,
 .btn-glass-whatsapp:hover {
   transform: translateY(-2px);
 }
 
-/* Press — sink */
 .btn-glass-primary:active,
 .btn-glass-secondary:active,
 .btn-glass-whatsapp:active {
@@ -290,7 +220,6 @@
   transition-duration: 0.08s;
 }
 
-/* ── Light sweep pseudo-element (moves on hover) ── */
 .btn-glass-primary::after,
 .btn-glass-secondary::after,
 .btn-glass-whatsapp::after {
@@ -301,7 +230,7 @@
   background: linear-gradient(
     105deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.22) 50%,
     transparent 70%
   );
   background-size: 200% 100%;
@@ -317,7 +246,6 @@
   background-position: -10% center;
 }
 
-/* Keep text + icon above the sweep layer */
 .btn-glass-primary > *,
 .btn-glass-secondary > *,
 .btn-glass-whatsapp > * {
@@ -325,118 +253,105 @@
   z-index: 2;
 }
 
-/* ── Primary — orange-tinted liquid glass ── */
+/* Primary — solid orange */
 .btn-glass-primary {
   padding: 11px 28px;
   background:
-    /* top edge highlight */
-    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 40%, rgba(243,107,18,0.22) 100%),
-    /* base orange glass */
-    rgba(243, 107, 18, 0.28);
-  border: 1px solid rgba(255, 180, 100, 0.45);
-  /* top-inset highlight line */
+    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.02) 40%, rgba(217,83,22,0.15) 100%),
+    #F36B21;
+  border: 1px solid rgba(255, 160, 80, 0.5);
   box-shadow:
-    inset 0 1px 0 rgba(255, 220, 160, 0.5),
-    inset 0 -1px 0 rgba(180, 80, 0, 0.2),
-    0 4px 20px rgba(243, 107, 18, 0.25),
-    0 1px 4px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    inset 0 1px 0 rgba(255, 220, 160, 0.4),
+    inset 0 -1px 0 rgba(180, 60, 0, 0.25),
+    0 4px 20px rgba(243, 107, 33, 0.30),
+    0 1px 4px rgba(0, 0, 0, 0.12);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .btn-glass-primary:hover {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.06) 40%, rgba(243,107,18,0.30) 100%),
-    rgba(243, 107, 18, 0.36);
-  border-color: rgba(255, 200, 130, 0.6);
+    linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 40%, rgba(217,83,22,0.20) 100%),
+    #E05A18;
+  border-color: rgba(255, 180, 100, 0.65);
   box-shadow:
-    inset 0 1px 0 rgba(255, 230, 180, 0.65),
-    inset 0 -1px 0 rgba(180, 80, 0, 0.2),
-    0 8px 28px rgba(243, 107, 18, 0.40),
-    0 2px 6px rgba(0, 0, 0, 0.3);
+    inset 0 1px 0 rgba(255, 230, 180, 0.55),
+    inset 0 -1px 0 rgba(180, 60, 0, 0.25),
+    0 8px 28px rgba(243, 107, 33, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-glass-primary:active {
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 200, 130, 0.35),
-    0 2px 8px rgba(243, 107, 18, 0.25);
+    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 200, 130, 0.3),
+    0 2px 8px rgba(243, 107, 33, 0.25);
 }
 
-/* ── Secondary — clear glass ── */
+/* Secondary — white pill with dark text, orange border on hover */
 .btn-glass-secondary {
   padding: 11px 28px;
+  color: #202124;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.02) 100%),
-    rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+    linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,248,248,0.98) 100%);
+  border: 1.5px solid #D0D0D0;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-    0 4px 20px rgba(0, 0, 0, 0.25),
-    0 1px 3px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  text-shadow: none;
 }
 
 .btn-glass-secondary:hover {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.04) 100%),
-    rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.42);
+    linear-gradient(180deg, #FFFFFF 0%, #FFF3EC 100%);
+  border-color: #F36B21;
+  color: #D95316;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
-    0 8px 28px rgba(0, 0, 0, 0.30),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 4px 16px rgba(243, 107, 33, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .btn-glass-secondary:active {
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    inset 0 2px 4px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* ── WhatsApp — green-tinted glass ── */
+/* WhatsApp — solid green */
 .btn-glass-whatsapp {
   padding: 11px 28px;
   background:
     linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 40%, rgba(37,211,102,0.22) 100%),
-    rgba(37, 211, 102, 0.26);
-  border: 1px solid rgba(130, 240, 170, 0.40);
+    rgba(37, 211, 102, 0.92);
+  border: 1px solid rgba(30, 180, 85, 0.6);
   box-shadow:
     inset 0 1px 0 rgba(180, 255, 210, 0.5),
     inset 0 -1px 0 rgba(0, 100, 40, 0.2),
-    0 4px 20px rgba(37, 211, 102, 0.22),
-    0 1px 4px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    0 4px 20px rgba(37, 211, 102, 0.25),
+    0 1px 4px rgba(0, 0, 0, 0.12);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .btn-glass-whatsapp:hover {
   background:
     linear-gradient(180deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.06) 40%, rgba(37,211,102,0.30) 100%),
-    rgba(37, 211, 102, 0.34);
-  border-color: rgba(150, 255, 190, 0.55);
+    rgba(30, 195, 90, 0.96);
+  border-color: rgba(30, 180, 85, 0.8);
   box-shadow:
     inset 0 1px 0 rgba(200, 255, 220, 0.65),
     inset 0 -1px 0 rgba(0, 100, 40, 0.2),
-    0 8px 28px rgba(37, 211, 102, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.3);
+    0 8px 28px rgba(37, 211, 102, 0.40),
+    0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-glass-whatsapp:active {
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 2px 6px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(180, 255, 210, 0.35),
     0 2px 8px rgba(37, 211, 102, 0.2);
 }
 
-/* ── Narrow phones — tighter padding, allow long labels to wrap ── */
 @media (max-width: 29.99rem) {
   .btn-glass-primary,
   .btn-glass-secondary,
@@ -449,7 +364,6 @@
   }
 }
 
-/* ── Disabled state (all variants) ── */
 .btn-glass-primary:disabled,
 .btn-glass-secondary:disabled,
 .btn-glass-whatsapp:disabled {
@@ -458,7 +372,6 @@
   transform: none !important;
 }
 
-/* ── Reduced motion — remove sweep + lift, keep glass look ── */
 @media (prefers-reduced-motion: reduce) {
   .btn-glass-primary,
   .btn-glass-secondary,
