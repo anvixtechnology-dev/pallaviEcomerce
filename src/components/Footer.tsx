@@ -14,11 +14,11 @@ const QUICK_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border-light bg-near-black text-steel-grey">
+    <footer className="border-t border-border-light bg-white text-steel-grey">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <p className="font-display text-3xl leading-none font-bold tracking-wide text-white uppercase">
+            <p className="font-display text-3xl leading-none font-bold tracking-wide text-near-black uppercase">
               Pallavi<span className="text-brand-orange">Traders</span>
             </p>
             <p className="mt-3 text-sm leading-relaxed text-steel-grey">
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Quick Links</h2>
+            <h2 className="font-display text-lg font-semibold tracking-wide text-near-black uppercase">Quick Links</h2>
             <ul className="mt-4 space-y-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.to}>
@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Products</h2>
+            <h2 className="font-display text-lg font-semibold tracking-wide text-near-black uppercase">Products</h2>
             <ul className="mt-4 space-y-2.5 text-sm text-steel-grey">
               <li>TMT Bars</li>
               <li>MS Angles, Channels &amp; Beams</li>
@@ -60,11 +60,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Contact</h2>
+            <h2 className="font-display text-lg font-semibold tracking-wide text-near-black uppercase">Contact</h2>
             <ul className="mt-4 space-y-3 text-sm text-steel-grey">
               <li className="flex items-start gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
-                <a href={`tel:${BUSINESS.phoneDial}`} className="transition hover:text-white">
+                <a href={`tel:${BUSINESS.phoneDial}`} className="transition hover:text-brand-orange">
                   {BUSINESS.phone}
                 </a>
               </li>
@@ -74,14 +74,14 @@ export default function Footer() {
                   href={buildWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition hover:text-white"
+                  className="transition hover:text-brand-orange"
                 >
                   {BUSINESS.whatsappDisplay}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
-                <a href={`mailto:${BUSINESS.email}`} className="break-all transition hover:text-white">
+                <a href={`mailto:${BUSINESS.email}`} className="break-all transition hover:text-brand-orange">
                   {BUSINESS.email}
                 </a>
               </li>
@@ -98,7 +98,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
+      <div className="border-t border-border-light">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-steel-grey sm:flex-row sm:px-6 lg:px-8">
           <p>© 2026 PallaviTraders. All rights reserved.</p>
           <p>Iron &amp; Steel Materials Catalogue — Enquire on WhatsApp for quotations.</p>

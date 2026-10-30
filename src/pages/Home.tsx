@@ -206,20 +206,20 @@ export default function Home() {
       </section>
 
       {/* ── CTA STRIP ── */}
-      <section className="relative overflow-hidden bg-brand-orange py-14 text-white sm:py-16">
+      <section className="relative overflow-hidden bg-light-orange py-14 text-near-black sm:py-16">
         <div className="blueprint-grid absolute inset-0 opacity-10" aria-hidden="true" />
         <div className="relative mx-auto flex max-w-4xl flex-col items-center px-4 text-center sm:px-6">
           <h2 className="font-display text-[1.75rem] font-bold leading-tight uppercase xs:text-3xl sm:text-4xl">
             Need a quotation for iron &amp; steel materials?
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-steel-grey sm:text-base">
             Tell us the material, size and quantity you need. We will share the price, availability and details on WhatsApp.
           </p>
           <div className="mt-7 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
             <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp">
               <WhatsAppIcon className="h-5 w-5" />Request a Quote
             </button>
-            <Link to="/contact" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/60 bg-white/10 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20">
+            <Link to="/contact" className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-near-black/20 bg-white px-7 py-3 text-sm font-semibold text-near-black transition hover:border-brand-orange hover:text-brand-orange">
               Send an Enquiry<ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
