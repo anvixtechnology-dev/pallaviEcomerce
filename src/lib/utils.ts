@@ -28,6 +28,9 @@ export function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** An error whose message is written for the end user and safe to show as is. */
+export class UserFacingError extends Error {}
+
 const FIRESTORE_MESSAGES: Record<string, string> = {
   "permission-denied": "You do not have permission to perform this action.",
   unavailable: "Unable to reach the server. Please check your connection and try again.",
@@ -43,6 +46,7 @@ const FIRESTORE_MESSAGES: Record<string, string> = {
   unauthenticated: "Please sign in to continue.",
   "too-many-requests": "Too many attempts. Please wait a while and try again.",
   "network-request-failed": "Network error. Please check your internet connection.",
+  "storage/unauthorized": "You do not have permission to upload this file.",
   "storage/unknown": "The upload could not be completed. Please try again.",
   "storage/canceled": "The upload was cancelled.",
   "storage/unsupported": "This file type is not supported. Please upload an image.",
@@ -71,6 +75,8 @@ function extractCode(error: unknown): string | null {
 /** Converts any thrown error into a customer-friendly message. Raw Firebase
  * errors are never surfaced directly to end users. */
 export function getErrorMessage(error: unknown): string {
+  if (error instanceof UserFacingError) return error.message;
+
   const code = extractCode(error);
   if (code && FIRESTORE_MESSAGES[code]) return FIRESTORE_MESSAGES[code];
 

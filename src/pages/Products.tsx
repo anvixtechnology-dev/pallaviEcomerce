@@ -7,7 +7,7 @@ import { ProductGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState } from "../components/StateMessage";
 import { useSeo } from "../hooks/useSeo";
 import { useCategories } from "../hooks/useCategories";
-import { useProducts } from "../hooks/useProducts";
+import { usePublishedProducts } from "../hooks/useProducts";
 import { cn } from "../lib/utils";
 import { filterProducts } from "../services/productService";
 import { AVAILABILITY_LABELS, type Availability } from "../types/product";
@@ -36,7 +36,7 @@ export default function Products() {
     "Browse iron and steel materials including TMT bars, MS angles, channels, plates, pipes and more. Contact us on WhatsApp for price and availability.",
   );
 
-  const { products, loading, error, reload } = useProducts();
+  const { products, loading, error, reload } = usePublishedProducts();
   const { categories } = useCategories();
 
   const [search, setSearch] = useState("");
@@ -77,8 +77,7 @@ export default function Products() {
           </nav>
           <h1 className="mt-3 font-display text-[2rem] font-bold uppercase text-charcoal xs:text-4xl sm:text-5xl">Our Products</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
-            Browse the full iron and steel catalogue. Prices are shared on request — enquire on WhatsApp for
-            availability and quotation.
+            Browse the full iron and steel catalogue. Enquire on WhatsApp for availability and quotation.
           </p>
         </div>
       </section>

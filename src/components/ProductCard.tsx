@@ -1,5 +1,6 @@
 import { Layers, MessageCircle, Ruler, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getPriceDisplay } from "../lib/productPricing";
 import { cn } from "../lib/utils";
 import { openWhatsApp } from "../lib/whatsapp";
 import { AVAILABILITY_LABELS, type Product } from "../types/product";
@@ -12,7 +13,8 @@ const AVAILABILITY_STYLES: Record<Product["availability"], string> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
-  const detailsUrl = `/products/${product.id}`;
+  const detailsUrl = `/products/${product.slug || product.id}`;
+  const price = getPriceDisplay(product);
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border-light bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-orange/40 hover:shadow-[0_18px_35px_-18px_rgba(243,107,18,0.2)]">
@@ -30,12 +32,20 @@ export default function ProductCard({ product }: { product: Product }) {
         >
           {AVAILABILITY_LABELS[product.availability]}
         </span>
-        {product.featured ? (
-          <span className="absolute top-3 right-3 flex items-center gap-1 rounded bg-brand-orange px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">
-            <Star className="h-3 w-3 fill-white text-white" aria-hidden="true" />
-            Featured
-          </span>
-        ) : null}
+        <span className="absolute top-3 right-3 flex flex-col items-end gap-1">
+          {product.featured ? (
+            <span className="flex items-center gap-1 rounded bg-brand-orange px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">
+              <Star className="h-3 w-3 fill-white text-white" aria-hidden="true" />
+              Featured
+            </span>
+          ) : null}
+          {product.newArrival ? (
+            <span className="rounded bg-charcoal px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">New Arrival</span>
+          ) : null}
+          {product.bestSeller ? (
+            <span className="rounded bg-charcoal px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">Best Seller</span>
+          ) : null}
+        </span>
       </Link>
 
       <div className="flex min-w-0 flex-1 flex-col p-4">
@@ -47,7 +57,21 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.name}
           </Link>
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary">{product.description}</p>
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary">
+          {product.shortDescription || product.description}
+        </p>
+
+        <p className="mt-3 text-sm font-semibold text-charcoal">
+          {price.price ? (
+            <>
+              {price.prefix ? <span className="font-medium text-text-secondary">{price.prefix} </span> : null}
+              <span className="font-display text-xl font-bold">{price.price}</span>
+              <span className="font-medium text-text-secondary"> / {price.unit}</span>
+            </>
+          ) : (
+            "Contact for Price"
+          )}
+        </p>
 
         <dl className="mt-3 mb-4 space-y-1.5 text-xs text-text-secondary">
           {product.material ? (
@@ -70,14 +94,19 @@ export default function ProductCard({ product }: { product: Product }) {
           ) : null}
         </dl>
 
-        <button
-          type="button"
-          onClick={() => openWhatsApp(product.name)}
-          className="btn-glass-whatsapp mt-auto w-full"
-        >
-          <MessageCircle className="h-4 w-4" aria-hidden="true" />
-          Enquire on WhatsApp
-        </button>
+        <div className="mt-auto space-y-2">
+          <Link to={detailsUrl} className="btn-glass-secondary w-full">
+            View Product
+          </Link>
+          <button
+            type="button"
+            onClick={() => openWhatsApp(product.name)}
+            className="btn-glass-whatsapp w-full"
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            Enquire on WhatsApp
+          </button>
+        </div>
       </div>
     </article>
   );

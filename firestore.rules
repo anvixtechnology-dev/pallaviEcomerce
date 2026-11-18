@@ -12,11 +12,47 @@ service cloud.firestore {
       return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-    // Prices are never stored — the catalogue is enquiry based.
-    function hasNoPriceFields() {
-      return !request.resource.data.keys().hasAny([
-        'price', 'salePrice', 'mrp', 'discount', 'sellingPrice', 'costPrice'
-      ]);
+    function nonNegative(value) {
+      return value is number && value >= 0;
+    }
+
+    function validProduct() {
+      let d = request.resource.data;
+      return d.name is string
+        && d.name.size() >= 3
+        && d.name.size() <= 200
+        && d.sku is string
+        && d.sku.size() >= 2
+        && d.sku.size() <= 64
+        && d.slug is string
+        && d.categoryId is string
+        && d.shortDescription is string
+        && d.shortDescription.size() <= 1000
+        && d.description is string
+        && d.description.size() <= 20000
+        && d.status in ['draft', 'active', 'inactive']
+        && d.availability in ['in-stock', 'limited', 'out-of-stock']
+        && d.featured is bool
+        && d.categorySpecs is map
+        && d.customSpecs is list
+        && d.imageUrl is string
+        && d.additionalImages is list
+        && d.documents is list
+        && nonNegative(d.mrp)
+        && nonNegative(d.sellingPrice)
+        && nonNegative(d.discountValue)
+        && d.discountType in ['none', 'percentage', 'fixed']
+        && d.pricingMode in ['fixed', 'starting-from', 'contact']
+        && d.minOrderQuantity is number
+        && d.minOrderQuantity > 0
+        && nonNegative(d.gstRate)
+        && d.gstRate <= 100
+        && nonNegative(d.availableQuantity)
+        // A live product must be complete enough for customers to see it.
+        && (d.status != 'active' || (
+          d.categoryId.size() > 0
+          && (d.pricingMode == 'contact' || d.sellingPrice > 0)
+        ));
     }
 
     // ------------------------------------------------------------------
@@ -28,30 +64,19 @@ service cloud.firestore {
     }
 
     // ------------------------------------------------------------------
-    // Products — public catalogue, admin managed, never any price fields
+    // Products — customers can only read active products. Customer-facing
+    // list queries must filter on status == 'active'. Records saved before
+    // `status` existed stay readable by id until they have been migrated.
     // ------------------------------------------------------------------
     match /products/{productId} {
-      allow read: if true;
+      allow get: if resource == null
+        || !('status' in resource.data)
+        || resource.data.status == 'active'
+        || isAdmin();
 
-      allow create: if isAdmin()
-        && hasNoPriceFields()
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 3
-        && request.resource.data.name.size() <= 200
-        && request.resource.data.categoryId is string
-        && request.resource.data.description is string
-        && request.resource.data.description.size() >= 10
-        && request.resource.data.description.size() <= 4000
-        && request.resource.data.availability in ['in-stock', 'limited', 'out-of-stock']
-        && request.resource.data.featured is bool;
+      allow list: if resource.data.status == 'active' || isAdmin();
 
-      allow update: if isAdmin()
-        && hasNoPriceFields()
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 3
-        && request.resource.data.name.size() <= 200
-        && request.resource.data.description is string
-        && request.resource.data.description.size() >= 10;
+      allow create, update: if isAdmin() && validProduct();
 
       allow delete: if isAdmin();
     }
@@ -73,6 +98,13 @@ service cloud.firestore {
         && request.resource.data.name.size() <= 100;
 
       allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------
+    // Catalogue settings such as GST rates — admin only
+    // ------------------------------------------------------------------
+    match /settings/{settingId} {
+      allow read, write: if isAdmin();
     }
 
     // ------------------------------------------------------------------

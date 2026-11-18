@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { getErrorMessage } from "../lib/utils";
-import { getFeaturedProducts, getProduct, getProducts, getProductsByCategory } from "../services/productService";
+import {
+  getFeaturedProducts,
+  getProduct,
+  getProducts,
+  getProductsByCategory,
+  getPublishedProduct,
+  getPublishedProducts,
+} from "../services/productService";
 import type { Product } from "../types/product";
 
 interface AsyncState<T> {
@@ -43,9 +50,19 @@ function useAsync<T>(loader: () => Promise<T>, deps: ReadonlyArray<unknown>): As
   return { data, loading, error, reload };
 }
 
+/** Every product regardless of status. Admin pages only. */
 export function useProducts(): AsyncState<Product[]> & { products: Product[] } {
   const state = useAsync(getProducts, []);
   return { ...state, products: state.data ?? [] };
+}
+
+export function usePublishedProducts(): AsyncState<Product[]> & { products: Product[] } {
+  const state = useAsync(getPublishedProducts, []);
+  return { ...state, products: state.data ?? [] };
+}
+
+export function usePublishedProduct(slugOrId: string | undefined): AsyncState<Product | null> {
+  return useAsync(() => getPublishedProduct(slugOrId ?? ""), [slugOrId]);
 }
 
 export function useFeaturedProducts(limit = 8): AsyncState<Product[]> & { products: Product[] } {
@@ -53,6 +70,7 @@ export function useFeaturedProducts(limit = 8): AsyncState<Product[]> & { produc
   return { ...state, products: state.data ?? [] };
 }
 
+/** Any product regardless of status. Admin pages only. */
 export function useProduct(productId: string | undefined): AsyncState<Product | null> {
   return useAsync(() => getProduct(productId ?? ""), [productId]);
 }

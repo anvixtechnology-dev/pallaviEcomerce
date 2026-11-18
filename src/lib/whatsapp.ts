@@ -25,6 +25,22 @@ export function openWhatsApp(productName?: string): void {
   window.open(buildWhatsAppUrl(message), "_blank", "noopener,noreferrer");
 }
 
+/** Opens WhatsApp with a message about the product and the customer's selection. */
+export function openProductEnquiry(details: {
+  name: string;
+  sku: string;
+  action: string;
+  quantity?: string;
+  size?: string;
+}): void {
+  const lines = [
+    `Hello PallaviTraders, ${details.action}: ${details.name}${details.sku ? ` (SKU: ${details.sku})` : ""}.`,
+    details.size ? `Size: ${details.size}` : "",
+    details.quantity ? `Quantity: ${details.quantity}` : "",
+  ].filter(Boolean);
+  window.open(buildWhatsAppUrl(lines.join("\n")), "_blank", "noopener,noreferrer");
+}
+
 export function openWhatsAppChat(phoneNumber: string, message: string): void {
   const digits = phoneNumber.replace(/[^\d]/g, "");
   const url = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;

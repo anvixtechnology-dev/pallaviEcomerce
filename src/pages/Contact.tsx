@@ -1,6 +1,6 @@
 import { Clock, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ButtonSpinner } from "../components/Loading";
 import { useSeo } from "../hooks/useSeo";
 import { BUSINESS } from "../lib/contact";
@@ -16,9 +16,27 @@ export default function Contact() {
     "Contact Pallavi Iron Traders for pricing, availability or orders. WhatsApp, phone, or email — we respond quickly.",
   );
 
+  // A product page's "Request a Quote" link fills these in.
+  const [searchParams] = useSearchParams();
+  const productId = searchParams.get("productId") ?? "";
+  const productName = searchParams.get("product") ?? "";
+  const productSku = searchParams.get("sku") ?? "";
+  const productSize = searchParams.get("size") ?? "";
+  const quantity = searchParams.get("quantity") ?? "";
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(() =>
+    productName
+      ? [
+          `I would like a quote for ${productName}${productSku ? ` (SKU: ${productSku})` : ""}.`,
+          productSize ? `Size: ${productSize}` : "",
+          quantity ? `Quantity: ${quantity}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n")
+      : "",
+  );
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +46,7 @@ export default function Contact() {
     setSending(true);
     setError(null);
     try {
-      await createEnquiry({ name: name.trim(), phone: phone.trim(), message: message.trim() });
+      await createEnquiry({ name: name.trim(), phone: phone.trim(), message: message.trim(), productId, productName, quantity });
       setSent(true);
       setName("");
       setPhone("");

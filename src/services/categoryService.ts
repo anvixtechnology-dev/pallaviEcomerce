@@ -9,6 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { inferSpecTemplate } from "../lib/productSpecs";
 import { slugify } from "../lib/utils";
 import type { Category, CategoryInput, CategoryPatch } from "../types/category";
 
@@ -20,6 +21,8 @@ function toCategory(id: string, data: Record<string, unknown>): Category {
     name: (data.name as string) ?? "",
     description: (data.description as string) ?? "",
     imageUrl: (data.imageUrl as string) ?? "",
+    subcategories: Array.isArray(data.subcategories) ? (data.subcategories as string[]) : [],
+    specTemplate: (data.specTemplate as Category["specTemplate"]) ?? inferSpecTemplate((data.name as string) ?? ""),
     createdAt: (data.createdAt as Category["createdAt"]) ?? null,
     updatedAt: (data.updatedAt as Category["updatedAt"]) ?? null,
   };
@@ -65,6 +68,16 @@ export async function createCategory(input: CategoryInput): Promise<string> {
   });
 
   return candidate;
+}
+
+/** Creates a category whose id comes only from its name, so running this more
+ * than once (e.g. from two admin tabs) cannot produce duplicates. */
+export async function ensureCategory(input: CategoryInput): Promise<void> {
+  await setDoc(doc(db, "categories", slugify(input.name)), {
+    ...input,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
 }
 
 export async function updateCategory(categoryId: string, patch: CategoryPatch): Promise<void> {

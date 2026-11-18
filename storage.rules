@@ -18,10 +18,22 @@ service firebase.storage {
         && request.resource.size <= 5 * 1024 * 1024;
     }
 
-    // Writes are scoped to the image folders the app uses.
+    function validDocument() {
+      return request.resource != null
+        && request.resource.contentType == 'application/pdf'
+        && request.resource.size <= 20 * 1024 * 1024;
+    }
+
+    // Writes are scoped to the folders the app uses.
     // Product images: admin managed, images only, max 5 MB.
     match /products/{productId}/{fileName} {
       allow create, update: if isAdmin() && validImage();
+      allow delete: if isAdmin();
+    }
+
+    // Product documents: admin managed, PDF only, max 20 MB.
+    match /products/{productId}/documents/{fileName} {
+      allow create, update: if isAdmin() && validDocument();
       allow delete: if isAdmin();
     }
 
@@ -31,14 +43,14 @@ service firebase.storage {
       allow delete: if isAdmin();
     }
 
-    // Every object in this bucket is a public catalogue image, so reads
+    // Every object in this bucket is a public catalogue file, so reads
     // (get and list) are public. The multi-segment wildcard matches both
     // individual file paths and folder list/listAll requests.
     match /{allPaths=**} {
       allow read: if true;
     }
 
-    // Anything outside the image folders is not writable.
+    // Anything outside these folders is not writable.
     match /{allPaths=**} {
       allow write: if false;
     }

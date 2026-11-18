@@ -7,10 +7,13 @@ import { useToast } from "../../components/Toast";
 import { useSeo } from "../../hooks/useSeo";
 import { useCategories } from "../../hooks/useCategories";
 import { useProducts } from "../../hooks/useProducts";
+import { inferSpecTemplate, SPEC_TEMPLATE_IDS, SPEC_TEMPLATES } from "../../lib/productSpecs";
 import { cn, getErrorMessage } from "../../lib/utils";
 import { createCategory, deleteCategory, updateCategory } from "../../services/categoryService";
+import { syncProductCategoryName } from "../../services/productService";
 import { deleteCategoryImages, uploadCategoryImage } from "../../services/storageService";
 import type { Category } from "../../types/category";
+import type { SpecTemplateId } from "../../types/product";
 
 interface ModalState {
   mode: "add" | "edit";
@@ -33,6 +36,10 @@ function CategoryModal({
   const [description, setDescription] = useState(editing?.description ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState(editing?.imageUrl ?? "");
+  const [subcategories, setSubcategories] = useState<string[]>(editing?.subcategories ?? []);
+  const [newSubcategory, setNewSubcategory] = useState("");
+  const [specTemplate, setSpecTemplate] = useState<SpecTemplateId>(editing?.specTemplate ?? "custom");
+  const [templateChosen, setTemplateChosen] = useState(Boolean(editing));
   const [nameError, setNameError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -43,6 +50,14 @@ function CategoryModal({
       setPreview(editing.imageUrl);
     }
   }, [editing]);
+
+  const addSubcategory = () => {
+    const value = newSubcategory.trim();
+    if (value && !subcategories.some((item) => item.toLowerCase() === value.toLowerCase())) {
+      setSubcategories((current) => [...current, value]);
+    }
+    setNewSubcategory("");
+  };
 
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
     const selected = event.target.files?.[0];
@@ -69,7 +84,13 @@ function CategoryModal({
 
     try {
       if (state.mode === "add") {
-        const newId = await createCategory({ name: name.trim(), description: description.trim(), imageUrl: "" });
+        const newId = await createCategory({
+          name: name.trim(),
+          description: description.trim(),
+          imageUrl: "",
+          subcategories,
+          specTemplate,
+        });
 
         if (file) {
           try {
@@ -93,7 +114,13 @@ function CategoryModal({
           name: name.trim(),
           description: description.trim(),
           imageUrl,
+          subcategories,
+          specTemplate,
         });
+
+        if (name.trim() !== editing.name) {
+          await syncProductCategoryName(editing.id, name.trim());
+        }
 
         showToast("Category updated successfully.", "success");
       }
@@ -144,6 +171,7 @@ function CategoryModal({
               onChange={(event) => {
                 setName(event.target.value);
                 setNameError("");
+                if (!templateChosen) setSpecTemplate(inferSpecTemplate(event.target.value));
               }}
               placeholder="e.g. MS Angles"
               className={cn(
@@ -168,6 +196,73 @@ function CategoryModal({
               placeholder="Short description shown on the category card…"
               className="w-full resize-y rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
             />
+          </div>
+
+          <div>
+            <label htmlFor="category-template" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+              Product Specification Fields
+            </label>
+            <select
+              id="category-template"
+              value={specTemplate}
+              onChange={(event) => {
+                setSpecTemplate(event.target.value as SpecTemplateId);
+                setTemplateChosen(true);
+              }}
+              className="w-full rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+            >
+              {SPEC_TEMPLATE_IDS.map((id) => (
+                <option key={id} value={id}>
+                  {SPEC_TEMPLATES[id].label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="category-subcategory" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-600 uppercase">
+              Subcategories
+            </label>
+            {subcategories.length > 0 ? (
+              <ul className="mb-2 flex flex-wrap gap-2">
+                {subcategories.map((subcategory) => (
+                  <li key={subcategory} className="inline-flex items-center gap-1.5 rounded-md bg-steel-100 px-2.5 py-1 text-xs font-medium text-steel-700">
+                    {subcategory}
+                    <button
+                      type="button"
+                      onClick={() => setSubcategories((current) => current.filter((item) => item !== subcategory))}
+                      className="text-steel-500 transition hover:text-red-600"
+                      aria-label={`Remove ${subcategory}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <div className="flex gap-2">
+              <input
+                id="category-subcategory"
+                type="text"
+                value={newSubcategory}
+                onChange={(event) => setNewSubcategory(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    addSubcategory();
+                  }
+                }}
+                placeholder="e.g. Heavy Duty"
+                className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={addSubcategory}
+                className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+              >
+                Add
+              </button>
+            </div>
           </div>
 
           <div>
@@ -288,6 +383,9 @@ export default function AdminCategories() {
                 <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-steel-600">{category.description || "No description."}</p>
                 <p className="mt-1 text-[11px] font-semibold tracking-wide text-navy-600 uppercase">
                   {counts.get(category.id) ?? 0} {(counts.get(category.id) ?? 0) === 1 ? "product" : "products"}
+                  {category.subcategories.length > 0
+                    ? ` · ${category.subcategories.length} ${category.subcategories.length === 1 ? "subcategory" : "subcategories"}`
+                    : ""}
                 </p>
 
                 <div className="mt-auto flex gap-2 pt-3">

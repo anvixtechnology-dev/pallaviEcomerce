@@ -10,7 +10,10 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { PageLoader } from "../../components/Loading";
+import { useToast } from "../../components/Toast";
 import { useAuth } from "../../hooks/useAuth";
+import { runCatalogSetup } from "../../services/catalogSetupService";
 
 const NAV_ITEMS = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
@@ -22,12 +25,23 @@ const NAV_ITEMS = [
 export default function AdminLayout() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [setupDone, setSetupDone] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
     setDrawerOpen(false);
   }, [pathname]);
+
+  // Pages wait for this so they load the categories it may have just added.
+  useEffect(() => {
+    runCatalogSetup()
+      .catch(() => {
+        showToast("Catalogue setup could not finish. Check that the latest security rules are deployed.", "error");
+      })
+      .finally(() => setSetupDone(true));
+  }, [showToast]);
 
   // Lock page scroll and close on Escape while the mobile drawer is open.
   useEffect(() => {
@@ -190,7 +204,7 @@ export default function AdminLayout() {
           </div>
 
           <div className="p-4 sm:p-6 lg:p-8">
-            <Outlet />
+            {setupDone ? <Outlet /> : <PageLoader label="Loading…" />}
           </div>
         </main>
       </div>

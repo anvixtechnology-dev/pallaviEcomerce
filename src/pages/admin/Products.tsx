@@ -1,16 +1,28 @@
-import { Eye, Package, PackagePlus, Pencil, Star, Trash2 } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight, Eye, EyeOff, Package, PackagePlus, Pencil, Rocket, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
 import { ProductGridSkeleton } from "../../components/Loading";
 import { EmptyState, ErrorState } from "../../components/StateMessage";
 import { useToast } from "../../components/Toast";
+import { useCategories } from "../../hooks/useCategories";
 import { useSeo } from "../../hooks/useSeo";
 import { useProducts } from "../../hooks/useProducts";
-import { cn, formatTimestamp, getErrorMessage } from "../../lib/utils";
-import { deleteProduct, filterProducts } from "../../services/productService";
+import { formatPrice } from "../../lib/productPricing";
+import { validateProduct } from "../../lib/productValidation";
+import { cn, getErrorMessage } from "../../lib/utils";
+import { deleteProduct, filterProducts, updateProduct } from "../../services/productService";
 import { deleteProductImages } from "../../services/storageService";
-import { AVAILABILITY_LABELS, type Product } from "../../types/product";
+import {
+  AVAILABILITY_LABELS,
+  PRICING_UNIT_LABELS,
+  PRODUCT_STATUS_LABELS,
+  type Product,
+  type ProductSort,
+  type ProductStatus,
+} from "../../types/product";
+
+const PAGE_SIZE = 20;
 
 const AVAILABILITY_BADGE: Record<Product["availability"], string> = {
   "in-stock": "border-emerald-200 bg-emerald-50 text-emerald-700",
@@ -18,16 +30,77 @@ const AVAILABILITY_BADGE: Record<Product["availability"], string> = {
   "out-of-stock": "border-steel-300 bg-steel-100 text-steel-600",
 };
 
+const STATUS_BADGE: Record<ProductStatus, string> = {
+  active: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  draft: "border-amber-200 bg-amber-50 text-amber-700",
+  inactive: "border-steel-300 bg-steel-100 text-steel-600",
+};
+
+const SORT_OPTIONS: Array<{ value: ProductSort; label: string }> = [
+  { value: "newest", label: "Newest first" },
+  { value: "oldest", label: "Oldest first" },
+  { value: "name-asc", label: "Name: A to Z" },
+  { value: "name-desc", label: "Name: Z to A" },
+  { value: "price-asc", label: "Price: low to high" },
+  { value: "price-desc", label: "Price: high to low" },
+];
+
+const FILTER_CLASSES =
+  "w-full min-w-0 rounded-md border border-steel-300 bg-white px-3 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none";
+
+const ACTION_CLASSES =
+  "rounded-md border border-steel-200 p-2 text-steel-500 transition hover:border-navy-600 hover:text-navy-800 disabled:cursor-not-allowed disabled:opacity-50";
+
 export default function AdminProducts() {
   useSeo("Manage Products | PallaviTraders Admin");
 
   const { products, loading, error, reload } = useProducts();
+  const { categories } = useCategories();
   const { showToast } = useToast();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("all");
+  const [status, setStatus] = useState<ProductStatus | "all">("all");
+  const [sort, setSort] = useState<ProductSort>("newest");
+  const [page, setPage] = useState(1);
   const [target, setTarget] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [publishingId, setPublishingId] = useState<string | null>(null);
 
-  const filtered = useMemo(() => filterProducts(products, { search }), [products, search]);
+  const filtered = useMemo(
+    () => filterProducts(products, { search, categoryId, status, sort }),
+    [products, search, categoryId, status, sort],
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, categoryId, status, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const hasFilters = Boolean(search.trim()) || categoryId !== "all" || status !== "all";
+
+  const togglePublished = async (product: Product) => {
+    const publishing = product.status !== "active";
+
+    if (publishing && Object.values(validateProduct(product, "publish")).some(Boolean)) {
+      showToast(`Complete the required fields to publish "${product.name}".`, "error");
+      navigate(`/admin/products/${product.id}/edit`);
+      return;
+    }
+
+    setPublishingId(product.id);
+    try {
+      await updateProduct(product.id, { status: publishing ? "active" : "inactive" });
+      showToast(`"${product.name}" ${publishing ? "published" : "unpublished"}.`, "success");
+      reload();
+    } catch (caught) {
+      showToast(getErrorMessage(caught), "error");
+    } finally {
+      setPublishingId(null);
+    }
+  };
 
   const confirmDelete = async () => {
     if (!target) return;
@@ -64,8 +137,27 @@ export default function AdminProducts() {
         </Link>
       </div>
 
-      <div className="max-w-md">
-        <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search products…" />
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+        <div className="min-w-0 sm:col-span-2 lg:col-span-1">
+          <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search by name, SKU, brand…" />
+        </div>
+        <select value={categoryId} onChange={(event) => setCategoryId(event.target.value)} aria-label="Filter by category" className={FILTER_CLASSES}>
+          <option value="all">All categories</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>{category.name}</option>
+          ))}
+        </select>
+        <select value={status} onChange={(event) => setStatus(event.target.value as ProductStatus | "all")} aria-label="Filter by status" className={FILTER_CLASSES}>
+          <option value="all">All statuses</option>
+          {(Object.keys(PRODUCT_STATUS_LABELS) as ProductStatus[]).map((key) => (
+            <option key={key} value={key}>{PRODUCT_STATUS_LABELS[key]}</option>
+          ))}
+        </select>
+        <select value={sort} onChange={(event) => setSort(event.target.value as ProductSort)} aria-label="Sort products" className={FILTER_CLASSES}>
+          {SORT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
       </div>
 
       {loading ? (
@@ -75,20 +167,21 @@ export default function AdminProducts() {
       ) : filtered.length > 0 ? (
         <div className="overflow-hidden rounded-lg border border-steel-200 bg-white">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[880px] text-left text-sm">
+            <table className="w-full min-w-[1080px] text-left text-sm">
               <thead className="bg-steel-50 text-[11px] tracking-wider text-steel-500 uppercase">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-semibold">Product</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">SKU</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Category</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Material</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Availability</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Featured</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Updated</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">Selling Price</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">Unit</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">Stock</th>
+                  <th scope="col" className="px-5 py-3 font-semibold">Status</th>
                   <th scope="col" className="px-5 py-3 text-right font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-steel-100">
-                {filtered.map((product) => (
+                {visible.map((product) => (
                   <tr key={product.id} className="transition hover:bg-steel-50/70">
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
@@ -107,8 +200,12 @@ export default function AdminProducts() {
                         </span>
                       </div>
                     </td>
+                    <td className="px-5 py-3.5 font-mono text-xs text-steel-600">{product.sku || "—"}</td>
                     <td className="px-5 py-3.5 text-steel-600">{product.categoryName || "—"}</td>
-                    <td className="px-5 py-3.5 text-steel-600">{product.material || "—"}</td>
+                    <td className="px-5 py-3.5 text-steel-600">
+                      {product.pricingMode === "contact" ? "On request" : formatPrice(product.sellingPrice)}
+                    </td>
+                    <td className="px-5 py-3.5 text-steel-600">{PRICING_UNIT_LABELS[product.pricingUnit]}</td>
                     <td className="px-5 py-3.5">
                       <span
                         className={cn(
@@ -120,18 +217,24 @@ export default function AdminProducts() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5">
-                      {product.featured ? (
-                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" aria-label="Featured" />
-                      ) : (
-                        <span className="text-steel-300">—</span>
-                      )}
+                      <span
+                        className={cn(
+                          "inline-block rounded border px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase",
+                          STATUS_BADGE[product.status],
+                        )}
+                      >
+                        {PRODUCT_STATUS_LABELS[product.status]}
+                      </span>
                     </td>
-                    <td className="px-5 py-3.5 text-steel-500">{formatTimestamp(product.updatedAt ?? product.createdAt)}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
-                          to={`/products/${product.id}`}
-                          className="rounded-md border border-steel-200 p-2 text-steel-500 transition hover:border-navy-600 hover:text-navy-800"
+                          to={
+                            product.status === "active"
+                              ? `/products/${product.slug || product.id}`
+                              : `/admin/products/${product.id}/preview`
+                          }
+                          className={ACTION_CLASSES}
                           title="View product"
                           aria-label={`View ${product.name}`}
                         >
@@ -139,12 +242,22 @@ export default function AdminProducts() {
                         </Link>
                         <Link
                           to={`/admin/products/${product.id}/edit`}
-                          className="rounded-md border border-steel-200 p-2 text-steel-500 transition hover:border-navy-600 hover:text-navy-800"
+                          className={ACTION_CLASSES}
                           title="Edit product"
                           aria-label={`Edit ${product.name}`}
                         >
                           <Pencil className="h-4 w-4" />
                         </Link>
+                        <button
+                          type="button"
+                          onClick={() => togglePublished(product)}
+                          disabled={publishingId === product.id}
+                          className={ACTION_CLASSES}
+                          title={product.status === "active" ? "Unpublish product" : "Publish product"}
+                          aria-label={`${product.status === "active" ? "Unpublish" : "Publish"} ${product.name}`}
+                        >
+                          {product.status === "active" ? <EyeOff className="h-4 w-4" /> : <Rocket className="h-4 w-4" />}
+                        </button>
                         <button
                           type="button"
                           onClick={() => setTarget(product)}
@@ -161,14 +274,30 @@ export default function AdminProducts() {
               </tbody>
             </table>
           </div>
+
+          {pageCount > 1 ? (
+            <div className="flex items-center justify-between gap-3 border-t border-steel-100 px-5 py-3 text-sm text-steel-600">
+              <p>
+                Page {currentPage} of {pageCount} · {filtered.length} products
+              </p>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setPage(currentPage - 1)} disabled={currentPage === 1} className={ACTION_CLASSES} aria-label="Previous page">
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button type="button" onClick={() => setPage(currentPage + 1)} disabled={currentPage === pageCount} className={ACTION_CLASSES} aria-label="Next page">
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : (
         <EmptyState
           icon={Package}
-          title={search ? "No products match your search" : "No products yet"}
+          title={hasFilters ? "No products match your filters" : "No products yet"}
           description={
-            search
-              ? "Try a different keyword, or clear the search to see the full catalogue."
+            hasFilters
+              ? "Try a different keyword or filter to see more of the catalogue."
               : "Add your first product to populate the PallaviTraders catalogue."
           }
         >
@@ -200,7 +329,7 @@ export default function AdminProducts() {
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-steel-600">
               <span className="font-semibold text-steel-800">{target.name}</span> will be permanently removed from
-              Firestore along with its uploaded images. This action cannot be undone.
+              Firestore along with its uploaded images and documents. This action cannot be undone.
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button

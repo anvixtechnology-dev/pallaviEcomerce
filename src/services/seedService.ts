@@ -1,5 +1,8 @@
+import { inferSpecTemplate, normalizeCategoryName } from "../lib/productSpecs";
+import { slugify } from "../lib/utils";
+import { EMPTY_PRODUCT_INPUT } from "../types/product";
 import { createCategory, getCategories } from "./categoryService";
-import { addProduct, getProducts } from "./productService";
+import { addProduct, generateSku, getProducts } from "./productService";
 
 interface SampleProduct {
   name: string;
@@ -285,13 +288,20 @@ export interface SeedResult {
 export async function seedSampleData(): Promise<SeedResult> {
   const [existingCategories, existingProducts] = await Promise.all([getCategories(), getProducts()]);
 
-  const categoryIdByName = new Map(existingCategories.map((category) => [category.name, category.id]));
+  const categoryIdByName = new Map(
+    existingCategories.map((category) => [normalizeCategoryName(category.name), category.id]),
+  );
   let categoriesAdded = 0;
 
   for (const category of SAMPLE_CATEGORIES) {
-    if (categoryIdByName.has(category.name)) continue;
-    const id = await createCategory({ ...category, imageUrl: "" });
-    categoryIdByName.set(category.name, id);
+    if (categoryIdByName.has(normalizeCategoryName(category.name))) continue;
+    const id = await createCategory({
+      ...category,
+      imageUrl: "",
+      subcategories: [],
+      specTemplate: inferSpecTemplate(category.name),
+    });
+    categoryIdByName.set(normalizeCategoryName(category.name), id);
     categoriesAdded += 1;
   }
 
@@ -305,24 +315,28 @@ export async function seedSampleData(): Promise<SeedResult> {
       continue;
     }
 
-    const categoryId = categoryIdByName.get(product.category) ?? "";
+    const categoryId = categoryIdByName.get(normalizeCategoryName(product.category)) ?? "";
     if (!categoryId) {
       skipped += 1;
       continue;
     }
 
     await addProduct({
+      ...EMPTY_PRODUCT_INPUT,
       name: product.name,
+      sku: generateSku(product.category),
+      slug: slugify(product.name),
+      status: "active",
       categoryId,
       categoryName: product.category,
+      specTemplate: inferSpecTemplate(product.category),
+      shortDescription: product.description,
       description: product.description,
       material: product.material,
       type: product.type,
       specifications: product.specifications,
       sizes: product.sizes,
       applications: product.applications,
-      imageUrl: "",
-      additionalImages: [],
       availability: product.availability,
       featured: product.featured,
     });

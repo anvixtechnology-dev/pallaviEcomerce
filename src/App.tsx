@@ -18,6 +18,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import EditProduct from "./pages/admin/EditProduct";
 import AdminEnquiries from "./pages/admin/Enquiries";
 import Login from "./pages/admin/Login";
+import PreviewProduct from "./pages/admin/PreviewProduct";
 import AdminProducts from "./pages/admin/Products";
 import Settings from "./pages/admin/Settings";
 
@@ -47,6 +48,7 @@ export default function App() {
                 <Route path="products" element={<AdminProducts />} />
                 <Route path="products/add" element={<AddProduct />} />
                 <Route path="products/:productId/edit" element={<EditProduct />} />
+                <Route path="products/:productId/preview" element={<PreviewProduct />} />
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="enquiries" element={<AdminEnquiries />} />
                 <Route path="settings" element={<Settings />} />
