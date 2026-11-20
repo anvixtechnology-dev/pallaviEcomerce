@@ -7,6 +7,7 @@ import { useCategories } from "../../hooks/useCategories";
 import { useEnquiries } from "../../hooks/useEnquiries";
 import { useProducts } from "../../hooks/useProducts";
 import { formatTimestamp } from "../../lib/utils";
+import { displayName } from "../../types/enquiry";
 
 export default function Dashboard() {
   useSeo("Dashboard | PallaviTraders Admin", "");
@@ -37,7 +38,7 @@ export default function Dashboard() {
     {
       label: "Enquiries",
       value: enquiriesLoading ? "—" : enquiries.length,
-      sub: "All time",
+      sub: enquiriesLoading ? "" : `${enquiries.filter((e) => e.status === "new").length} new · all time`,
       icon: MessageSquare,
       to: "/admin/enquiries",
     },
@@ -165,8 +166,8 @@ export default function Dashboard() {
                 <tbody className="divide-y divide-border-grey">
                   {recentEnquiries.map((enquiry) => (
                     <tr key={enquiry.id} className="hover:bg-warm-white/50 transition">
-                      <td className="px-4 py-3 font-medium text-charcoal">{enquiry.name}</td>
-                      <td className="hidden px-4 py-3 text-steel-600 sm:table-cell">{enquiry.phone}</td>
+                      <td className="px-4 py-3 font-medium text-charcoal">{displayName(enquiry)}</td>
+                      <td className="hidden px-4 py-3 text-steel-600 sm:table-cell">{enquiry.phone || "—"}</td>
                       <td className="max-w-xs px-4 py-3 text-steel-600">
                         <p className="truncate">{enquiry.message}</p>
                       </td>

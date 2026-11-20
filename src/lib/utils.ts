@@ -4,14 +4,15 @@ export function cn(...classes: Array<string | false | null | undefined>): string
   return classes.filter(Boolean).join(" ");
 }
 
-export function formatTimestamp(value: Timestamp | null | undefined): string {
+export function formatTimestamp(value: Timestamp | null | undefined, withTime = false): string {
   if (!value) return "—";
   const date = typeof value.toDate === "function" ? value.toDate() : new Date(value as unknown as string);
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("en-IN", {
+  return date.toLocaleString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",
+    ...(withTime ? { hour: "numeric", minute: "2-digit", hour12: true } : {}),
   });
 }
 

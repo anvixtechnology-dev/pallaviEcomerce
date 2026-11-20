@@ -1,7 +1,7 @@
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BUSINESS } from "../lib/contact";
-import { buildWhatsAppUrl } from "../lib/whatsapp";
+import { buildWhatsAppUrl, logWhatsAppEnquiry } from "../lib/whatsapp";
 import WhatsAppIcon from "./WhatsAppIcon";
 
 const QUICK_LINKS = [
@@ -18,14 +18,20 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <p className="font-display text-3xl leading-none font-bold tracking-wide text-near-black uppercase">
-              Pallavi<span className="text-brand-orange">Traders</span>
-            </p>
+            <img
+              src="/images/pallavi-logo.png"
+              alt="Pallavi Iron Traders"
+              width={795}
+              height={348}
+              loading="lazy"
+              className="h-16 w-auto object-contain"
+            />
             <p className="mt-3 text-sm leading-relaxed text-white/50">
               Quality Iron &amp; Steel Materials for Every Construction Need.
             </p>
             <a
               href={buildWhatsAppUrl()}
+              onClick={() => logWhatsAppEnquiry()}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-whatsapp px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-whatsapp-dark"
@@ -72,6 +78,7 @@ export default function Footer() {
                 <WhatsAppIcon className="mt-0.5 h-4 w-4 shrink-0 text-whatsapp" />
                 <a
                   href={buildWhatsAppUrl()}
+                  onClick={() => logWhatsAppEnquiry()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition hover:text-brand-orange"

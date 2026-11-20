@@ -22,6 +22,19 @@ const NAV_ITEMS = [
   { to: "/admin/enquiries", icon: BarChart3, label: "Enquiries" },
 ];
 
+const LOGO_SRC = "/images/pallavi-logo.png";
+
+function AdminLogo({ className }: { className: string }) {
+  return (
+    <img
+      src={LOGO_SRC}
+      alt="Pallavi Iron Traders"
+      loading="eager"
+      className={`w-auto shrink-0 rounded-md object-contain ${className}`}
+    />
+  );
+}
+
 export default function AdminLayout() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -37,8 +50,12 @@ export default function AdminLayout() {
   // Pages wait for this so they load the categories it may have just added.
   useEffect(() => {
     runCatalogSetup()
-      .catch(() => {
-        showToast("Catalogue setup could not finish. Check that the latest security rules are deployed.", "error");
+      .catch((caught) => {
+        const detail = caught instanceof Error ? caught.message : "Catalogue setup could not finish.";
+        const hint = String(caught?.cause?.code ?? caught?.message).includes("permission-denied")
+          ? " Deploy the latest firestore.rules and make sure your account is in the admins collection."
+          : "";
+        showToast(detail + hint, "error");
       })
       .finally(() => setSetupDone(true));
   }, [showToast]);
@@ -66,21 +83,18 @@ export default function AdminLayout() {
     `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition ${
       isActive
         ? "bg-navy-800 text-white"
-        : "text-navy-300 hover:bg-navy-900 hover:text-white"
+        : "text-white hover:bg-navy-900"
     }`;
 
   return (
     <div className="flex min-h-screen bg-warm-white">
       {/* Sidebar — desktop */}
       <aside className="hidden w-60 shrink-0 flex-col bg-navy-950 lg:flex">
-        <div className="flex h-16 items-center gap-2.5 border-b border-navy-800 px-5">
-          <Link to="/" className="flex items-center gap-2 min-w-0">
-            <img
-              src="/images/pallavi-traders-logo.png"
-              alt="Pallavi Iron Traders"
-              className="h-8 w-auto shrink-0 object-contain"
-            />
+        <div className="flex flex-col items-center gap-1.5 border-b border-navy-800 px-5 py-5">
+          <Link to="/admin" className="flex items-center" aria-label="Admin dashboard">
+            <AdminLogo className="h-20" />
           </Link>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-white">Admin panel</span>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1" aria-label="Admin navigation">
@@ -97,12 +111,12 @@ export default function AdminLayout() {
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-700 text-sm font-bold text-white uppercase">
               {user?.email?.[0] ?? "A"}
             </div>
-            <p className="min-w-0 truncate text-xs text-navy-300">{user?.email}</p>
+            <p className="min-w-0 truncate text-xs text-white">{user?.email}</p>
           </div>
           <button
             type="button"
             onClick={handleSignOut}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-navy-300 transition hover:bg-navy-900 hover:text-white"
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-white transition hover:bg-navy-900"
           >
             <LogOut className="h-4 w-4" aria-hidden="true" />
             Sign out
@@ -113,12 +127,8 @@ export default function AdminLayout() {
       {/* Mobile header + drawer */}
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border-grey bg-white px-4 lg:hidden">
-          <Link to="/" className="flex items-center">
-            <img
-              src="/images/pallavi-traders-logo.png"
-              alt="Pallavi Iron Traders"
-              className="h-7 w-auto object-contain"
-            />
+          <Link to="/admin" className="flex items-center" aria-label="Admin dashboard">
+            <AdminLogo className="h-10" />
           </Link>
           <button
             type="button"
@@ -148,17 +158,13 @@ export default function AdminLayout() {
           aria-label="Mobile admin navigation"
           inert={!drawerOpen}
         >
-          <div className="flex h-14 items-center justify-between border-b border-navy-800 px-4">
-            <img
-              src="/images/pallavi-traders-logo.png"
-              alt="Pallavi Iron Traders"
-              className="h-7 w-auto object-contain"
-            />
+          <div className="flex h-20 items-center justify-between border-b border-navy-800 px-4">
+            <AdminLogo className="h-14" />
             <button
               type="button"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close navigation"
-              className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-navy-300 hover:text-white"
+              className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-white"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -180,11 +186,11 @@ export default function AdminLayout() {
           </nav>
 
           <div className="border-t border-navy-800 p-4">
-            <p className="mb-2 truncate text-xs text-navy-300">{user?.email}</p>
+            <p className="mb-2 truncate text-xs text-white">{user?.email}</p>
             <button
               type="button"
               onClick={handleSignOut}
-              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-navy-300 transition hover:bg-navy-900 hover:text-white"
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-white transition hover:bg-navy-900"
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
               Sign out

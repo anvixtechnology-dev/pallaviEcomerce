@@ -8,7 +8,7 @@ import { useEnquiries } from "../../hooks/useEnquiries";
 import { cn, formatTimestamp, getErrorMessage } from "../../lib/utils";
 import { openWhatsAppChat } from "../../lib/whatsapp";
 import { deleteEnquiry, updateEnquiryStatus } from "../../services/enquiryService";
-import { ENQUIRY_STATUS_LABELS, type Enquiry, type EnquiryStatus } from "../../types/enquiry";
+import { displayName, ENQUIRY_STATUS_LABELS, type Enquiry, type EnquiryStatus } from "../../types/enquiry";
 
 type Filter = EnquiryStatus | "all";
 
@@ -87,7 +87,7 @@ export default function AdminEnquiries() {
         <div>
           <h1 className="font-display text-2xl font-bold text-steel-900 uppercase sm:text-3xl">Enquiries</h1>
           <p className="mt-1 text-sm text-steel-600">
-            Customer enquiries submitted through the website contact form.
+            Contact form submissions and WhatsApp button taps from the website.
           </p>
         </div>
         <button
@@ -152,16 +152,33 @@ export default function AdminEnquiries() {
                   <tr key={enquiry.id} className="align-top transition hover:bg-steel-50/70">
                     <td className="px-5 py-3.5">
                       <span className="flex items-center gap-2.5">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-100 text-xs font-bold text-navy-800">
-                          {enquiry.name.charAt(0).toUpperCase()}
+                        {enquiry.source === "whatsapp" ? (
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-whatsapp/15 text-whatsapp-dark">
+                            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                          </span>
+                        ) : (
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-100 text-xs font-bold text-navy-800">
+                            {enquiry.name.charAt(0).toUpperCase()}
+                          </span>
+                        )}
+                        <span className="flex flex-col">
+                          <span className="font-medium text-steel-900">{displayName(enquiry)}</span>
+                          <span className="text-[11px] text-steel-500">
+                            {enquiry.source === "whatsapp" ? "WhatsApp tap" : "Contact form"}
+                          </span>
                         </span>
-                        <span className="font-medium text-steel-900">{enquiry.name}</span>
                       </span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <a href={`tel:${enquiry.phone}`} className="font-medium text-navy-700 hover:underline">
-                        {enquiry.phone}
-                      </a>
+                      {enquiry.phone ? (
+                        <a href={`tel:${enquiry.phone}`} className="font-medium text-navy-700 hover:underline">
+                          {enquiry.phone}
+                        </a>
+                      ) : (
+                        <span className="text-xs text-steel-500" title="The customer's number shows up in your WhatsApp chats">
+                          In WhatsApp chat
+                        </span>
+                      )}
                     </td>
                     <td className="px-5 py-3.5 text-steel-700">{enquiry.productName || "—"}</td>
                     <td className="px-5 py-3.5 text-steel-600">{enquiry.quantity || "—"}</td>
@@ -169,6 +186,11 @@ export default function AdminEnquiries() {
                       <span className="line-clamp-2 text-xs leading-relaxed text-steel-600" title={enquiry.message}>
                         {enquiry.message}
                       </span>
+                      {enquiry.page ? (
+                        <span className="mt-1 block truncate text-[11px] text-steel-400" title={enquiry.page}>
+                          from {enquiry.page}
+                        </span>
+                      ) : null}
                     </td>
                     <td className="px-5 py-3.5">
                       <select
@@ -190,9 +212,10 @@ export default function AdminEnquiries() {
                         ))}
                       </select>
                     </td>
-                    <td className="px-5 py-3.5 text-steel-500">{formatTimestamp(enquiry.createdAt)}</td>
+                    <td className="px-5 py-3.5 text-steel-500">{formatTimestamp(enquiry.createdAt, true)}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1.5">
+                        {enquiry.phone ? (
                         <button
                           type="button"
                           onClick={() =>
@@ -209,6 +232,7 @@ export default function AdminEnquiries() {
                         >
                           <MessageCircle className="h-4 w-4" />
                         </button>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => setTarget(enquiry)}
@@ -262,7 +286,7 @@ export default function AdminEnquiries() {
               Are you sure you want to delete this enquiry?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-steel-600">
-              Enquiry from <span className="font-semibold text-steel-800">{target.name}</span> will be permanently
+              Enquiry from <span className="font-semibold text-steel-800">{displayName(target)}</span> will be permanently
               removed. This action cannot be undone.
             </p>
             <div className="mt-6 flex justify-end gap-3">

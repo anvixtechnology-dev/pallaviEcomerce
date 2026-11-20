@@ -1,6 +1,13 @@
-import { deleteObject, getDownloadURL, listAll, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, listAll, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../lib/firebase";
 import { UserFacingError } from "../lib/utils";
+import {
+  CLOUDINARY_ROOT,
+  deleteCloudinaryFolder,
+  deleteCloudinaryImageByUrl,
+  isCloudinaryUrl,
+  uploadToCloudinary,
+} from "./cloudinaryService";
 import type { ProductDocumentKind } from "../types/product";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -96,17 +103,11 @@ function uniqueName(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-const IMAGE_EXTENSIONS: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-};
-
-/** products/{productId}/{unique}.webp — names are unique so replacing an image
- * never changes a file that a saved product still points to. */
+/** Cloudinary: pallavi/products/{productId}/{unique} — names are unique so
+ * replacing an image never changes a file that a saved product still points to. */
 export function uploadProductImage(productId: string, image: Blob, onProgress?: UploadProgress): Promise<string> {
   assertValidImage(image);
-  return uploadWithProgress(`products/${productId}/${uniqueName()}.${IMAGE_EXTENSIONS[image.type] ?? "jpg"}`, image, onProgress);
+  return uploadToCloudinary(image, `${CLOUDINARY_ROOT}/products/${productId}`, { onProgress });
 }
 
 /** products/{productId}/documents/{kind}-{unique}.pdf */
@@ -121,13 +122,11 @@ export function uploadProductDocument(
   return uploadWithProgress(`products/${productId}/documents/${kind}-${uniqueName()}.pdf`, file, onProgress);
 }
 
-/** categories/{categoryId}/main-image.jpg */
+/** Cloudinary: pallavi/categories/{categoryId}/main-image (overwritten on change;
+ * the returned URL is versioned, so browsers pick up the new image). */
 export async function uploadCategoryImage(categoryId: string, file: File): Promise<string> {
   assertValidImage(file);
-  const snapshot = await uploadBytes(ref(storage, `categories/${categoryId}/main-image.jpg`), file, {
-    contentType: file.type,
-  });
-  return getDownloadURL(snapshot.ref);
+  return uploadToCloudinary(file, `${CLOUDINARY_ROOT}/categories/${categoryId}`, { publicId: "main-image" });
 }
 
 async function deleteFolderContents(folderRef: ReturnType<typeof ref>): Promise<void> {
@@ -144,12 +143,28 @@ export async function deleteStorageFolder(folderPath: string): Promise<void> {
   }
 }
 
-export function deleteProductImages(productId: string): Promise<void> {
-  return deleteStorageFolder(`products/${productId}`);
+async function deleteCloudinaryFolderQuietly(folder: string): Promise<void> {
+  try {
+    await deleteCloudinaryFolder(folder);
+  } catch {
+    // Leftover images are harmless; never block the delete itself.
+  }
 }
 
-export function deleteCategoryImages(categoryId: string): Promise<void> {
-  return deleteStorageFolder(`categories/${categoryId}`);
+/** Removes product images from Cloudinary plus documents (and any images
+ * uploaded before the Cloudinary switch) from Firebase Storage. */
+export async function deleteProductImages(productId: string): Promise<void> {
+  await Promise.all([
+    deleteCloudinaryFolderQuietly(`${CLOUDINARY_ROOT}/products/${productId}`),
+    deleteStorageFolder(`products/${productId}`),
+  ]);
+}
+
+export async function deleteCategoryImages(categoryId: string): Promise<void> {
+  await Promise.all([
+    deleteCloudinaryFolderQuietly(`${CLOUDINARY_ROOT}/categories/${categoryId}`),
+    deleteStorageFolder(`categories/${categoryId}`),
+  ]);
 }
 
 /** Extracts the storage object path from a Firebase download URL. */
@@ -164,6 +179,10 @@ export function storagePathFromUrl(url: string): string | null {
 }
 
 export async function deleteStorageFileByUrl(url: string): Promise<void> {
+  if (isCloudinaryUrl(url)) {
+    await deleteCloudinaryImageByUrl(url).catch(() => undefined);
+    return;
+  }
   const path = storagePathFromUrl(url);
   if (!path) return;
   try {

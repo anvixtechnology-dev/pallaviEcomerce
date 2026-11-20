@@ -221,7 +221,7 @@ export default function About() {
               className="btn-glass-whatsapp"
             >
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              WhatsApp: {BUSINESS.phone}
+              WhatsApp: {BUSINESS.whatsappDisplay}
             </button>
             <Link
               to="/contact"

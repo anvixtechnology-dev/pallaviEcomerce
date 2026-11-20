@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getErrorMessage } from "../lib/utils";
-import { getEnquiries } from "../services/enquiryService";
+import { subscribeEnquiries } from "../services/enquiryService";
 import type { Enquiry } from "../types/enquiry";
 
 interface EnquiryState {
@@ -10,33 +10,31 @@ interface EnquiryState {
   reload: () => void;
 }
 
+/** Enquiries kept in sync with Firestore: new ones appear without a refresh. */
 export function useEnquiries(): EnquiryState {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [version, setVersion] = useState(0);
 
+  // Restarts the listener, e.g. after an error.
   const reload = useCallback(() => setVersion((value) => value + 1), []);
 
   useEffect(() => {
-    let active = true;
     setLoading(true);
     setError(null);
 
-    getEnquiries()
-      .then((result) => {
-        if (active) setEnquiries(result);
-      })
-      .catch((caught) => {
-        if (active) setError(getErrorMessage(caught));
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
+    return subscribeEnquiries(
+      (result) => {
+        setEnquiries(result);
+        setError(null);
+        setLoading(false);
+      },
+      (caught) => {
+        setError(getErrorMessage(caught));
+        setLoading(false);
+      },
+    );
   }, [version]);
 
   return { enquiries, loading, error, reload };

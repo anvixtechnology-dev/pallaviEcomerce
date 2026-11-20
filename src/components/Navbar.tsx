@@ -24,9 +24,9 @@ function BrandMark() {
   return (
     <span className="flex items-center">
       <img
-        src="/images/pallavi-logo.jpg"
+        src="/images/pallavi-logo.png"
         alt="Pallavi Iron Traders"
-        className="h-10 w-auto object-contain"
+        className="h-10 w-auto object-contain sm:h-11"
         loading="eager"
       />
     </span>

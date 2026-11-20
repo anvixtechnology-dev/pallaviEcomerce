@@ -70,16 +70,32 @@ export function runCatalogSetup(): Promise<void> {
   return setupRun;
 }
 
+/** Labels an error with the setup step that failed, so the admin sees what went wrong. */
+async function step<T>(label: string, run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (caught) {
+    const code = (caught as { code?: string })?.code;
+    const reason = code ?? (caught instanceof Error ? caught.message : String(caught));
+    console.error(`Catalogue setup failed while ${label}`, caught);
+    throw new Error(`Catalogue setup failed while ${label} (${reason}).`, { cause: caught });
+  }
+}
+
 async function performCatalogSetup(): Promise<void> {
-  const settings = await readSettings();
+  const settings = await step("reading catalogue settings", readSettings);
 
   if (!settings.initialCategoriesAdded) {
-    await addInitialCategories();
-    await setDoc(settingsRef, { initialCategoriesAdded: true }, { merge: true });
+    await step("adding the starting categories", addInitialCategories);
+    await step("saving catalogue settings", () =>
+      setDoc(settingsRef, { initialCategoriesAdded: true }, { merge: true }),
+    );
   }
 
   if (!settings.legacyProductsMigrated) {
-    await migrateLegacyProducts();
-    await setDoc(settingsRef, { legacyProductsMigrated: true }, { merge: true });
+    await step("updating older products", migrateLegacyProducts);
+    await step("saving catalogue settings", () =>
+      setDoc(settingsRef, { legacyProductsMigrated: true }, { merge: true }),
+    );
   }
 }

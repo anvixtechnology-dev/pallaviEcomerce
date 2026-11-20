@@ -39,7 +39,7 @@ function ImagePlaceholder({ alt, icon }: { alt: string; icon?: ReactNode }) {
   );
 }
 
-/** Renders an image from Firebase Storage with a graceful industrial placeholder
+/** Renders an image (Cloudinary or Firebase Storage) with a graceful industrial placeholder
  * when the file is missing or fails to load. */
 export default function SmartImage({ src, alt, className, icon }: SmartImageProps) {
   const [failed, setFailed] = useState(false);

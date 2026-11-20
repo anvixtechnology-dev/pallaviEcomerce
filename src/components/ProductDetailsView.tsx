@@ -124,6 +124,7 @@ function ProductPurchasePanel({ product, preview }: { product: Product; preview:
           disabled={preview || (!isContact && (!orderable || belowMinimum || aboveStock))}
           onClick={() =>
             openProductEnquiry({
+              productId: product.id,
               name: product.name,
               sku: product.sku,
               action:
