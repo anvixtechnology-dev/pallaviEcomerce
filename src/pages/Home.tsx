@@ -1,4 +1,5 @@
-import { ArrowRight, Boxes, HardHat, MessageCircle, PackageSearch, ShieldCheck } from "lucide-react";
+import { ArrowRight, Boxes, ChevronLeft, ChevronRight, HardHat, MessageCircle, PackageSearch, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryCard from "../components/CategoryCard";
 import ProductCard from "../components/ProductCard";
@@ -16,6 +17,110 @@ const VALUE_PROPS = [
   { icon: MessageCircle, title: "Quick WhatsApp Response", description: "Ask for price, availability and quotation directly on WhatsApp — no waiting." },
   { icon: HardHat, title: "Built for Every Project", description: "Suitable for buildings, infrastructure, workshops and general engineering work." },
 ];
+
+const SHOP_SLIDES = [
+  { src: "/images/PallaviShop1.jpg", alt: "Pallavi Traders shop interior, first view" },
+  { src: "/images/PallaviShop2.jpg", alt: "Pallavi Traders shop interior, second view" },
+  { src: "/images/PallaviShop4.jpg", alt: "Pallavi Traders shop interior, fourth view" },
+];
+
+function ShopSlideshow() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused || typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % SHOP_SLIDES.length);
+    }, 3000);
+
+    return () => window.clearInterval(interval);
+  }, [isPaused]);
+
+  const goTo = (index: number) => {
+    setActiveIndex((index + SHOP_SLIDES.length) % SHOP_SLIDES.length);
+  };
+
+  return (
+    <section className="bg-surface-cream py-12 sm:py-14" aria-label="Pallavi Traders shop photos">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Shop photo slideshow"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              goTo(activeIndex - 1);
+            }
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              goTo(activeIndex + 1);
+            }
+          }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
+          }}
+          className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border-light bg-white shadow-[0_20px_45px_-25px_rgba(243,107,18,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 sm:aspect-[16/9]"
+        >
+          {SHOP_SLIDES.map((slide, index) => (
+            <img
+              key={slide.src}
+              src={slide.src}
+              alt={slide.alt}
+              aria-hidden={index !== activeIndex}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${index === activeIndex ? "opacity-100" : "opacity-0"}`}
+            />
+          ))}
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent" aria-hidden="true" />
+
+          <span className="absolute top-3 right-3 rounded-full bg-black/35 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+            {activeIndex + 1} / {SHOP_SLIDES.length}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex - 1)}
+            aria-label="Previous photo"
+            className="absolute top-1/2 left-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-brand-orange-dark focus-visible:ring-2 focus-visible:ring-brand-orange sm:h-11 sm:w-11"
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(activeIndex + 1)}
+            aria-label="Next photo"
+            className="absolute top-1/2 right-3 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 text-charcoal shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-brand-orange-dark focus-visible:ring-2 focus-visible:ring-brand-orange sm:h-11 sm:w-11"
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          </button>
+
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2">
+            {SHOP_SLIDES.map((slide, index) => (
+              <button
+                key={slide.src}
+                type="button"
+                onClick={() => goTo(index)}
+                aria-label={`Show photo ${index + 1}`}
+                aria-current={index === activeIndex ? "true" : undefined}
+                className={`h-2 rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 ${index === activeIndex ? "w-7 bg-white" : "w-2 bg-white/60 hover:bg-white"}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   useSeo(
@@ -183,6 +288,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ShopSlideshow />
 
       {/* ── CTA STRIP ── */}
       <section className="relative overflow-hidden bg-brand-orange py-14 text-white sm:py-16">
