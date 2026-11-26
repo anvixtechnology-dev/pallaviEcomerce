@@ -54,20 +54,20 @@ export default function Login() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-navy-950 px-4 py-12">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-cream px-4 py-12">
       <div className="blueprint-grid absolute inset-0 opacity-60" aria-hidden="true" />
-      <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-navy-700/40 blur-3xl" aria-hidden="true" />
-      <div className="absolute -right-24 -bottom-32 h-96 w-96 rounded-full bg-navy-600/30 blur-3xl" aria-hidden="true" />
+      <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute -right-24 -bottom-32 h-96 w-96 rounded-full bg-light-orange blur-3xl" aria-hidden="true" />
 
       <div className="relative w-full max-w-md">
-        <Link to="/" className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-steel-400 transition hover:text-white">
+        <Link to="/" className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-charcoal/60 transition hover:text-brand-orange-dark">
           <span className="h-1.5 w-1.5 rounded-full bg-accent-500" aria-hidden="true" />
           Back to PallaviTraders website
         </Link>
 
-        <div className="rounded-xl border border-navy-700/70 bg-white p-6 shadow-2xl sm:p-8">
+        <div className="rounded-xl border border-border-light bg-white p-6 shadow-2xl sm:p-8">
           <div className="flex flex-col items-center text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <LockKeyhole className="h-6 w-6" aria-hidden="true" />
             </span>
             <h1 className="mt-4 font-display text-3xl font-bold text-steel-900 uppercase">Admin Login</h1>
@@ -95,7 +95,7 @@ export default function Login() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="admin@example.com"
-                  className="w-full rounded-md border border-steel-300 py-2.5 pr-4 pl-9.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+                  className="w-full rounded-md border border-steel-300 py-2.5 pr-4 pl-9.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
                 />
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function Login() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-md border border-steel-300 py-2.5 pr-11 pl-9.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+                  className="w-full rounded-md border border-steel-300 py-2.5 pr-11 pl-9.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
                 />
                 <button
                   type="button"
@@ -129,7 +129,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-navy-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-navy-500 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-orange px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-orange-dark focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
             >
               {submitting ? (
                 <ButtonSpinner label="Signing in…" />

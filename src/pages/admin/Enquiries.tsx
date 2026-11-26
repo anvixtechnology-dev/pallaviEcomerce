@@ -93,7 +93,7 @@ export default function AdminEnquiries() {
         <button
           type="button"
           onClick={reload}
-          className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+          className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark"
         >
           <RefreshCw className="h-4 w-4" aria-hidden="true" />
           Refresh
@@ -110,8 +110,8 @@ export default function AdminEnquiries() {
             className={cn(
               "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition",
               filter === tab.value
-                ? "border-navy-800 bg-navy-900 text-white"
-                : "border-steel-300 bg-white text-steel-600 hover:border-navy-700 hover:text-navy-800",
+                  ? "border-brand-orange bg-brand-orange text-white"
+                : "border-steel-300 bg-white text-steel-600 hover:border-brand-orange hover:text-brand-orange-dark",
             )}
           >
             {tab.label}
@@ -171,7 +171,7 @@ export default function AdminEnquiries() {
                     </td>
                     <td className="px-5 py-3.5">
                       {enquiry.phone ? (
-                        <a href={`tel:${enquiry.phone}`} className="font-medium text-navy-700 hover:underline">
+                        <a href={`tel:${enquiry.phone}`} className="font-medium text-brand-orange-dark hover:underline">
                           {enquiry.phone}
                         </a>
                       ) : (
@@ -201,7 +201,7 @@ export default function AdminEnquiries() {
                         className={cn(
                           "rounded-md border px-2.5 py-1.5 text-xs font-semibold tracking-wide uppercase focus:outline-none",
                           STATUS_STYLES[enquiry.status],
-                          "focus:ring-2 focus:ring-navy-600/20",
+                          "focus:ring-2 focus:ring-brand-orange/20",
                           busyId === enquiry.id && "opacity-60",
                         )}
                       >
@@ -263,7 +263,7 @@ export default function AdminEnquiries() {
           <button
             type="button"
             onClick={() => setFilter("all")}
-            className="rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
           >
             View all enquiries
           </button>
@@ -274,7 +274,7 @@ export default function AdminEnquiries() {
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <button
             type="button"
-            className="absolute inset-0 bg-steel-950/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-charcoal/25 backdrop-blur-sm"
             onClick={() => setTarget(null)}
             aria-label="Cancel"
           />

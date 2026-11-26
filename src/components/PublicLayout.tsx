@@ -6,7 +6,7 @@ import WhatsAppButton from "./WhatsAppButton";
 
 export default function PublicLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-near-black">
+    <div className="flex min-h-screen flex-col bg-white">
       <ScrollToTop />
       <Navbar />
       {/* No top padding here — the Home hero starts at the top of the page behind

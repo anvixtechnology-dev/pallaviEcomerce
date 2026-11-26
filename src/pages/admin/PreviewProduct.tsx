@@ -20,7 +20,7 @@ export default function PreviewProduct() {
   if (!product) {
     return (
       <EmptyState icon={PackageX} title="Product not found" description="This product may have been deleted.">
-        <Link to="/admin/products" className="rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700">
+        <Link to="/admin/products" className="rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark">
           Back to products
         </Link>
       </EmptyState>
@@ -35,11 +35,11 @@ export default function PreviewProduct() {
           {product.status !== "active" ? " — hidden from customers." : ""}
         </p>
         <div className="flex gap-2">
-          <Link to="/admin/products" className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900">
+          <Link to="/admin/products" className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Back
           </Link>
-          <Link to={`/admin/products/${product.id}/edit`} className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-navy-700">
+          <Link to={`/admin/products/${product.id}/edit`} className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-orange-dark">
             <Pencil className="h-4 w-4" aria-hidden="true" />
             Edit
           </Link>

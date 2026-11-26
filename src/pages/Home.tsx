@@ -31,12 +31,12 @@ export default function Home() {
     <>
       {/* ── HERO ── */}
       <section
-        className="relative isolate w-full overflow-hidden bg-near-black"
+        className="relative isolate w-full overflow-hidden bg-surface-cream"
         style={{ minHeight: "100svh", paddingTop: "var(--nav-h)" }}
       >
         {/* Background video — full cover behind all content */}
         <video
-          src="/videos/pallavi-hero.mp4"
+          src="/videos/Logo_reveal_animation_for_company_20261027131025-clean.mp4"
           autoPlay
           muted
           loop
@@ -55,13 +55,13 @@ export default function Home() {
           }}
         />
 
-        {/* White overlay — keeps text readable without hiding the video */}
+        {/* Light overlay — keeps text readable without hiding the video */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            background: "rgba(0,0,0,0.55)",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,247,240,0.9) 100%)",
             zIndex: -1,
           }}
         />
@@ -69,19 +69,19 @@ export default function Home() {
         {/* Hero content — centred vertically over the video */}
         <div className="relative z-10 flex min-h-[calc(100svh-var(--nav-h))] flex-col items-center justify-center px-4 py-14 text-center sm:px-6 sm:py-20 lg:px-8">
           {/* Eyebrow badge */}
-          <span className="mb-5 inline-block rounded-full border border-brand-orange/60 bg-brand-orange/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand-orange uppercase backdrop-blur-sm">
+          <span className="mb-5 inline-block rounded-full border border-brand-orange/40 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand-orange-dark uppercase backdrop-blur-sm">
             Iron &amp; Steel Specialists
           </span>
 
           {/* Heading */}
-          <h1 className="max-w-full font-display text-[2.125rem] font-bold leading-tight break-words text-white uppercase xs:text-4xl sm:text-5xl md:text-6xl">
+          <h1 className="max-w-full font-display text-[2.125rem] font-bold leading-tight break-words text-charcoal uppercase xs:text-4xl sm:text-5xl md:text-6xl">
             Quality Iron &amp;{" "}
             <span className="text-brand-orange">Steel</span>
             <br className="hidden sm:block" />
             {" "}Materials
           </h1>
 
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-charcoal/75 sm:text-base md:text-lg">
             TMT bars, angles, channels, plates, pipes and more. Browse our catalogue and get a
             quotation on WhatsApp instantly.
           </p>
@@ -107,7 +107,7 @@ export default function Home() {
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="font-display text-2xl font-bold text-brand-orange sm:text-3xl">{stat.value}</div>
-                <div className="mt-0.5 text-xs font-semibold text-white/50 uppercase tracking-wider">{stat.label}</div>
+                <div className="mt-0.5 text-xs font-semibold text-charcoal/60 uppercase tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -115,19 +115,19 @@ export default function Home() {
       </section>
 
       {/* ── PRODUCT TICKER ── */}
-      <div className="border-y border-white/10 bg-near-black-alt py-3">
-        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-1.5 px-4 text-[11px] font-semibold tracking-widest text-white/40 uppercase select-none">
-          <li>TMT Bars</li><li aria-hidden="true" className="text-white/20">/</li>
-          <li>Angles &amp; Channels</li><li aria-hidden="true" className="text-white/20">/</li>
-          <li>Plates &amp; Flats</li><li aria-hidden="true" className="text-white/20">/</li>
-          <li>MS &amp; GI Pipes</li><li aria-hidden="true" className="text-white/20">/</li>
-          <li>Structural Steel</li><li aria-hidden="true" className="text-white/20">/</li>
+      <div className="border-y border-border-light bg-white py-3">
+        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-1.5 px-4 text-[11px] font-semibold tracking-widest text-charcoal/55 uppercase select-none">
+          <li>TMT Bars</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
+          <li>Angles &amp; Channels</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
+          <li>Plates &amp; Flats</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
+          <li>MS &amp; GI Pipes</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
+          <li>Structural Steel</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
           <li>Binding Wire</li>
         </ul>
       </div>
 
       {/* ── CATEGORIES ── */}
-      <section className="bg-near-black py-14 sm:py-16">
+      <section className="bg-white py-14 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
             eyebrow="Product Catalogue"
@@ -135,7 +135,7 @@ export default function Home() {
             description="Browse iron and steel materials by category. Select a category to view the full range."
             to="/categories"
             actionLabel="View all categories"
-            tone="dark"
+            tone="light"
           />
           {categoriesLoading ? <CategoryGridSkeleton count={8} />
             : categoriesError ? <ErrorState message={categoriesError} onRetry={reloadCategories} />
@@ -155,7 +155,7 @@ export default function Home() {
       </section>
 
       {/* ── FEATURED PRODUCTS ── */}
-      <section className="bg-near-black-alt py-14 sm:py-16">
+      <section className="bg-surface-cream py-14 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
             eyebrow="Handpicked"
@@ -163,7 +163,7 @@ export default function Home() {
             description="Popular materials frequently requested by our customers. Contact us for price and availability."
             to="/products"
             actionLabel="Browse all products"
-            tone="dark"
+            tone="light"
           />
           {featuredLoading ? <ProductGridSkeleton count={8} />
             : featuredError ? <ErrorState message={featuredError} onRetry={reloadFeatured} />
@@ -181,24 +181,24 @@ export default function Home() {
       </section>
 
       {/* ── VALUE PROPS ── */}
-      <section className="border-y border-white/10 bg-near-black py-14 sm:py-16">
+      <section className="border-y border-border-light bg-white py-14 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
             align="center"
             eyebrow="Why PallaviTraders"
             title="Materials You Can Rely On"
             description="A straightforward catalogue for buyers who need iron and steel materials quickly — with quotations on WhatsApp."
-            tone="dark"
+            tone="light"
           />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {VALUE_PROPS.map((item) => (
               <div key={item.title}
-                className="rounded-lg border border-white/10 bg-near-black-alt p-6 shadow-sm transition duration-300 hover:border-brand-orange/50 hover:shadow-[0_16px_30px_-18px_rgba(243,107,18,0.3)]">
-                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-orange/15 text-brand-orange">
+                className="rounded-lg border border-border-light bg-surface-cream p-6 shadow-sm transition duration-300 hover:border-brand-orange/60 hover:shadow-[0_16px_30px_-18px_rgba(243,107,18,0.3)]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-orange/10 text-brand-orange-dark">
                   <item.icon className="h-5 w-5" aria-hidden="true" />
                 </div>
-                <h3 className="mt-4 font-display text-lg font-bold text-white uppercase">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/55">{item.description}</p>
+                <h3 className="mt-4 font-display text-lg font-bold text-charcoal uppercase">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{item.description}</p>
               </div>
             ))}
           </div>

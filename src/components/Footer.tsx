@@ -14,7 +14,7 @@ const QUICK_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-near-black text-white/60">
+    <footer className="border-t border-border-light bg-white text-charcoal/70">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
@@ -26,7 +26,7 @@ export default function Footer() {
               loading="lazy"
               className="h-16 w-auto object-contain"
             />
-            <p className="mt-3 text-sm leading-relaxed text-white/50">
+            <p className="mt-3 text-sm leading-relaxed text-charcoal/60">
               Quality Iron &amp; Steel Materials for Every Construction Need.
             </p>
             <a
@@ -42,11 +42,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Quick Links</h2>
+            <h2 className="font-display text-lg font-semibold tracking-wide text-charcoal uppercase">Quick Links</h2>
             <ul className="mt-4 space-y-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="text-sm text-white/50 transition hover:text-brand-orange">
+                  <Link to={link.to} className="text-sm text-charcoal/60 transition hover:text-brand-orange">
                     {link.label}
                   </Link>
                 </li>
@@ -55,8 +55,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Products</h2>
-            <ul className="mt-4 space-y-2.5 text-sm text-white/50">
+            <h2 className="font-display text-lg font-semibold tracking-wide text-charcoal uppercase">Products</h2>
+            <ul className="mt-4 space-y-2.5 text-sm text-charcoal/60">
               <li>TMT Bars</li>
               <li>MS Angles, Channels &amp; Beams</li>
               <li>MS Plates, Flats &amp; Rods</li>
@@ -66,8 +66,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h2 className="font-display text-lg font-semibold tracking-wide text-white uppercase">Contact</h2>
-            <ul className="mt-4 space-y-3 text-sm text-white/50">
+            <h2 className="font-display text-lg font-semibold tracking-wide text-charcoal uppercase">Contact</h2>
+            <ul className="mt-4 space-y-3 text-sm text-charcoal/60">
               <li className="flex items-start gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                 <a href={`tel:${BUSINESS.phoneDial}`} className="transition hover:text-brand-orange">
@@ -105,8 +105,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/30 sm:flex-row sm:px-6 lg:px-8">
+      <div className="border-t border-border-light">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-charcoal/50 sm:flex-row sm:px-6 lg:px-8">
           <p>© 2026 PallaviTraders. All rights reserved.</p>
           <p>Iron &amp; Steel Materials Catalogue — Enquire on WhatsApp for quotations.</p>
         </div>

@@ -40,10 +40,10 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           ) : null}
           {product.newArrival ? (
-            <span className="rounded bg-charcoal px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">New Arrival</span>
+            <span className="rounded bg-brand-orange-dark px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">New Arrival</span>
           ) : null}
           {product.bestSeller ? (
-            <span className="rounded bg-charcoal px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">Best Seller</span>
+            <span className="rounded bg-brand-orange-dark px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">Best Seller</span>
           ) : null}
         </span>
       </Link>

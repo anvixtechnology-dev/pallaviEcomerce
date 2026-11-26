@@ -29,7 +29,7 @@ export default function EditProduct() {
       >
         <Link
           to="/admin/products"
-          className="rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+          className="rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
         >
           Back to products
         </Link>

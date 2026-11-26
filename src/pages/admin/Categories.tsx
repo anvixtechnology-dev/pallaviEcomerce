@@ -136,7 +136,7 @@ function CategoryModal({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <button type="button" className="absolute inset-0 bg-steel-950/70 backdrop-blur-sm" onClick={onClose} aria-label="Close" />
+      <button type="button" className="absolute inset-0 bg-charcoal/25 backdrop-blur-sm" onClick={onClose} aria-label="Close" />
       <form
         onSubmit={handleSubmit}
         noValidate
@@ -178,7 +178,7 @@ function CategoryModal({
                 "w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:ring-2 focus:outline-none",
                 nameError
                   ? "border-red-400 focus:border-red-500 focus:ring-red-500/15"
-                  : "border-steel-300 focus:border-navy-600 focus:ring-navy-600/15",
+                  : "border-steel-300 focus:border-brand-orange focus:ring-brand-orange/15",
               )}
             />
             {nameError ? <p className="mt-1 text-xs text-red-600">{nameError}</p> : null}
@@ -194,7 +194,7 @@ function CategoryModal({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder="Short description shown on the category card…"
-              className="w-full resize-y rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+              className="w-full resize-y rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
             />
           </div>
 
@@ -209,7 +209,7 @@ function CategoryModal({
                 setSpecTemplate(event.target.value as SpecTemplateId);
                 setTemplateChosen(true);
               }}
-              className="w-full rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+              className="w-full rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
             >
               {SPEC_TEMPLATE_IDS.map((id) => (
                 <option key={id} value={id}>
@@ -253,12 +253,12 @@ function CategoryModal({
                   }
                 }}
                 placeholder="e.g. Heavy Duty"
-                className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+                className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={addSubcategory}
-                className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+                className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark"
               >
                 Add
               </button>
@@ -275,7 +275,7 @@ function CategoryModal({
                   <span className="flex h-full w-full items-center justify-center text-[11px] text-steel-400">No image</span>
                 )}
               </div>
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark">
                 <ImagePlus className="h-4 w-4" aria-hidden="true" />
                 {preview ? "Replace" : "Upload"}
                 <input type="file" accept="image/*" className="sr-only" onChange={handleFile} />
@@ -296,7 +296,7 @@ function CategoryModal({
           <button
             type="submit"
             disabled={saving}
-            className="rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark disabled:cursor-not-allowed disabled:opacity-70"
           >
             {saving ? <ButtonSpinner label="Saving…" /> : state.mode === "add" ? "Add Category" : "Save Changes"}
           </button>
@@ -353,7 +353,7 @@ export default function AdminCategories() {
         <button
           type="button"
           onClick={() => setModal({ mode: "add", category: null })}
-          className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+          className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Add Category
@@ -381,7 +381,7 @@ export default function AdminCategories() {
               <div className="flex min-w-0 flex-1 flex-col">
                 <h2 className="font-display text-lg leading-tight font-bold text-steel-900 uppercase">{category.name}</h2>
                 <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-steel-600">{category.description || "No description."}</p>
-                <p className="mt-1 text-[11px] font-semibold tracking-wide text-navy-600 uppercase">
+                <p className="mt-1 text-[11px] font-semibold tracking-wide text-brand-orange-dark uppercase">
                   {counts.get(category.id) ?? 0} {(counts.get(category.id) ?? 0) === 1 ? "product" : "products"}
                   {category.subcategories.length > 0
                     ? ` · ${category.subcategories.length} ${category.subcategories.length === 1 ? "subcategory" : "subcategories"}`
@@ -391,14 +391,14 @@ export default function AdminCategories() {
                 <div className="mt-auto flex gap-2 pt-3">
                   <Link
                     to={`/categories/${category.id}`}
-                    className="rounded-md border border-steel-200 px-2.5 py-1.5 text-xs font-semibold text-steel-600 transition hover:border-navy-600 hover:text-navy-800"
+                    className="rounded-md border border-steel-200 px-2.5 py-1.5 text-xs font-semibold text-steel-600 transition hover:border-brand-orange hover:text-brand-orange-dark"
                   >
                     View
                   </Link>
                   <button
                     type="button"
                     onClick={() => setModal({ mode: "edit", category })}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-steel-200 px-2.5 py-1.5 text-xs font-semibold text-steel-600 transition hover:border-navy-600 hover:text-navy-800"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-steel-200 px-2.5 py-1.5 text-xs font-semibold text-steel-600 transition hover:border-brand-orange hover:text-brand-orange-dark"
                   >
                     <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
                     Edit
@@ -425,7 +425,7 @@ export default function AdminCategories() {
           <button
             type="button"
             onClick={() => setModal({ mode: "add", category: null })}
-            className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add Category
@@ -445,7 +445,7 @@ export default function AdminCategories() {
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <button
             type="button"
-            className="absolute inset-0 bg-steel-950/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-charcoal/25 backdrop-blur-sm"
             onClick={() => setTarget(null)}
             aria-label="Cancel"
           />

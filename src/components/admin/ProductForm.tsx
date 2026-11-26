@@ -67,7 +67,7 @@ function fieldClasses(error?: string): string {
     "w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:ring-2 focus:outline-none read-only:bg-steel-50",
     error
       ? "border-red-400 focus:border-red-500 focus:ring-red-500/15"
-      : "border-steel-300 focus:border-navy-600 focus:ring-navy-600/15",
+      : "border-steel-300 focus:border-brand-orange focus:ring-brand-orange/15",
   );
 }
 
@@ -92,7 +92,7 @@ function Toggle({ checked, onChange, children }: { checked: boolean; onChange: (
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="h-4 w-4 rounded border-steel-300 text-navy-700 focus:ring-navy-600/30"
+        className="h-4 w-4 rounded border-steel-300 text-brand-orange-dark focus:ring-brand-orange/30"
       />
       <span className="flex items-center gap-2 text-sm font-medium text-steel-700">
         <Star className={cn("h-4 w-4", checked ? "fill-amber-400 text-amber-400" : "text-steel-400")} aria-hidden="true" />
@@ -331,7 +331,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
         </div>
         <Link
           to="/admin/products"
-          className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+          className="inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-4 py-2 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to products
@@ -402,7 +402,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                     <button
                       type="button"
                       onClick={() => set("sku", generateSku(selectedCategory?.name ?? ""))}
-                      className="shrink-0 rounded-md border border-steel-300 px-3 text-steel-600 transition hover:border-navy-700 hover:text-navy-900"
+                      className="shrink-0 rounded-md border border-steel-300 px-3 text-steel-600 transition hover:border-brand-orange hover:text-brand-orange-dark"
                       title="Generate a new SKU"
                       aria-label="Generate a new SKU"
                     >
@@ -513,7 +513,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 <button
                   type="button"
                   onClick={() => set("customSpecs", [...values.customSpecs, { name: "", value: "" }])}
-                  className="mt-2 inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-3 py-2 text-xs font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900"
+                  className="mt-2 inline-flex items-center gap-2 rounded-md border border-steel-300 bg-white px-3 py-2 text-xs font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark"
                 >
                   <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                   Add Specification
@@ -707,7 +707,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
           </p>
           {uploadPercent !== null ? (
             <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-steel-100" role="progressbar" aria-valuenow={uploadPercent} aria-valuemin={0} aria-valuemax={100}>
-              <div className="h-full rounded-full bg-navy-700 transition-all" style={{ width: `${uploadPercent}%` }} />
+              <div className="h-full rounded-full bg-brand-orange transition-all" style={{ width: `${uploadPercent}%` }} />
             </div>
           ) : null}
         </div>
@@ -731,7 +731,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
             type="button"
             onClick={() => save("publish")}
             disabled={submitting}
-            className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-navy-500 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70"
           >
             {submitting ? (
               <ButtonSpinner label={uploadStatus || "Saving…"} />

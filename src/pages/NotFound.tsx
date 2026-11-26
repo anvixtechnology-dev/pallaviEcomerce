@@ -8,11 +8,11 @@ export default function NotFound() {
 
   return (
     <section className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-4 pt-below-nav pb-20 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/5">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-light-orange">
         <SearchX className="h-8 w-8 text-steel-grey" aria-hidden="true" />
       </div>
       <p className="mt-6 font-display text-7xl font-bold text-brand-orange">404</p>
-      <h1 className="mt-2 font-display text-3xl font-bold text-white uppercase">Page not found</h1>
+      <h1 className="mt-2 font-display text-3xl font-bold text-charcoal uppercase">Page not found</h1>
       <p className="mt-3 max-w-md text-sm leading-relaxed text-steel-grey">
         The page you are looking for does not exist or may have been moved. Browse our catalogue or get in touch on
         WhatsApp.
@@ -20,7 +20,7 @@ export default function NotFound() {
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+          className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Browse products

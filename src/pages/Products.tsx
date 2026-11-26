@@ -230,7 +230,7 @@ export default function Products() {
                 ) : null}
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal"
+                  className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange"
                 >
                   Send an enquiry
                 </Link>

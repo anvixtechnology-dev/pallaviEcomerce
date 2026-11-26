@@ -82,19 +82,19 @@ export default function AdminLayout() {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition ${
       isActive
-        ? "bg-navy-800 text-white"
-        : "text-white hover:bg-navy-900"
+        ? "bg-brand-orange text-white"
+        : "text-charcoal/70 hover:bg-surface-cream hover:text-charcoal"
     }`;
 
   return (
     <div className="flex min-h-screen bg-warm-white">
       {/* Sidebar — desktop */}
-      <aside className="hidden w-60 shrink-0 flex-col bg-navy-950 lg:flex">
-        <div className="flex flex-col items-center gap-1.5 border-b border-navy-800 px-5 py-5">
+      <aside className="hidden w-60 shrink-0 flex-col bg-white lg:flex">
+        <div className="flex flex-col items-center gap-1.5 border-b border-border-light px-5 py-5">
           <Link to="/admin" className="flex items-center" aria-label="Admin dashboard">
             <AdminLogo className="h-20" />
           </Link>
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-white">Admin panel</span>
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-charcoal/60">Admin panel</span>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1" aria-label="Admin navigation">
@@ -106,17 +106,17 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-navy-800 p-4">
+        <div className="border-t border-border-light p-4">
           <div className="mb-3 flex items-center gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-700 text-sm font-bold text-white uppercase">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange/10 text-sm font-bold text-brand-orange-dark uppercase">
               {user?.email?.[0] ?? "A"}
             </div>
-            <p className="min-w-0 truncate text-xs text-white">{user?.email}</p>
+            <p className="min-w-0 truncate text-xs text-charcoal/70">{user?.email}</p>
           </div>
           <button
             type="button"
             onClick={handleSignOut}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-white transition hover:bg-navy-900"
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-charcoal/70 transition hover:bg-surface-cream hover:text-charcoal"
           >
             <LogOut className="h-4 w-4" aria-hidden="true" />
             Sign out
@@ -143,7 +143,7 @@ export default function AdminLayout() {
 
         {/* Mobile drawer overlay */}
         <div
-          className={`fixed inset-0 z-40 bg-near-black/60 transition-opacity duration-300 lg:hidden ${
+          className={`fixed inset-0 z-40 bg-charcoal/25 transition-opacity duration-300 lg:hidden ${
             drawerOpen ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           aria-hidden="true"
@@ -152,19 +152,19 @@ export default function AdminLayout() {
 
         {/* Mobile drawer */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 flex w-64 max-w-[85vw] flex-col bg-navy-950 transition-transform duration-300 lg:hidden ${
+          className={`fixed inset-y-0 left-0 z-50 flex w-64 max-w-[85vw] flex-col bg-white transition-transform duration-300 lg:hidden ${
             drawerOpen ? "translate-x-0" : "-translate-x-full"
           }`}
           aria-label="Mobile admin navigation"
           inert={!drawerOpen}
         >
-          <div className="flex h-20 items-center justify-between border-b border-navy-800 px-4">
+          <div className="flex h-20 items-center justify-between border-b border-border-light px-4">
             <AdminLogo className="h-14" />
             <button
               type="button"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close navigation"
-              className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-white"
+              className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-charcoal"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -185,12 +185,12 @@ export default function AdminLayout() {
             ))}
           </nav>
 
-          <div className="border-t border-navy-800 p-4">
-            <p className="mb-2 truncate text-xs text-white">{user?.email}</p>
+          <div className="border-t border-border-light p-4">
+            <p className="mb-2 truncate text-xs text-charcoal/70">{user?.email}</p>
             <button
               type="button"
               onClick={handleSignOut}
-              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-white transition hover:bg-navy-900"
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-charcoal/70 transition hover:bg-surface-cream hover:text-charcoal"
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
               Sign out
@@ -202,7 +202,7 @@ export default function AdminLayout() {
         <main className="min-w-0 flex-1 overflow-auto">
           {/* Desktop breadcrumb strip */}
           <div className="hidden border-b border-border-grey bg-white px-6 py-3 lg:flex items-center gap-1 text-xs text-steel-grey">
-            <Link to="/" className="hover:text-charcoal transition">
+            <Link to="/" className="hover:text-brand-orange-dark transition">
               Site
             </Link>
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />

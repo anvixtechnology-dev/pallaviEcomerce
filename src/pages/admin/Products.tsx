@@ -46,10 +46,10 @@ const SORT_OPTIONS: Array<{ value: ProductSort; label: string }> = [
 ];
 
 const FILTER_CLASSES =
-  "w-full min-w-0 rounded-md border border-steel-300 bg-white px-3 py-2.5 text-sm text-steel-800 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none";
+  "w-full min-w-0 rounded-md border border-steel-300 bg-white px-3 py-2.5 text-sm text-steel-800 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
 
 const ACTION_CLASSES =
-  "rounded-md border border-steel-200 p-2 text-steel-500 transition hover:border-navy-600 hover:text-navy-800 disabled:cursor-not-allowed disabled:opacity-50";
+  "rounded-md border border-steel-200 p-2 text-steel-500 transition hover:border-brand-orange hover:text-brand-orange-dark disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function AdminProducts() {
   useSeo("Manage Products | PallaviTraders Admin");
@@ -130,7 +130,7 @@ export default function AdminProducts() {
         </div>
         <Link
           to="/admin/products/add"
-          className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+          className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
         >
           <PackagePlus className="h-4 w-4" aria-hidden="true" />
           Add Product
@@ -303,7 +303,7 @@ export default function AdminProducts() {
         >
           <Link
             to="/admin/products/add"
-            className="inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
           >
             <PackagePlus className="h-4 w-4" aria-hidden="true" />
             Add Product
@@ -316,7 +316,7 @@ export default function AdminProducts() {
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <button
             type="button"
-            className="absolute inset-0 bg-steel-950/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-charcoal/25 backdrop-blur-sm"
             onClick={() => setTarget(null)}
             aria-label="Cancel"
           />

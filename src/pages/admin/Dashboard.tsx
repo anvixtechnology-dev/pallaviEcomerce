@@ -74,7 +74,7 @@ export default function Dashboard() {
           <Link
             key={label}
             to={to}
-            className="group min-w-0 rounded-lg border border-border-grey bg-white p-4 transition sm:p-5 hover:border-charcoal/30 hover:shadow-sm"
+            className="group min-w-0 rounded-lg border border-border-grey bg-white p-4 transition sm:p-5 hover:border-brand-orange/30 hover:shadow-sm"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -96,21 +96,21 @@ export default function Dashboard() {
         <div className="flex flex-wrap gap-3">
           <Link
             to="/admin/products/add"
-            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
           >
             <Package className="h-4 w-4" aria-hidden="true" />
             New Product
           </Link>
           <Link
             to="/admin/categories"
-            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
           >
             <Boxes className="h-4 w-4" aria-hidden="true" />
             Manage Categories
           </Link>
           <Link
             to="/admin/enquiries"
-            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
           >
             <MessageSquare className="h-4 w-4" aria-hidden="true" />
             View Enquiries
@@ -119,7 +119,7 @@ export default function Dashboard() {
             to="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white"
+            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
           >
             <TrendingUp className="h-4 w-4" aria-hidden="true" />
             View Live Site

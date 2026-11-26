@@ -32,7 +32,7 @@ export default function SearchBar({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="w-full rounded-md border border-steel-300 bg-white py-2.5 pr-10 pl-9 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+        className="w-full rounded-md border border-steel-300 bg-white py-2.5 pr-10 pl-9 text-sm text-steel-800 placeholder:text-steel-400 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
       />
       {value ? (
         <button

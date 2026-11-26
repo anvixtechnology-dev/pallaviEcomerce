@@ -21,7 +21,7 @@ function ImagePlaceholder({ alt, icon }: { alt: string; icon?: ReactNode }) {
       <svg className="absolute h-full w-full opacity-40" aria-hidden="true">
         <defs>
           <pattern id={patternId} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="14" stroke="#97a6b8" strokeWidth="6" />
+            <line x1="0" y1="0" x2="0" y2="14" stroke="#EDBFA2" strokeWidth="6" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill={`url(#${patternId})`} />

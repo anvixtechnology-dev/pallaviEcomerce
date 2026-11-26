@@ -58,7 +58,7 @@ export default function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">
-        <nav className="pointer-events-auto flex w-full max-w-5xl items-center justify-between px-5 py-3 rounded-full text-sm border border-white/10 bg-near-black/90 shadow-[0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-md">
+        <nav className="pointer-events-auto flex w-full max-w-5xl items-center justify-between px-5 py-3 rounded-full text-sm border border-border-light bg-white/95 shadow-[0_4px_20px_rgba(243,107,33,0.12)] backdrop-blur-md">
           <Link to="/" aria-label="PallaviTraders home" className="shrink-0">
             <BrandMark />
           </Link>
@@ -72,17 +72,17 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   cn(
                     "relative overflow-hidden h-6 group text-sm font-medium transition-colors",
-                    isActive ? "text-brand-orange" : "text-white/60 hover:text-white",
+                    isActive ? "text-brand-orange-dark" : "text-charcoal/60 hover:text-charcoal",
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
                     {isActive && (
-                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-orange" aria-hidden="true" />
+                      <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-orange-dark" aria-hidden="true" />
                     )}
                     <span className="block group-hover:-translate-y-full transition-transform duration-300">{link.label}</span>
-                    <span className="block absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300 text-white">{link.label}</span>
+                    <span className="block absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300 text-charcoal">{link.label}</span>
                   </>
                 )}
               </NavLink>
@@ -92,7 +92,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               to="/contact"
-              className="hidden md:inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-brand-orange/70 hover:text-brand-orange"
+              className="hidden md:inline-flex items-center justify-center rounded-full border border-border-light bg-surface-cream px-4 py-2 text-sm font-semibold text-charcoal transition hover:border-brand-orange/70 hover:text-brand-orange-dark"
             >
               Contact
             </Link>
@@ -107,7 +107,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-white/20 text-white hover:bg-white/10 transition"
+              className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-border-light text-charcoal hover:bg-surface-cream transition"
               aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav-drawer"
@@ -127,7 +127,7 @@ export default function Navbar() {
           tabIndex={mobileOpen ? 0 : -1}
           onClick={() => setMobileOpen(false)}
           className={cn(
-            "absolute inset-0 bg-charcoal/40 transition-opacity duration-300",
+            "absolute inset-0 bg-charcoal/25 transition-opacity duration-300",
             mobileOpen ? "opacity-100" : "opacity-0",
           )}
           aria-label="Close navigation menu"
@@ -135,7 +135,7 @@ export default function Navbar() {
         <nav
           id="mobile-nav-drawer"
           className={cn(
-            "absolute top-0 right-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 overflow-y-auto border-l border-white/10 bg-near-black p-5 pt-20 shadow-2xl transition-transform duration-300",
+            "absolute top-0 right-0 flex h-full w-72 max-w-[80vw] flex-col gap-1 overflow-y-auto border-l border-border-light bg-white p-5 pt-20 shadow-2xl transition-transform duration-300",
             mobileOpen ? "translate-x-0" : "translate-x-full",
           )}
           aria-label="Mobile navigation"
@@ -148,14 +148,14 @@ export default function Navbar() {
               className={({ isActive }) =>
                 cn(
                   "rounded-full px-4 py-3 text-base font-medium transition",
-                  isActive ? "bg-brand-orange text-white" : "text-white/70 hover:bg-white/10 hover:text-white",
+                  isActive ? "bg-brand-orange text-white" : "text-charcoal/70 hover:bg-surface-cream hover:text-charcoal",
                 )
               }
             >
               {link.label}
             </NavLink>
           ))}
-          <p className="mt-auto px-4 pt-6 text-xs leading-relaxed text-white/40">
+          <p className="mt-auto px-4 pt-6 text-xs leading-relaxed text-charcoal/55">
             Quality Iron &amp; Steel Materials for Every Construction Need.
           </p>
         </nav>

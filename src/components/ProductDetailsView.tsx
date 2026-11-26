@@ -17,7 +17,7 @@ const AVAILABILITY_STYLES = {
 const PRIMARY_ACTION =
   "inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-orange px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60";
 const SECONDARY_ACTION =
-  "inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-grey bg-white px-6 py-3 text-sm font-semibold text-charcoal transition hover:border-charcoal";
+  "inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-grey bg-white px-6 py-3 text-sm font-semibold text-charcoal transition hover:border-brand-orange";
 const INPUT =
   "w-full rounded-md border border-border-grey bg-white px-3 py-2.5 text-sm text-charcoal focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
 
@@ -239,7 +239,7 @@ export default function ProductDetailsView({
                     type="button"
                     onClick={() => setActiveImage(index)}
                     className={`h-16 w-16 shrink-0 overflow-hidden rounded border-2 transition sm:h-20 sm:w-20 ${
-                      index === activeImage ? "border-brand-orange" : "border-border-grey hover:border-charcoal"
+                      index === activeImage ? "border-brand-orange" : "border-border-grey hover:border-brand-orange"
                     }`}
                     aria-label={`View image ${index + 1}`}
                     aria-pressed={index === activeImage}
@@ -268,13 +268,13 @@ export default function ProductDetailsView({
                 {AVAILABILITY_LABELS[product.availability]}
               </span>
               {product.featured ? (
-                <span className="rounded bg-charcoal px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">Featured</span>
+                <span className="rounded bg-brand-orange-dark px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">Featured</span>
               ) : null}
               {product.newArrival ? (
-                <span className="rounded bg-charcoal px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">New Arrival</span>
+                <span className="rounded bg-brand-orange-dark px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">New Arrival</span>
               ) : null}
               {product.bestSeller ? (
-                <span className="rounded bg-charcoal px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">Best Seller</span>
+                <span className="rounded bg-brand-orange-dark px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">Best Seller</span>
               ) : null}
             </div>
 
@@ -309,7 +309,7 @@ export default function ProductDetailsView({
                       href={document.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-medium text-charcoal transition hover:border-charcoal"
+                      className="flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-medium text-charcoal transition hover:border-brand-orange"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
                       <span className="min-w-0 truncate">

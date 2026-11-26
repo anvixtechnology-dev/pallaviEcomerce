@@ -93,7 +93,7 @@ export default function Settings() {
         {/* Account */}
         <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <UserRound className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
             <h2 className="font-display text-lg font-bold text-steel-900 uppercase">Admin Account</h2>
@@ -124,7 +124,7 @@ export default function Settings() {
         {/* Sample data */}
         <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <Sparkles className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
             <h2 className="font-display text-lg font-bold text-steel-900 uppercase">Sample Data</h2>
@@ -139,7 +139,7 @@ export default function Settings() {
             type="button"
             onClick={handleSeed}
             disabled={seeding}
-            className="mt-4 inline-flex items-center gap-2 rounded-md bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-4 inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark disabled:cursor-not-allowed disabled:opacity-70"
           >
             {seeding ? (
               <ButtonSpinner label="Loading sample data…" />
@@ -162,7 +162,7 @@ export default function Settings() {
         {/* GST rates */}
         <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <Percent className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
             <h2 className="font-display text-lg font-bold text-steel-900 uppercase">GST Rates</h2>
@@ -200,9 +200,9 @@ export default function Settings() {
               onChange={(event) => setNewGstRate(event.target.value)}
               placeholder="New rate (%)"
               aria-label="New GST rate"
-              className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-navy-600 focus:ring-2 focus:ring-navy-600/15 focus:outline-none"
+              className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
             />
-            <button type="submit" className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-navy-700 hover:text-navy-900">
+            <button type="submit" className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark">
               Add
             </button>
           </form>
@@ -211,7 +211,7 @@ export default function Settings() {
         {/* Business details */}
         <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <Info className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
             <h2 className="font-display text-lg font-bold text-steel-900 uppercase">Business Contact Details</h2>
@@ -237,7 +237,7 @@ export default function Settings() {
         {/* Security */}
         <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-navy-900 text-accent-500">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
               <ShieldCheck className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
             <h2 className="font-display text-lg font-bold text-steel-900 uppercase">Security Rules</h2>
@@ -250,7 +250,7 @@ export default function Settings() {
             with:
           </p>
 
-          <pre className={cn("mt-3 overflow-x-auto rounded-md bg-steel-950 px-4 py-3 text-xs text-steel-300")}>
+          <pre className={cn("mt-3 overflow-x-auto rounded-md bg-surface-cream px-4 py-3 text-xs text-charcoal")}>
             <code>firebase deploy --only firestore:rules,storage</code>
           </pre>
 

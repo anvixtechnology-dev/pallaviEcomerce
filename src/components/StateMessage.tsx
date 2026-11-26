@@ -24,11 +24,11 @@ export function SectionHeader({ eyebrow, title, description, to, actionLabel, al
         {eyebrow ? (
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-orange uppercase">{eyebrow}</p>
         ) : null}
-        <h2 className={cn("font-display text-3xl leading-tight font-bold uppercase sm:text-4xl", light ? "text-charcoal" : "text-white")}>
+        <h2 className={cn("font-display text-3xl leading-tight font-bold uppercase sm:text-4xl", light ? "text-charcoal" : "text-brand-orange-dark")}>
           {title}
         </h2>
         {description ? (
-          <p className={cn("mt-2 max-w-2xl text-sm leading-relaxed sm:text-base", light ? "text-steel-600" : "text-steel-grey")}>{description}</p>
+          <p className={cn("mt-2 max-w-2xl text-sm leading-relaxed sm:text-base", light ? "text-steel-600" : "text-charcoal/70")}>{description}</p>
         ) : null}
       </div>
       {to && actionLabel ? (
@@ -37,8 +37,8 @@ export function SectionHeader({ eyebrow, title, description, to, actionLabel, al
           className={cn(
             "shrink-0 self-start sm:self-auto",
             light
-              ? "inline-flex items-center justify-center rounded-full border border-border-grey bg-white px-4 py-2 text-sm font-semibold text-charcoal transition hover:border-charcoal"
-              : "btn-glass-secondary !py-2 !px-4 text-sm",
+              ? "inline-flex items-center justify-center rounded-full border border-border-grey bg-white px-4 py-2 text-sm font-semibold text-charcoal transition hover:border-brand-orange"
+              : "btn-glass-primary !py-2 !px-4 text-sm",
           )}
         >
           {actionLabel}

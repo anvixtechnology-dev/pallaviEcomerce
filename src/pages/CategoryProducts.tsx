@@ -48,7 +48,7 @@ export default function CategoryProducts() {
         >
           <Link
             to="/categories"
-            className="inline-flex items-center gap-2 rounded-md bg-charcoal px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-charcoal/80"
+            className="inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             All categories
@@ -109,8 +109,8 @@ export default function CategoryProducts() {
               className={cn(
                 "inline-flex min-h-9 shrink-0 items-center rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition",
                 item.id === category.id
-                  ? "border-charcoal bg-charcoal text-white"
-                  : "border-border-light bg-white text-text-secondary hover:border-charcoal/50 hover:text-charcoal",
+                  ? "border-brand-orange bg-brand-orange text-white"
+                  : "border-border-light bg-white text-text-secondary hover:border-brand-orange/50 hover:text-charcoal",
               )}
             >
               {item.name}
@@ -160,7 +160,7 @@ export default function CategoryProducts() {
               </button>
               <Link
                 to="/products"
-                className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-charcoal"
+                className="inline-flex items-center gap-2 rounded-md border border-border-light bg-white px-5 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange"
               >
                 Browse all products
               </Link>

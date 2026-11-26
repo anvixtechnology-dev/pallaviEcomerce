@@ -45,7 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <button
             type="button"
             onClick={this.handleReset}
-            className="mt-6 inline-flex items-center gap-2 rounded-md bg-navy-800 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-md bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange-dark"
           >
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
             Back to home
