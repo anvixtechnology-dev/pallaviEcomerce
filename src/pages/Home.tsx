@@ -81,10 +81,7 @@ export default function Home() {
             {" "}Materials
           </h1>
 
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-charcoal/75 sm:text-base md:text-lg">
-            TMT bars, angles, channels, plates, pipes and more. Browse our catalogue and get a
-            quotation on WhatsApp instantly.
-          </p>
+          
 
           {/* CTA buttons */}
           <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
