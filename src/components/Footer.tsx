@@ -19,12 +19,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <img
-              src="/images/pallavi-logo.png"
+              src="/images/Pallavi%20Logo.jpeg"
               alt="Pallavi Iron Traders"
               width={795}
               height={348}
               loading="lazy"
-              className="h-16 w-auto object-contain"
+              className="h-14 w-auto max-w-full object-contain sm:h-16 lg:h-20"
             />
             <p className="mt-3 text-sm leading-relaxed text-charcoal/60">
               Quality Iron &amp; Steel Materials for Every Construction Need.

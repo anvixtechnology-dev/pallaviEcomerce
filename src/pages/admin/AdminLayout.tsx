@@ -22,7 +22,7 @@ const NAV_ITEMS = [
   { to: "/admin/enquiries", icon: BarChart3, label: "Enquiries" },
 ];
 
-const LOGO_SRC = "/images/pallavi-logo.png";
+const LOGO_SRC = "/images/Pallavi%20Logo.jpeg";
 
 function AdminLogo({ className }: { className: string }) {
   return (
@@ -30,7 +30,7 @@ function AdminLogo({ className }: { className: string }) {
       src={LOGO_SRC}
       alt="Pallavi Iron Traders"
       loading="eager"
-      className={`w-auto shrink-0 rounded-md object-contain ${className}`}
+      className={`max-w-full shrink-0 rounded-md object-contain ${className}`}
     />
   );
 }
@@ -92,7 +92,7 @@ export default function AdminLayout() {
       <aside className="hidden w-60 shrink-0 flex-col bg-white lg:flex">
         <div className="flex flex-col items-center gap-1.5 border-b border-border-light px-5 py-5">
           <Link to="/admin" className="flex items-center" aria-label="Admin dashboard">
-            <AdminLogo className="h-20" />
+            <AdminLogo className="h-16 lg:h-20" />
           </Link>
           <span className="text-[11px] font-semibold uppercase tracking-wider text-charcoal/60">Admin panel</span>
         </div>
@@ -128,7 +128,7 @@ export default function AdminLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border-grey bg-white px-4 lg:hidden">
           <Link to="/admin" className="flex items-center" aria-label="Admin dashboard">
-            <AdminLogo className="h-10" />
+            <AdminLogo className="h-9 sm:h-10" />
           </Link>
           <button
             type="button"
@@ -159,7 +159,7 @@ export default function AdminLayout() {
           inert={!drawerOpen}
         >
           <div className="flex h-20 items-center justify-between border-b border-border-light px-4">
-            <AdminLogo className="h-14" />
+            <AdminLogo className="h-12" />
             <button
               type="button"
               onClick={() => setDrawerOpen(false)}

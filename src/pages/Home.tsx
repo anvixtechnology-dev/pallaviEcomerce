@@ -30,10 +30,7 @@ export default function Home() {
   return (
     <>
       {/* ── HERO ── */}
-      <section
-        className="relative isolate w-full overflow-hidden bg-surface-cream"
-        style={{ minHeight: "100svh", paddingTop: "var(--nav-h)" }}
-      >
+      <section className="relative isolate min-h-[100svh] w-full overflow-hidden bg-surface-cream pt-[var(--nav-h)]">
         {/* Background video — full cover behind all content */}
         <video
           src="/videos/Logo_reveal_animation_for_company_20261027131025-clean.mp4"
@@ -42,69 +39,54 @@ export default function Home() {
           loop
           playsInline
           preload="auto"
-          poster="/images/pallavi-logo.jpg"
+          poster="/images/Pallavi%20Logo.jpeg"
           aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center center",
-            zIndex: -2,
-          }}
+          className="absolute inset-x-0 top-0 -z-20 h-[70%] w-full object-cover object-[50%_30%] sm:h-full sm:object-center"
         />
 
         {/* Light overlay — keeps text readable without hiding the video */}
         <div
           aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,247,240,0.9) 100%)",
-            zIndex: -1,
-          }}
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-white/85 via-white/80 to-surface-cream/95 sm:from-white/75 sm:via-white/80 sm:to-surface-cream/90"
         />
 
         {/* Hero content — centred vertically over the video */}
-        <div className="relative z-10 flex min-h-[calc(100svh-var(--nav-h))] flex-col items-center justify-center px-4 py-14 text-center sm:px-6 sm:py-20 lg:px-8">
+        <div className="relative z-10 flex min-h-[calc(100svh-var(--nav-h))] flex-col items-center justify-center px-3 py-8 text-center sm:px-6 sm:py-20 lg:px-8">
           {/* Eyebrow badge */}
-          <span className="mb-5 inline-block rounded-full border border-brand-orange/40 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand-orange-dark uppercase backdrop-blur-sm">
+          <span className="mb-3 inline-block rounded-full border border-brand-orange/40 bg-white/80 px-3 py-1 text-[10px] font-semibold tracking-wide text-brand-orange-dark uppercase backdrop-blur-sm sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-widest">
             Iron &amp; Steel Specialists
           </span>
 
           {/* Heading */}
-          <h1 className="max-w-full font-display text-[2.125rem] font-bold leading-tight break-words text-charcoal uppercase xs:text-4xl sm:text-5xl md:text-6xl">
+          <h1 className="max-w-full font-display text-[1.75rem] font-bold leading-[1.1] break-words text-charcoal uppercase xs:text-3xl sm:text-5xl md:text-6xl">
             Quality Iron &amp;{" "}
             <span className="text-brand-orange">Steel</span>
             <br className="hidden sm:block" />
             {" "}Materials
           </h1>
 
-          
-
           {/* CTA buttons */}
-          <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
-            <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp">
-              <WhatsAppIcon className="h-5 w-5" />
+          <div className="mt-5 flex w-full max-w-xs flex-col gap-2 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
+            <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp !px-4 !py-2 text-xs sm:!px-5 sm:!py-3 sm:text-sm">
+              <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               Get a Quote on WhatsApp
             </button>
-            <Link to="/products" className="btn-glass-secondary">
+            <Link to="/products" className="btn-glass-secondary !px-4 !py-2 text-xs sm:!px-5 sm:!py-3 sm:text-sm">
               Browse Catalogue
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
 
           {/* Stats */}
-          <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-4 sm:mt-12 sm:gap-14">
+          <div className="mt-6 grid w-full max-w-sm grid-cols-3 gap-2 sm:mt-12 sm:max-w-none sm:gap-14">
             {[
               { value: "500+", label: "Products" },
               { value: "10+", label: "Categories" },
               { value: "Fast", label: "WhatsApp Response" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="font-display text-2xl font-bold text-brand-orange sm:text-3xl">{stat.value}</div>
-                <div className="mt-0.5 text-xs font-semibold text-charcoal/60 uppercase tracking-wider">{stat.label}</div>
+              <div key={stat.label} className="min-w-0 text-center">
+                <div className="font-display text-xl font-bold text-brand-orange sm:text-3xl">{stat.value}</div>
+                <div className="mt-0.5 text-[9px] font-semibold leading-tight text-charcoal/60 uppercase tracking-wide sm:text-xs sm:tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
