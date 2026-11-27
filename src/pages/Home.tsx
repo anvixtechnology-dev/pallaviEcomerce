@@ -248,7 +248,7 @@ export default function Home() {
           {productsLoading ? <ProductGridSkeleton count={6} />
             : productsError ? <ErrorState message={productsError} onRetry={reloadProducts} />
             : cataloguePreview.length > 0 ? (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
                 {cataloguePreview.map((product) => <ProductCard key={product.id} product={product} />)}
               </div>
             ) : (
