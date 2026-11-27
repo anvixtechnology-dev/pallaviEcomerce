@@ -24,28 +24,6 @@ export function validateProduct(product: ProductInput, intent: ValidationIntent)
   if (product.shortDescription.length > 1000) errors.shortDescription = "Short description must be 1000 characters or fewer.";
   if (product.description.length > 20000) errors.description = "Description must be 20,000 characters or fewer.";
 
-  if (!isNonNegative(product.mrp)) errors.mrp = "MRP cannot be negative.";
-  if (!isNonNegative(product.sellingPrice)) errors.sellingPrice = "Selling price cannot be negative.";
-  if (!isNonNegative(product.discountValue)) errors.discountValue = "Discount cannot be negative.";
-  if (!Number.isFinite(product.gstRate) || product.gstRate < 0 || product.gstRate > 100) {
-    errors.gstRate = "GST rate must be between 0 and 100.";
-  }
-  if (!Number.isFinite(product.minOrderQuantity) || product.minOrderQuantity <= 0) {
-    errors.minOrderQuantity = "Minimum order quantity must be greater than zero.";
-  }
-
-  if (product.discountType !== "none" && !errors.discountValue && !errors.mrp) {
-    if (product.mrp <= 0) errors.mrp = "Enter the MRP to apply a discount.";
-    else if (product.discountType === "percentage" && product.discountValue > 100) {
-      errors.discountValue = "Percentage discount cannot exceed 100.";
-    } else if (product.discountType === "fixed" && product.discountValue > product.mrp) {
-      errors.discountValue = "Discount cannot exceed the MRP.";
-    }
-  }
-  if (!errors.mrp && !errors.sellingPrice && product.mrp > 0 && product.sellingPrice > product.mrp) {
-    errors.sellingPrice = "Selling price cannot exceed the MRP.";
-  }
-
   if (!isNonNegative(product.availableQuantity)) errors.availableQuantity = "Quantity cannot be negative.";
   if (!isNonNegative(product.lowStockThreshold)) errors.lowStockThreshold = "Threshold cannot be negative.";
 
@@ -58,9 +36,6 @@ export function validateProduct(product: ProductInput, intent: ValidationIntent)
 
     if (product.description.trim().length < 10 && product.shortDescription.trim().length < 10) {
       errors.description = "Add a description of at least 10 characters.";
-    }
-    if (product.pricingMode !== "contact" && !errors.sellingPrice && product.sellingPrice <= 0) {
-      errors.sellingPrice = "Enter a selling price, or set the display mode to Contact for Price.";
     }
   }
 

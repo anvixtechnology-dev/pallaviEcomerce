@@ -46,7 +46,6 @@ function toProduct(snapshot: DocumentSnapshot): Product {
     description,
     // Records saved before the pricing module were live and enquiry based.
     status: data.status ?? "active",
-    pricingMode: data.pricingMode ?? "contact",
     specTemplate: data.specTemplate ?? inferSpecTemplate(data.categoryName ?? ""),
     categorySpecs: data.categorySpecs ?? {},
     customSpecs: Array.isArray(data.customSpecs) ? data.customSpecs : [],
@@ -249,10 +248,6 @@ export function filterProducts(products: Product[], filters: ProductFilters = {}
       return result.sort((a, b) => a.name.localeCompare(b.name));
     case "name-desc":
       return result.sort((a, b) => b.name.localeCompare(a.name));
-    case "price-asc":
-      return result.sort((a, b) => a.sellingPrice - b.sellingPrice);
-    case "price-desc":
-      return result.sort((a, b) => b.sellingPrice - a.sellingPrice);
     case "oldest":
       return result.sort((a, b) => byNewest(b, a));
     default:

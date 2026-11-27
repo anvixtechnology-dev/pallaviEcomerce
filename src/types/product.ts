@@ -17,17 +17,9 @@ export const PRODUCT_STATUS_LABELS: Record<ProductStatus, string> = {
   inactive: "Inactive",
 };
 
-export type DiscountType = "none" | "percentage" | "fixed";
+export type Unit = "piece" | "kg" | "ton" | "ft" | "meter" | "sheet" | "box" | "set";
 
-export const DISCOUNT_TYPE_LABELS: Record<DiscountType, string> = {
-  none: "None",
-  percentage: "Percentage",
-  fixed: "Fixed Amount",
-};
-
-export type PricingUnit = "piece" | "kg" | "ton" | "ft" | "meter" | "sheet" | "box" | "set";
-
-export const PRICING_UNIT_LABELS: Record<PricingUnit, string> = {
+export const UNIT_LABELS: Record<Unit, string> = {
   piece: "Piece",
   kg: "Kg",
   ton: "Ton",
@@ -36,14 +28,6 @@ export const PRICING_UNIT_LABELS: Record<PricingUnit, string> = {
   sheet: "Sheet",
   box: "Box",
   set: "Set",
-};
-
-export type PricingMode = "fixed" | "starting-from" | "contact";
-
-export const PRICING_MODE_LABELS: Record<PricingMode, string> = {
-  fixed: "Fixed Price",
-  "starting-from": "Starting From",
-  contact: "Contact for Price",
 };
 
 /** Which group of specification fields a category uses. See lib/productSpecs.ts. */
@@ -105,21 +89,10 @@ export interface Product {
   additionalImages: string[];
   documents: ProductDocument[];
 
-  // Pricing. `sellingPrice` is exclusive of GST; GST is only ever added by
-  // computeOrderTotals in lib/productPricing.ts.
-  mrp: number;
-  sellingPrice: number;
-  discountType: DiscountType;
-  discountValue: number;
-  pricingUnit: PricingUnit;
-  minOrderQuantity: number;
-  gstRate: number;
-  pricingMode: PricingMode;
-
   // Inventory. `availability` is the stock status.
   trackInventory: boolean;
   availableQuantity: number;
-  inventoryUnit: PricingUnit;
+  inventoryUnit: Unit;
   lowStockThreshold: number;
   availability: Availability;
   allowBackorders: boolean;
@@ -140,7 +113,7 @@ export type ProductInput = Omit<Product, "id" | "createdAt" | "updatedAt">;
 
 export type ProductPatch = Partial<ProductInput>;
 
-export type ProductSort = "newest" | "oldest" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
+export type ProductSort = "newest" | "oldest" | "name-asc" | "name-desc";
 
 export interface ProductFilters {
   search?: string;
@@ -176,14 +149,6 @@ export const EMPTY_PRODUCT_INPUT: ProductInput = {
   imageUrl: "",
   additionalImages: [],
   documents: [],
-  mrp: 0,
-  sellingPrice: 0,
-  discountType: "none",
-  discountValue: 0,
-  pricingUnit: "piece",
-  minOrderQuantity: 1,
-  gstRate: 18,
-  pricingMode: "contact",
   trackInventory: false,
   availableQuantity: 0,
   inventoryUnit: "piece",

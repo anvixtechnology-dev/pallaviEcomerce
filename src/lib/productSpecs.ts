@@ -9,7 +9,7 @@ export interface SpecField {
   unit?: string;
   /** Stored on the product itself rather than in categorySpecs, so the field
    * stays in sync with the matching field elsewhere on the form. */
-  linkedTo?: "brand" | "minOrderQuantity";
+  linkedTo?: "brand";
 }
 
 const PIPE_SIZES = [
@@ -99,7 +99,6 @@ export const SPEC_TEMPLATES: Record<SpecTemplateId, { label: string; fields: Spe
       { key: "grade", label: "Grade / Quality", input: "text" },
       { key: "weight", label: "Weight", input: "number" },
       { key: "unit", label: "Unit", input: "select", options: ["Kg", "Ton"] },
-      { key: "moq", label: "Minimum Order Quantity", input: "number", linkedTo: "minOrderQuantity" },
     ],
   },
   custom: {

@@ -1,5 +1,5 @@
-import { Database, Info, Percent, ShieldCheck, Sparkles, UploadCloud, UserRound, X } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { Database, Info, ShieldCheck, Sparkles, UploadCloud, UserRound } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { ButtonSpinner } from "../../components/Loading";
@@ -10,7 +10,6 @@ import { BUSINESS } from "../../lib/contact";
 import { auth } from "../../lib/firebase";
 import { cn, getErrorMessage } from "../../lib/utils";
 import { WHATSAPP_NUMBER } from "../../lib/whatsapp";
-import { DEFAULT_GST_RATES, getGstRates, saveGstRates } from "../../services/catalogSetupService";
 import { seedSampleData, type SeedResult } from "../../services/seedService";
 
 export default function Settings() {
@@ -21,8 +20,6 @@ export default function Settings() {
   const navigate = useNavigate();
   const [seeding, setSeeding] = useState(false);
   const [seedResult, setSeedResult] = useState<SeedResult | null>(null);
-  const [gstRates, setGstRates] = useState<number[]>(DEFAULT_GST_RATES);
-  const [newGstRate, setNewGstRate] = useState("");
 
   const handleSeed = async () => {
     setSeeding(true);
@@ -38,33 +35,6 @@ export default function Settings() {
     } finally {
       setSeeding(false);
     }
-  };
-
-  useEffect(() => {
-    getGstRates()
-      .then(setGstRates)
-      .catch((caught) => showToast(getErrorMessage(caught), "error"));
-  }, [showToast]);
-
-  const persistGstRates = async (rates: number[]) => {
-    try {
-      await saveGstRates(rates);
-      setGstRates(rates);
-      showToast("GST rates updated.", "success");
-    } catch (caught) {
-      showToast(getErrorMessage(caught), "error");
-    }
-  };
-
-  const handleAddGstRate = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const rate = Number(newGstRate);
-    if (newGstRate.trim() === "" || !Number.isFinite(rate) || rate < 0 || rate > 100) {
-      showToast("GST rate must be between 0 and 100.", "error");
-      return;
-    }
-    setNewGstRate("");
-    if (!gstRates.includes(rate)) void persistGstRates([...gstRates, rate].sort((a, b) => a - b));
   };
 
   const handleLogout = async () => {
@@ -157,55 +127,6 @@ export default function Settings() {
               {seedResult.skipped ? ` (${seedResult.skipped} already existed and were skipped)` : ""}.
             </p>
           ) : null}
-        </section>
-
-        {/* GST rates */}
-        <section className="rounded-lg border border-steel-200 bg-white p-5 sm:p-6">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-light-orange text-brand-orange-dark">
-              <Percent className="h-4.5 w-4.5" aria-hidden="true" />
-            </span>
-            <h2 className="font-display text-lg font-bold text-steel-900 uppercase">GST Rates</h2>
-          </div>
-
-          <p className="mt-3 text-sm leading-relaxed text-steel-600">
-            The rates offered in the product form&apos;s GST dropdown. Removing a rate does not change products already
-            using it.
-          </p>
-
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {gstRates.map((rate) => (
-              <li key={rate} className="inline-flex items-center gap-1.5 rounded-md bg-steel-50 px-3 py-1.5 text-sm font-medium text-steel-800">
-                {rate}%
-                <button
-                  type="button"
-                  disabled={gstRates.length === 1}
-                  onClick={() => persistGstRates(gstRates.filter((other) => other !== rate))}
-                  className="rounded p-0.5 text-steel-500 transition hover:text-red-600 disabled:opacity-40"
-                  aria-label={`Remove ${rate}% GST rate`}
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </li>
-            ))}
-          </ul>
-
-          <form onSubmit={handleAddGstRate} className="mt-4 flex gap-2">
-            <input
-              type="number"
-              min={0}
-              max={100}
-              step="any"
-              value={newGstRate}
-              onChange={(event) => setNewGstRate(event.target.value)}
-              placeholder="New rate (%)"
-              aria-label="New GST rate"
-              className="w-full min-w-0 rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-sm text-steel-800 placeholder:text-steel-400 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none"
-            />
-            <button type="submit" className="shrink-0 rounded-md border border-steel-300 px-4 py-2.5 text-sm font-semibold text-steel-700 transition hover:border-brand-orange hover:text-brand-orange-dark">
-              Add
-            </button>
-          </form>
         </section>
 
         {/* Business details */}

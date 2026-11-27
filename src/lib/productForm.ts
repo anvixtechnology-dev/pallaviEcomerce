@@ -2,15 +2,13 @@ import {
   EMPTY_PRODUCT_INPUT,
   type Availability,
   type CustomSpec,
-  type DiscountType,
-  type PricingMode,
-  type PricingUnit,
   type Product,
   type ProductInput,
   type ProductStatus,
   type SpecTemplateId,
+  type Unit,
 } from "../types/product";
-import { computeDiscountedPrice, deriveAvailability } from "./productPricing";
+import { deriveAvailability } from "./productAvailability";
 import { deriveSummaryFields, legacySpecsToForm, pickTemplateSpecs } from "./productSpecs";
 import { slugify } from "./utils";
 
@@ -32,17 +30,9 @@ export interface ProductFormValues {
   customSpecs: CustomSpec[];
   specifications: string;
   applications: string;
-  mrp: string;
-  sellingPrice: string;
-  discountType: DiscountType;
-  discountValue: string;
-  pricingUnit: PricingUnit;
-  minOrderQuantity: string;
-  gstRate: string;
-  pricingMode: PricingMode;
   trackInventory: boolean;
   availableQuantity: string;
-  inventoryUnit: PricingUnit;
+  inventoryUnit: Unit;
   lowStockThreshold: string;
   availability: Availability;
   allowBackorders: boolean;
@@ -77,14 +67,6 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
     customSpecs,
     specifications: product.specifications,
     applications: product.applications,
-    mrp: numberToField(product.mrp),
-    sellingPrice: numberToField(product.sellingPrice),
-    discountType: product.discountType,
-    discountValue: numberToField(product.discountValue),
-    pricingUnit: product.pricingUnit,
-    minOrderQuantity: String(product.minOrderQuantity),
-    gstRate: String(product.gstRate),
-    pricingMode: product.pricingMode,
     trackInventory: product.trackInventory,
     availableQuantity: numberToField(product.availableQuantity),
     inventoryUnit: product.inventoryUnit,
@@ -121,13 +103,6 @@ export function formValuesToInput(
     .map((spec) => ({ name: spec.name.trim(), value: spec.value.trim() }))
     .filter((spec) => spec.name || spec.value);
 
-  const mrp = fieldToNumber(values.mrp);
-  const discountValue = values.discountType === "none" ? 0 : fieldToNumber(values.discountValue);
-  const sellingPrice =
-    values.discountType === "none"
-      ? fieldToNumber(values.sellingPrice)
-      : computeDiscountedPrice(mrp, values.discountType, discountValue);
-
   const trackInventory = values.trackInventory;
   const availableQuantity = fieldToNumber(values.availableQuantity);
   const lowStockThreshold = fieldToNumber(values.lowStockThreshold);
@@ -152,14 +127,6 @@ export function formValuesToInput(
     ...deriveSummaryFields(categorySpecs, customSpecs),
     specifications: values.specifications.trim(),
     applications: values.applications.trim(),
-    mrp,
-    sellingPrice,
-    discountType: values.discountType,
-    discountValue,
-    pricingUnit: values.pricingUnit,
-    minOrderQuantity: fieldToNumber(values.minOrderQuantity),
-    gstRate: fieldToNumber(values.gstRate),
-    pricingMode: values.pricingMode,
     trackInventory,
     availableQuantity,
     inventoryUnit: values.inventoryUnit,

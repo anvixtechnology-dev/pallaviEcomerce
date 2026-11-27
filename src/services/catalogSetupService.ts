@@ -4,8 +4,6 @@ import { inferSpecTemplate, normalizeCategoryName } from "../lib/productSpecs";
 import { ensureCategory, getCategories } from "./categoryService";
 import { migrateLegacyProducts } from "./productService";
 
-export const DEFAULT_GST_RATES = [0, 5, 18, 40];
-
 export const INITIAL_CATEGORIES: Array<{ name: string; description: string }> = [
   { name: "G.I. Pipes", description: "Galvanised iron round and box pipes." },
   { name: "M.S. Pipes", description: "Mild steel round and box pipes." },
@@ -17,7 +15,6 @@ export const INITIAL_CATEGORIES: Array<{ name: string; description: string }> = 
 ];
 
 interface CatalogSettings {
-  gstRates: number[];
   initialCategoriesAdded: boolean;
   legacyProductsMigrated: boolean;
 }
@@ -28,18 +25,9 @@ async function readSettings(): Promise<CatalogSettings> {
   const snapshot = await getDoc(settingsRef);
   const data = snapshot.data() ?? {};
   return {
-    gstRates: Array.isArray(data.gstRates) && data.gstRates.length > 0 ? data.gstRates : DEFAULT_GST_RATES,
     initialCategoriesAdded: Boolean(data.initialCategoriesAdded),
     legacyProductsMigrated: Boolean(data.legacyProductsMigrated),
   };
-}
-
-export async function getGstRates(): Promise<number[]> {
-  return (await readSettings()).gstRates;
-}
-
-export async function saveGstRates(gstRates: number[]): Promise<void> {
-  await setDoc(settingsRef, { gstRates }, { merge: true });
 }
 
 /** Adds any initial category that is missing, matching "GI Pipes" to "G.I. Pipes". */

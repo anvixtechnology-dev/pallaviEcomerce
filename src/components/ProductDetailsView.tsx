@@ -1,11 +1,11 @@
 import { ArrowLeft, ChevronRight, FileText, Layers, MessageCircle, Package, Ruler, Tag } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { canOrder, computeOrderTotals, formatPrice, getPriceDisplay } from "../lib/productPricing";
+import { canOrder } from "../lib/productAvailability";
 import { getSizeOptions, getSpecRows } from "../lib/productSpecs";
 import { cn } from "../lib/utils";
 import { openProductEnquiry } from "../lib/whatsapp";
-import { AVAILABILITY_LABELS, DOCUMENT_KIND_LABELS, type Product } from "../types/product";
+import { AVAILABILITY_LABELS, DOCUMENT_KIND_LABELS, UNIT_LABELS, type Product } from "../types/product";
 import SmartImage from "./SmartImage";
 
 const AVAILABILITY_STYLES = {
@@ -21,128 +21,71 @@ const SECONDARY_ACTION =
 const INPUT =
   "w-full rounded-md border border-border-grey bg-white px-3 py-2.5 text-sm text-charcoal focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/15 focus:outline-none";
 
-/** Shows the price and the action that fits the product's pricing mode. */
+/** Lets a customer choose a size and quantity, then enquire about the product. */
 function ProductPurchasePanel({ product, preview }: { product: Product; preview: boolean }) {
-  const display = getPriceDisplay(product);
   const sizeOptions = getSizeOptions(product.sizes);
-  const [quantity, setQuantity] = useState(String(product.minOrderQuantity));
+  const [quantity, setQuantity] = useState("1");
   const [size, setSize] = useState("");
 
   const quantityValue = Number(quantity);
-  const belowMinimum = !Number.isFinite(quantityValue) || quantityValue < product.minOrderQuantity;
+  const invalidQuantity = !Number.isFinite(quantityValue) || quantityValue <= 0;
   const aboveStock = product.trackInventory && !product.allowBackorders && quantityValue > product.availableQuantity;
   const orderable = canOrder(product);
-  const quantityLabel = `${quantity} ${display.unit}`;
-  const isContact = display.price === null;
-  const totals = computeOrderTotals(product.sellingPrice, quantityValue || 0, product.gstRate);
+  const unit = UNIT_LABELS[product.inventoryUnit];
+  const quantityLabel = `${quantity} ${unit}`;
 
   const enquiry = new URLSearchParams({
     productId: product.id,
     product: product.name,
     ...(size ? { size } : {}),
-    ...(isContact && product.minOrderQuantity <= 1 ? {} : { quantity: quantityLabel }),
+    quantity: quantityLabel,
   });
 
   return (
     <div className="mt-6 rounded-lg border border-border-grey bg-white p-4 sm:p-5">
-      {isContact ? (
-        <p className="font-display text-2xl font-bold text-charcoal uppercase">Contact for Price</p>
-      ) : (
-        <div>
-          {display.prefix ? <p className="text-xs font-semibold tracking-wide text-steel-grey uppercase">{display.prefix}</p> : null}
-          <p className="font-display text-3xl font-bold text-charcoal">
-            {display.price} <span className="text-base font-semibold text-steel-grey">/ {display.unit}</span>
-          </p>
-          {display.mrp ? (
-            <p className="mt-1 text-sm text-steel-grey">
-              MRP <span className="line-through">{display.mrp}</span>
-              <span className="ml-2 font-semibold text-emerald-700">{display.discountPercent}% off</span>
-            </p>
-          ) : null}
-          <p className="mt-1 text-xs text-steel-grey">Excludes {product.gstRate}% GST</p>
-        </div>
-      )}
+      <p className="font-display text-2xl font-bold text-charcoal uppercase">Enquire for Price &amp; Availability</p>
 
-      {product.minOrderQuantity > 1 ? (
-        <p className="mt-2 text-xs font-medium text-steel-600">
-          Minimum order: {product.minOrderQuantity} {display.unit}
-        </p>
-      ) : null}
-
-      {!isContact ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {product.pricingMode === "starting-from" && sizeOptions.length > 1 ? (
-            <div>
-              <label htmlFor="purchase-size" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">Size</label>
-              <select id="purchase-size" value={size} onChange={(event) => setSize(event.target.value)} className={INPUT}>
-                <option value="">Select a size</option>
-                {sizeOptions.map((option) => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-            </div>
-          ) : null}
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {sizeOptions.length > 1 ? (
           <div>
-            <label htmlFor="purchase-quantity" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
-              Quantity ({display.unit})
-            </label>
-            <input id="purchase-quantity" type="number" min={product.minOrderQuantity} step="any" value={quantity} onChange={(event) => setQuantity(event.target.value)} className={INPUT} />
+            <label htmlFor="purchase-size" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">Size</label>
+            <select id="purchase-size" value={size} onChange={(event) => setSize(event.target.value)} className={INPUT}>
+              <option value="">Select a size</option>
+              {sizeOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
           </div>
+        ) : null}
+        <div>
+          <label htmlFor="purchase-quantity" className="mb-1.5 block text-xs font-semibold tracking-wide text-steel-grey uppercase">
+            Quantity ({unit})
+          </label>
+          <input id="purchase-quantity" type="number" min={1} step="any" value={quantity} onChange={(event) => setQuantity(event.target.value)} className={INPUT} />
         </div>
-      ) : null}
+      </div>
 
-      {!isContact && belowMinimum ? (
-        <p className="mt-2 text-xs text-red-600">Minimum order is {product.minOrderQuantity} {display.unit}.</p>
-      ) : null}
-      {!isContact && aboveStock ? (
-        <p className="mt-2 text-xs text-red-600">Only {product.availableQuantity} {display.unit} available.</p>
-      ) : null}
-
-      {product.pricingMode === "fixed" && !isContact && !belowMinimum ? (
-        <dl className="mt-3 space-y-1 border-t border-border-grey pt-3 text-sm">
-          <div className="flex justify-between gap-3">
-            <dt className="text-steel-600">Subtotal</dt>
-            <dd className="text-charcoal">{formatPrice(totals.subtotal)}</dd>
-          </div>
-          <div className="flex justify-between gap-3">
-            <dt className="text-steel-600">GST ({product.gstRate}%)</dt>
-            <dd className="text-charcoal">{formatPrice(totals.gst)}</dd>
-          </div>
-          <div className="flex justify-between gap-3 font-semibold">
-            <dt className="text-charcoal">Estimated total</dt>
-            <dd className="text-charcoal">{formatPrice(totals.total)}</dd>
-          </div>
-        </dl>
-      ) : null}
+      {invalidQuantity ? <p className="mt-2 text-xs text-red-600">Enter a quantity greater than zero.</p> : null}
+      {aboveStock ? <p className="mt-2 text-xs text-red-600">Only {product.availableQuantity} {unit} available.</p> : null}
+      {!orderable ? <p className="mt-2 text-sm font-semibold text-steel-600">Currently out of stock — you can still enquire.</p> : null}
 
       <div className="mt-4 space-y-3">
-        {!orderable && !isContact ? <p className="text-sm font-semibold text-steel-600">Currently out of stock.</p> : null}
-
         <button
           type="button"
-          disabled={preview || (!isContact && (!orderable || belowMinimum || aboveStock))}
+          disabled={preview || invalidQuantity || aboveStock}
           onClick={() =>
             openProductEnquiry({
               productId: product.id,
               name: product.name,
-              action:
-                product.pricingMode === "fixed" && !isContact
-                  ? "I would like to order"
-                  : product.pricingMode === "starting-from" && !isContact
-                    ? "please confirm the price for"
-                    : "please share the price for",
+              action: "please share the price and availability for",
               size,
-              quantity: isContact ? "" : quantityLabel,
+              quantity: quantityLabel,
             })
           }
           className={PRIMARY_ACTION}
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
-          {isContact
-            ? "Enquire on WhatsApp"
-            : product.pricingMode === "fixed"
-              ? "Order on WhatsApp"
-              : "Confirm Price on WhatsApp"}
+          Enquire on WhatsApp
         </button>
 
         {preview ? (

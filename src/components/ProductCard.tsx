@@ -1,6 +1,5 @@
 import { Layers, MessageCircle, Ruler, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { getPriceDisplay } from "../lib/productPricing";
 import { cn } from "../lib/utils";
 import { openWhatsApp } from "../lib/whatsapp";
 import { AVAILABILITY_LABELS, type Product } from "../types/product";
@@ -14,7 +13,6 @@ const AVAILABILITY_STYLES: Record<Product["availability"], string> = {
 
 export default function ProductCard({ product }: { product: Product }) {
   const detailsUrl = `/products/${product.slug || product.id}`;
-  const price = getPriceDisplay(product);
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border-light bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-orange/40 hover:shadow-[0_18px_35px_-18px_rgba(243,107,18,0.2)]">
@@ -59,18 +57,6 @@ export default function ProductCard({ product }: { product: Product }) {
         </h3>
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary">
           {product.shortDescription || product.description}
-        </p>
-
-        <p className="mt-3 text-sm font-semibold text-charcoal">
-          {price.price ? (
-            <>
-              {price.prefix ? <span className="font-medium text-text-secondary">{price.prefix} </span> : null}
-              <span className="font-display text-xl font-bold">{price.price}</span>
-              <span className="font-medium text-text-secondary"> / {price.unit}</span>
-            </>
-          ) : (
-            "Contact for Price"
-          )}
         </p>
 
         <dl className="mt-3 mb-4 space-y-1.5 text-xs text-text-secondary">

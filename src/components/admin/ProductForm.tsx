@@ -1,5 +1,5 @@
 import { ArrowLeft, CheckCircle2, Eye, FileEdit, Plus, Save, Star, Trash2, X } from "lucide-react";
-import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ButtonSpinner } from "../Loading";
 import ProductDetailsView from "../ProductDetailsView";
@@ -11,11 +11,9 @@ import {
   productToFormValues,
   type ProductFormValues,
 } from "../../lib/productForm";
-import { computeDiscountedPrice } from "../../lib/productPricing";
 import { defaultPipeMaterial, SPEC_TEMPLATES, type SpecField } from "../../lib/productSpecs";
 import { validateProduct, type ProductErrors } from "../../lib/productValidation";
 import { cn, getErrorMessage, slugify } from "../../lib/utils";
-import { DEFAULT_GST_RATES, getGstRates } from "../../services/catalogSetupService";
 import {
   createProduct,
   newProductId,
@@ -30,18 +28,14 @@ import {
 } from "../../services/storageService";
 import {
   AVAILABILITY_LABELS,
-  DISCOUNT_TYPE_LABELS,
-  PRICING_MODE_LABELS,
-  PRICING_UNIT_LABELS,
   PRODUCT_STATUS_LABELS,
+  UNIT_LABELS,
   type Availability,
-  type DiscountType,
-  type PricingMode,
-  type PricingUnit,
   type Product,
   type ProductDocument,
   type ProductInput,
   type ProductStatus,
+  type Unit,
 } from "../../types/product";
 import {
   documentItemsFrom,
@@ -116,7 +110,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
     product ? galleryFromUrls([product.imageUrl, ...product.additionalImages]) : [],
   );
   const [documents, setDocuments] = useState<DocumentItem[]>(() => (product ? documentItemsFrom(product.documents) : []));
-  const [gstRates, setGstRates] = useState<number[]>(DEFAULT_GST_RATES);
   const [submitting, setSubmitting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [uploadPercent, setUploadPercent] = useState<number | null>(null);
@@ -125,18 +118,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
   const selectedCategory = categories.find((category) => category.id === values.categoryId);
   const specTemplate = selectedCategory?.specTemplate ?? product?.specTemplate ?? "custom";
   const specFields = SPEC_TEMPLATES[specTemplate].fields;
-
-  useEffect(() => {
-    getGstRates()
-      .then(setGstRates)
-      .catch(() => undefined); // The default rates still work.
-  }, []);
-
-  const gstOptions = useMemo(() => {
-    const current = Number(values.gstRate);
-    const rates = Number.isFinite(current) && !gstRates.includes(current) ? [...gstRates, current] : gstRates;
-    return [...rates].sort((a, b) => a - b);
-  }, [gstRates, values.gstRate]);
 
   const set = <K extends keyof ProductFormValues>(field: K, value: ProductFormValues[K]) => {
     setValues((current) => ({ ...current, [field]: value }));
@@ -182,11 +163,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
       values.customSpecs.map((spec, position) => (position === index ? { ...spec, [key]: value } : spec)),
     );
   };
-
-  const computedSellingPrice =
-    values.discountType === "none"
-      ? values.sellingPrice
-      : String(computeDiscountedPrice(Number(values.mrp) || 0, values.discountType, Number(values.discountValue) || 0));
 
   // Until categories load (or if the category was deleted), keep what the product already stores.
   const categoryForSave =
@@ -491,74 +467,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
           </section>
 
           <section className={SECTION}>
-            <h2 className={SECTION_TITLE}>Pricing</h2>
-            <p className="mt-1 text-xs text-steel-500">Enter the selling price excluding GST. GST is stored separately and added once on the order total.</p>
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <FieldLabel htmlFor="product-pricing-mode">Price Display Mode</FieldLabel>
-                <select id="product-pricing-mode" value={values.pricingMode} onChange={(event) => set("pricingMode", event.target.value as PricingMode)} className={fieldClasses()}>
-                  {(Object.keys(PRICING_MODE_LABELS) as PricingMode[]).map((key) => (
-                    <option key={key} value={key}>{PRICING_MODE_LABELS[key]}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-pricing-unit">Pricing Unit</FieldLabel>
-                <select id="product-pricing-unit" value={values.pricingUnit} onChange={(event) => set("pricingUnit", event.target.value as PricingUnit)} className={fieldClasses()}>
-                  {(Object.keys(PRICING_UNIT_LABELS) as PricingUnit[]).map((key) => (
-                    <option key={key} value={key}>{PRICING_UNIT_LABELS[key]}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-mrp">MRP (₹)</FieldLabel>
-                <input id="product-mrp" type="number" min={0} step="any" value={values.mrp} onChange={update("mrp")} className={fieldClasses(errors.mrp)} />
-                <FieldError message={errors.mrp} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-discount-type">Discount Type</FieldLabel>
-                <select id="product-discount-type" value={values.discountType} onChange={(event) => set("discountType", event.target.value as DiscountType)} className={fieldClasses()}>
-                  {(Object.keys(DISCOUNT_TYPE_LABELS) as DiscountType[]).map((key) => (
-                    <option key={key} value={key}>{DISCOUNT_TYPE_LABELS[key]}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-discount-value">Discount Value</FieldLabel>
-                <input id="product-discount-value" type="number" min={0} step="any" disabled={values.discountType === "none"} value={values.discountType === "none" ? "" : values.discountValue} onChange={update("discountValue")} className={cn(fieldClasses(errors.discountValue), "disabled:bg-steel-50")} />
-                <FieldError message={errors.discountValue} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-selling-price">Selling Price (₹)</FieldLabel>
-                <input id="product-selling-price" type="number" min={0} step="any" readOnly={values.discountType !== "none"} value={computedSellingPrice} onChange={update("sellingPrice")} className={fieldClasses(errors.sellingPrice)} />
-                <FieldError message={errors.sellingPrice} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-moq">Minimum Order Quantity</FieldLabel>
-                <input id="product-moq" type="number" min={0} step="any" value={values.minOrderQuantity} onChange={update("minOrderQuantity")} className={fieldClasses(errors.minOrderQuantity)} />
-                <FieldError message={errors.minOrderQuantity} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="product-gst">GST Rate</FieldLabel>
-                <select id="product-gst" value={values.gstRate} onChange={update("gstRate")} className={fieldClasses(errors.gstRate)}>
-                  {gstOptions.map((rate) => (
-                    <option key={rate} value={rate}>{rate}%</option>
-                  ))}
-                </select>
-                <FieldError message={errors.gstRate} />
-              </div>
-            </div>
-          </section>
-
-          <section className={SECTION}>
             <h2 className={SECTION_TITLE}>Inventory &amp; Availability</h2>
 
             <div className="mt-4 space-y-4">
@@ -574,9 +482,9 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                     </div>
                     <div>
                       <FieldLabel htmlFor="product-inventory-unit">Unit of Measurement</FieldLabel>
-                      <select id="product-inventory-unit" value={values.inventoryUnit} onChange={(event) => set("inventoryUnit", event.target.value as PricingUnit)} className={fieldClasses()}>
-                        {(Object.keys(PRICING_UNIT_LABELS) as PricingUnit[]).map((key) => (
-                          <option key={key} value={key}>{PRICING_UNIT_LABELS[key]}</option>
+                      <select id="product-inventory-unit" value={values.inventoryUnit} onChange={(event) => set("inventoryUnit", event.target.value as Unit)} className={fieldClasses()}>
+                        {(Object.keys(UNIT_LABELS) as Unit[]).map((key) => (
+                          <option key={key} value={key}>{UNIT_LABELS[key]}</option>
                         ))}
                       </select>
                     </div>

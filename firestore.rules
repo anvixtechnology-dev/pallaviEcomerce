@@ -35,21 +35,9 @@ service cloud.firestore {
         && d.imageUrl is string
         && d.additionalImages is list
         && d.documents is list
-        && nonNegative(d.mrp)
-        && nonNegative(d.sellingPrice)
-        && nonNegative(d.discountValue)
-        && d.discountType in ['none', 'percentage', 'fixed']
-        && d.pricingMode in ['fixed', 'starting-from', 'contact']
-        && d.minOrderQuantity is number
-        && d.minOrderQuantity > 0
-        && nonNegative(d.gstRate)
-        && d.gstRate <= 100
         && nonNegative(d.availableQuantity)
         // A live product must be complete enough for customers to see it.
-        && (d.status != 'active' || (
-          d.categoryId.size() > 0
-          && (d.pricingMode == 'contact' || d.sellingPrice > 0)
-        ));
+        && (d.status != 'active' || d.categoryId.size() > 0);
     }
 
     // ------------------------------------------------------------------
@@ -98,7 +86,7 @@ service cloud.firestore {
     }
 
     // ------------------------------------------------------------------
-    // Catalogue settings such as GST rates — admin only
+    // Catalogue settings — admin only
     // ------------------------------------------------------------------
     match /settings/{settingId} {
       allow read, write: if isAdmin();

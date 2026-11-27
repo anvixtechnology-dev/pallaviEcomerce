@@ -8,14 +8,12 @@ import { useToast } from "../../components/Toast";
 import { useCategories } from "../../hooks/useCategories";
 import { useSeo } from "../../hooks/useSeo";
 import { useProducts } from "../../hooks/useProducts";
-import { formatPrice } from "../../lib/productPricing";
 import { validateProduct } from "../../lib/productValidation";
 import { cn, getErrorMessage } from "../../lib/utils";
 import { deleteProduct, filterProducts, updateProduct } from "../../services/productService";
 import { deleteProductImages } from "../../services/storageService";
 import {
   AVAILABILITY_LABELS,
-  PRICING_UNIT_LABELS,
   PRODUCT_STATUS_LABELS,
   type Product,
   type ProductSort,
@@ -41,8 +39,6 @@ const SORT_OPTIONS: Array<{ value: ProductSort; label: string }> = [
   { value: "oldest", label: "Oldest first" },
   { value: "name-asc", label: "Name: A to Z" },
   { value: "name-desc", label: "Name: Z to A" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
 ];
 
 const FILTER_CLASSES =
@@ -172,8 +168,6 @@ export default function AdminProducts() {
                 <tr>
                   <th scope="col" className="px-5 py-3 font-semibold">Product</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Category</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Selling Price</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Unit</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Stock</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Status</th>
                   <th scope="col" className="px-5 py-3 text-right font-semibold">Actions</th>
@@ -200,10 +194,6 @@ export default function AdminProducts() {
                       </div>
                     </td>
                     <td className="px-5 py-3.5 text-steel-600">{product.categoryName || "—"}</td>
-                    <td className="px-5 py-3.5 text-steel-600">
-                      {product.pricingMode === "contact" ? "On request" : formatPrice(product.sellingPrice)}
-                    </td>
-                    <td className="px-5 py-3.5 text-steel-600">{PRICING_UNIT_LABELS[product.pricingUnit]}</td>
                     <td className="px-5 py-3.5">
                       <span
                         className={cn(

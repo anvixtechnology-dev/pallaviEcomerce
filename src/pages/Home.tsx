@@ -21,7 +21,13 @@ const VALUE_PROPS = [
 const SHOP_SLIDES = [
   { src: "/images/PallaviShop1.jpg", alt: "Pallavi Traders shop interior, first view" },
   { src: "/images/PallaviShop2.jpg", alt: "Pallavi Traders shop interior, second view" },
+  { src: "/images/PallaviShop3.jpeg", alt: "Pallavi Traders shop interior, third view" },
   { src: "/images/PallaviShop4.jpg", alt: "Pallavi Traders shop interior, fourth view" },
+  { src: "/images/PallaviShop5.jpeg", alt: "Pallavi Traders shop interior, fifth view" },
+  { src: "/images/PallaviShop6.jpeg", alt: "Pallavi Traders shop interior, sixth view" },
+  { src: "/images/PallaviShop7.jpeg", alt: "Pallavi Traders shop interior, seventh view" },
+  { src: "/images/PallaviShop8.jpeg", alt: "Pallavi Traders shop interior, eighth view" },
+  { src: "/images/PallaviShop9.jpeg", alt: "Pallavi Traders shop interior, ninth view" },
 ];
 
 function ShopSlideshow() {
