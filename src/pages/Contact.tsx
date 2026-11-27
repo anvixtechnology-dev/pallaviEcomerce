@@ -20,7 +20,6 @@ export default function Contact() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("productId") ?? "";
   const productName = searchParams.get("product") ?? "";
-  const productSku = searchParams.get("sku") ?? "";
   const productSize = searchParams.get("size") ?? "";
   const quantity = searchParams.get("quantity") ?? "";
 
@@ -29,7 +28,7 @@ export default function Contact() {
   const [message, setMessage] = useState(() =>
     productName
       ? [
-          `I would like a quote for ${productName}${productSku ? ` (SKU: ${productSku})` : ""}.`,
+          `I would like a quote for ${productName}.`,
           productSize ? `Size: ${productSize}` : "",
           quantity ? `Quantity: ${quantity}` : "",
         ]

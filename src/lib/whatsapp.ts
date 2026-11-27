@@ -64,13 +64,12 @@ export function openWhatsApp(productName?: string): void {
 export function openProductEnquiry(details: {
   productId?: string;
   name: string;
-  sku: string;
   action: string;
   quantity?: string;
   size?: string;
 }): void {
   const lines = [
-    `Hello PallaviTraders, ${details.action}: ${details.name}${details.sku ? ` (SKU: ${details.sku})` : ""}.`,
+    `Hello PallaviTraders, ${details.action}: ${details.name}.`,
     details.size ? `Size: ${details.size}` : "",
     details.quantity ? `Quantity: ${details.quantity}` : "",
   ].filter(Boolean);

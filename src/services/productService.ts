@@ -161,11 +161,6 @@ export async function syncProductCategoryName(categoryId: string, categoryName: 
   }
 }
 
-export async function isSkuTaken(sku: string, excludeProductId?: string): Promise<boolean> {
-  const snapshot = await getDocs(query(productsCollection, where("sku", "==", sku)));
-  return snapshot.docs.some((item) => item.id !== excludeProductId);
-}
-
 /** Adds a numeric suffix if another product already uses the slug. */
 export async function resolveUniqueSlug(slug: string, excludeProductId?: string): Promise<string> {
   let candidate = slug;
@@ -177,18 +172,6 @@ export async function resolveUniqueSlug(slug: string, excludeProductId?: string)
     candidate = `${slug}-${suffix}`;
     suffix += 1;
   }
-}
-
-/** e.g. "G.I. Pipes" → PIT-GP-K3F9QZ. Uniqueness is checked again on save. */
-export function generateSku(categoryName: string): string {
-  const initials = categoryName
-    .split(/\s+/)
-    .map((word) => word.replace(/[^a-zA-Z0-9]/g, "").charAt(0))
-    .join("")
-    .toUpperCase()
-    .slice(0, 3);
-  const random = Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, "0");
-  return ["PIT", initials, random].filter(Boolean).join("-");
 }
 
 /** Gives records created before the pricing module their new fields. Their
@@ -212,7 +195,6 @@ export async function migrateLegacyProducts(): Promise<number> {
       batch.update(item.ref, {
         ...product,
         slug,
-        sku: generateSku(product.categoryName),
         shortDescription: product.description.slice(0, 1000),
       });
     }
@@ -230,7 +212,6 @@ export function matchesSearch(product: Product, term: string): boolean {
 
   const haystack = [
     product.name,
-    product.sku,
     product.brand,
     product.categoryName,
     product.subcategory,

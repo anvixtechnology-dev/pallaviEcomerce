@@ -139,7 +139,7 @@ export default function AdminProducts() {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
         <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-          <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search by name, SKU, brand…" />
+          <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search by name, brand, category…" />
         </div>
         <select value={categoryId} onChange={(event) => setCategoryId(event.target.value)} aria-label="Filter by category" className={FILTER_CLASSES}>
           <option value="all">All categories</option>
@@ -171,7 +171,6 @@ export default function AdminProducts() {
               <thead className="bg-steel-50 text-[11px] tracking-wider text-steel-500 uppercase">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-semibold">Product</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">SKU</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Category</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Selling Price</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Unit</th>
@@ -200,7 +199,6 @@ export default function AdminProducts() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 font-mono text-xs text-steel-600">{product.sku || "—"}</td>
                     <td className="px-5 py-3.5 text-steel-600">{product.categoryName || "—"}</td>
                     <td className="px-5 py-3.5 text-steel-600">
                       {product.pricingMode === "contact" ? "On request" : formatPrice(product.sellingPrice)}

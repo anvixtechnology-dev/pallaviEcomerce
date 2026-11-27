@@ -27,7 +27,7 @@ export default function Footer() {
               className="h-14 w-auto max-w-full object-contain sm:h-16 lg:h-20"
             />
             <p className="mt-3 text-sm leading-relaxed text-charcoal/60">
-              Quality Iron &amp; Steel Materials for Every Construction Need.
+              Pipes &amp; Roofing Sheets for Every Construction Need.
             </p>
             <a
               href={buildWhatsAppUrl()}
@@ -57,11 +57,11 @@ export default function Footer() {
           <div>
             <h2 className="font-display text-lg font-semibold tracking-wide text-charcoal uppercase">Products</h2>
             <ul className="mt-4 space-y-2.5 text-sm text-charcoal/60">
-              <li>TMT Bars</li>
+              <li>Pipes</li>
               <li>MS Angles, Channels &amp; Beams</li>
               <li>MS Plates, Flats &amp; Rods</li>
               <li>MS &amp; GI Pipes and Sheets</li>
-              <li>Binding Wire &amp; Steel Sections</li>
+              <li>TATA Pipes,M.S Pipes,G.P Pipes,Z+ Pipes</li>
             </ul>
           </div>
 

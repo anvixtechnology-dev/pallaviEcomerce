@@ -2,7 +2,7 @@ import { inferSpecTemplate, normalizeCategoryName } from "../lib/productSpecs";
 import { slugify } from "../lib/utils";
 import { EMPTY_PRODUCT_INPUT } from "../types/product";
 import { createCategory, getCategories } from "./categoryService";
-import { addProduct, generateSku, getProducts } from "./productService";
+import { addProduct, getProducts } from "./productService";
 
 interface SampleProduct {
   name: string;
@@ -324,7 +324,6 @@ export async function seedSampleData(): Promise<SeedResult> {
     await addProduct({
       ...EMPTY_PRODUCT_INPUT,
       name: product.name,
-      sku: generateSku(product.category),
       slug: slugify(product.name),
       status: "active",
       categoryId,

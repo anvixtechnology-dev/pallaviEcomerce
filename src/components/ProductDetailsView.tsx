@@ -39,7 +39,6 @@ function ProductPurchasePanel({ product, preview }: { product: Product; preview:
   const enquiry = new URLSearchParams({
     productId: product.id,
     product: product.name,
-    ...(product.sku ? { sku: product.sku } : {}),
     ...(size ? { size } : {}),
     ...(isContact && product.minOrderQuantity <= 1 ? {} : { quantity: quantityLabel }),
   });
@@ -126,7 +125,6 @@ function ProductPurchasePanel({ product, preview }: { product: Product; preview:
             openProductEnquiry({
               productId: product.id,
               name: product.name,
-              sku: product.sku,
               action:
                 product.pricingMode === "fixed" && !isContact
                   ? "I would like to order"
@@ -174,7 +172,6 @@ export default function ProductDetailsView({
     { icon: Tag, label: "Category", value: product.categoryName },
     { icon: Tag, label: "Subcategory", value: product.subcategory },
     { icon: Tag, label: "Brand", value: product.brand },
-    { icon: Tag, label: "SKU", value: product.sku },
     { icon: Package, label: "Availability", value: AVAILABILITY_LABELS[product.availability] },
   ].filter((row) => Boolean(row.value));
 

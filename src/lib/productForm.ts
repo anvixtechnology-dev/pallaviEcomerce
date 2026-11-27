@@ -18,7 +18,6 @@ import { slugify } from "./utils";
  * is not rewritten while the admin is typing. */
 export interface ProductFormValues {
   name: string;
-  sku: string;
   slug: string;
   categoryId: string;
   subcategory: string;
@@ -64,7 +63,6 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
 
   return {
     name: product.name,
-    sku: product.sku,
     slug: product.slug,
     categoryId: product.categoryId,
     subcategory: product.subcategory,
@@ -133,13 +131,11 @@ export function formValuesToInput(
   const trackInventory = values.trackInventory;
   const availableQuantity = fieldToNumber(values.availableQuantity);
   const lowStockThreshold = fieldToNumber(values.lowStockThreshold);
-  const sku = values.sku.trim().toUpperCase();
 
   return {
     ...EMPTY_PRODUCT_INPUT,
     name: values.name.trim(),
-    sku,
-    slug: slugify(values.slug || values.name) || sku.toLowerCase(),
+    slug: slugify(values.slug || values.name),
     categoryId: values.categoryId,
     categoryName: category?.name ?? "",
     subcategory: values.subcategory,

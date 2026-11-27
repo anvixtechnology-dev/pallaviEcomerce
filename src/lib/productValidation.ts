@@ -5,7 +5,6 @@ export type ProductErrors = Partial<Record<keyof ProductInput, string>>;
 /** "draft" allows incomplete products; "publish" also requires what customers need to see. */
 export type ValidationIntent = "draft" | "publish";
 
-const SKU_PATTERN = /^[A-Z0-9][A-Z0-9_-]{1,63}$/;
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 function isNonNegative(value: number): boolean {
@@ -19,9 +18,6 @@ export function validateProduct(product: ProductInput, intent: ValidationIntent)
   if (name.length < 3) errors.name = "Product name must be at least 3 characters.";
   else if (name.length > 200) errors.name = "Product name must be 200 characters or fewer.";
 
-  if (!SKU_PATTERN.test(product.sku)) {
-    errors.sku = "SKU must be 2–64 characters: letters, numbers, hyphens or underscores.";
-  }
   if (product.slug && !SLUG_PATTERN.test(product.slug)) {
     errors.slug = "Slug may only contain lowercase letters, numbers and single hyphens.";
   }

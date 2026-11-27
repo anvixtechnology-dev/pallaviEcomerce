@@ -1,4 +1,4 @@
-import { ArrowLeft, CheckCircle2, Eye, FileEdit, Plus, RefreshCw, Save, Star, Trash2, X } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Eye, FileEdit, Plus, Save, Star, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ButtonSpinner } from "../Loading";
@@ -14,12 +14,10 @@ import {
 import { computeDiscountedPrice } from "../../lib/productPricing";
 import { defaultPipeMaterial, SPEC_TEMPLATES, type SpecField } from "../../lib/productSpecs";
 import { validateProduct, type ProductErrors } from "../../lib/productValidation";
-import { cn, getErrorMessage, slugify, UserFacingError } from "../../lib/utils";
+import { cn, getErrorMessage, slugify } from "../../lib/utils";
 import { DEFAULT_GST_RATES, getGstRates } from "../../services/catalogSetupService";
 import {
   createProduct,
-  generateSku,
-  isSkuTaken,
   newProductId,
   resolveUniqueSlug,
   updateProduct,
@@ -119,7 +117,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
   );
   const [documents, setDocuments] = useState<DocumentItem[]>(() => (product ? documentItemsFrom(product.documents) : []));
   const [gstRates, setGstRates] = useState<number[]>(DEFAULT_GST_RATES);
-  const [skuEdited, setSkuEdited] = useState(mode === "edit");
   const [submitting, setSubmitting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [uploadPercent, setUploadPercent] = useState<number | null>(null);
@@ -134,13 +131,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
       .then(setGstRates)
       .catch(() => undefined); // The default rates still work.
   }, []);
-
-  // A new product gets a generated SKU, which follows its category until edited.
-  useEffect(() => {
-    if (!skuEdited) {
-      setValues((current) => ({ ...current, sku: generateSku(selectedCategory?.name ?? "") }));
-    }
-  }, [skuEdited, selectedCategory?.name]);
 
   const gstOptions = useMemo(() => {
     const current = Number(values.gstRate);
@@ -273,11 +263,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
     const uploaded: string[] = [];
 
     try {
-      setUploadStatus("Checking SKU…");
-      if (await isSkuTaken(input.sku, productId)) {
-        setErrors({ sku: "Another product already uses this SKU." });
-        throw new UserFacingError("Another product already uses this SKU.");
-      }
       const slug = await resolveUniqueSlug(input.slug, productId);
 
       const id = productId ?? newProductId();
@@ -380,37 +365,9 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <FieldLabel htmlFor="product-brand">Brand</FieldLabel>
-                  <input id="product-brand" type="text" value={values.brand} onChange={update("brand")} placeholder="e.g. Tata" className={fieldClasses()} />
-                </div>
-
-                <div>
-                  <FieldLabel htmlFor="product-sku" required>SKU / Product Code</FieldLabel>
-                  <div className="flex gap-2">
-                    <input
-                      id="product-sku"
-                      type="text"
-                      value={values.sku}
-                      onChange={(event) => {
-                        setSkuEdited(true);
-                        set("sku", event.target.value.toUpperCase());
-                      }}
-                      className={cn(fieldClasses(errors.sku), "min-w-0")}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => set("sku", generateSku(selectedCategory?.name ?? ""))}
-                      className="shrink-0 rounded-md border border-steel-300 px-3 text-steel-600 transition hover:border-brand-orange hover:text-brand-orange-dark"
-                      title="Generate a new SKU"
-                      aria-label="Generate a new SKU"
-                    >
-                      <RefreshCw className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <FieldError message={errors.sku} />
-                </div>
+              <div>
+                <FieldLabel htmlFor="product-brand">Brand</FieldLabel>
+                <input id="product-brand" type="text" value={values.brand} onChange={update("brand")} placeholder="e.g. Tata" className={fieldClasses()} />
               </div>
 
               <div>

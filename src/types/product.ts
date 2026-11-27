@@ -74,7 +74,6 @@ export interface Product {
 
   // Basic information
   name: string;
-  sku: string;
   slug: string;
   categoryId: string;
   categoryName: string;
@@ -155,7 +154,6 @@ export interface ProductFilters {
 /** Field values for a product before the admin has filled anything in. */
 export const EMPTY_PRODUCT_INPUT: ProductInput = {
   name: "",
-  sku: "",
   slug: "",
   categoryId: "",
   categoryName: "",

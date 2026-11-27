@@ -159,15 +159,15 @@ export default function Home() {
         <div className="relative z-10 flex min-h-[calc(100svh-var(--nav-h))] flex-col items-center justify-center px-3 py-8 text-center sm:px-6 sm:py-20 lg:px-8">
           {/* Eyebrow badge */}
           <span className="mb-3 inline-block rounded-full border border-brand-orange/40 bg-white/80 px-3 py-1 text-[10px] font-semibold tracking-wide text-brand-orange-dark uppercase backdrop-blur-sm sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs sm:tracking-widest">
-            Iron &amp; Steel Specialists
+            PIPES &amp; ROOFING SHEETS
           </span>
 
           {/* Heading */}
           <h1 className="max-w-full font-display text-[1.75rem] font-bold leading-[1.1] break-words text-charcoal uppercase xs:text-3xl sm:text-5xl md:text-6xl">
-            Quality Iron &amp;{" "}
-            <span className="text-brand-orange">Steel</span>
+            Quality{" "}
+            <span className="text-brand-orange">Pipes</span>
             <br className="hidden sm:block" />
-            {" "}Materials
+            {" "}and Roofing Sheets
           </h1>
 
           {/* CTA buttons */}
