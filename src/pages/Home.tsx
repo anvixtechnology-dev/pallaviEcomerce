@@ -18,6 +18,16 @@ const VALUE_PROPS = [
   { icon: HardHat, title: "Built for Every Project", description: "Suitable for buildings, infrastructure, workshops and general engineering work." },
 ];
 
+const HERO_IMAGES = [
+  { src: "/images/Add%201.jpg", alt: "Pallavi Traders advertisement 1" },
+  { src: "/images/Add%202.png", alt: "Pallavi Traders advertisement 2" },
+  { src: "/images/Add%203.jpg", alt: "Pallavi Traders advertisement 3" },
+  { src: "/images/Add%204.jpg", alt: "Pallavi Traders advertisement 4" },
+  { src: "/images/add%205.png", alt: "Pallavi Traders advertisement 5" },
+  { src: "/images/Add%206.png", alt: "Pallavi Traders advertisement 6" },
+  { src: "/images/add%207.jpg", alt: "Pallavi Traders advertisement 7" },
+];
+
 const SHOP_SLIDES = [
   { src: "/images/PallaviShop2.jpg", alt: "Pallavi Traders shop interior, second view" },
   { src: "/images/PallaviShop3.jpeg", alt: "Pallavi Traders shop interior, third view" },
@@ -156,7 +166,7 @@ export default function Home() {
         {/* Light overlay — keeps text readable without hiding the video */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-white/85 via-white/80 to-surface-cream/95 sm:from-white/75 sm:via-white/80 sm:to-surface-cream/90"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-white/55 via-white/50 to-surface-cream/75 sm:from-white/45 sm:via-white/50 sm:to-surface-cream/70"
         />
 
         {/* Hero content — centred vertically over the video */}
@@ -173,6 +183,20 @@ export default function Home() {
             <br className="hidden sm:block" />
             {" "}and Roofing Sheets
           </h1>
+
+          {/* Advertisement thumbnails */}
+          <div className="mt-4 flex max-w-3xl flex-wrap items-center justify-center gap-2 sm:mt-6 sm:gap-3">
+            {HERO_IMAGES.map((image) => (
+              <img
+                key={image.src}
+                src={image.src}
+                alt={image.alt}
+                loading="eager"
+                decoding="async"
+                className="h-12 w-20 rounded-md border border-border-light bg-white/90 object-contain p-1 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-orange/60 hover:shadow-md sm:h-14 sm:w-24"
+              />
+            ))}
+          </div>
 
           {/* CTA buttons */}
           <div className="mt-5 flex w-full max-w-xs flex-col gap-2 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
@@ -205,7 +229,7 @@ export default function Home() {
       {/* ── PRODUCT TICKER ── */}
       <div className="border-y border-border-light bg-white py-3">
         <ul className="flex flex-wrap justify-center gap-x-6 gap-y-1.5 px-4 text-[11px] font-semibold tracking-widest text-charcoal/55 uppercase select-none">
-          <li>TMT Bars</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
+          <li>Pipes</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
           <li>Angles &amp; Channels</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
           <li>Plates &amp; Flats</li><li aria-hidden="true" className="text-brand-orange/40">/</li>
           <li>MS &amp; GI Pipes</li><li aria-hidden="true" className="text-brand-orange/40">/</li>

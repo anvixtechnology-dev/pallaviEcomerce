@@ -32,18 +32,13 @@ const VALUES = [
 ];
 
 const PRODUCT_CATEGORIES = [
-  "TMT Bars",
-  "MS Angles",
-  "MS Channels",
-  "MS Flat Bars",
-  "MS Round Bars",
-  "MS Square Bars",
-  "Hollow Sections",
-  "Steel Plates",
-  "Chequered Plates",
-  "Steel Pipes & Tubes",
-  "Wire Rods",
-  "Binding Wire",
+  "Pipes",
+"MS Angles", "Channels & Beams",
+"MS Plates", "Flats & Rods",
+"MS & GI Pipes and Sheets",
+"TATA Pipes", 
+"M.S Pipes","G.P Pipes",
+"Z+ Pipes",
 ];
 
 export default function About() {
