@@ -103,7 +103,7 @@ export default function About() {
               </h2>
               <div className="mt-5 space-y-4 text-sm leading-relaxed text-text-secondary sm:text-base">
                 <p>
-                  Founded in 2003, Pallavi Iron Traders started as a small stockist serving local construction needs in
+                  Founded in 2017, Pallavi Iron Traders started as a small stockist serving local construction needs in
                   Bhimavaram. Over two decades, we have grown into one of the region's most dependable iron and steel
                   suppliers — expanding our product range, deepening our mill partnerships, and building long-term
                   relationships with thousands of customers.
