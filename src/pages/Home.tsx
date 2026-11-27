@@ -6,7 +6,7 @@ import { ProductGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState, SectionHeader } from "../components/StateMessage";
 import WhatsAppIcon from "../components/WhatsAppIcon";
 import { useSeo } from "../hooks/useSeo";
-import { useFeaturedProducts } from "../hooks/useProducts";
+import { usePublishedProducts } from "../hooks/useProducts";
 import { openWhatsApp } from "../lib/whatsapp";
 
 const VALUE_PROPS = [
@@ -27,13 +27,10 @@ const HERO_IMAGES = [
 ];
 
 const SHOP_SLIDES = [
-  { src: "/images/PallaviShop2.jpg", alt: "Pallavi Traders shop interior, second view" },
   { src: "/images/PallaviShop3.jpeg", alt: "Pallavi Traders shop interior, third view" },
   { src: "/images/PallaviShop5.jpeg", alt: "Pallavi Traders shop interior, fifth view" },
-  { src: "/images/PallaviShop6.jpeg", alt: "Pallavi Traders shop interior, sixth view" },
   { src: "/images/PallaviShop7.jpeg", alt: "Pallavi Traders shop interior, seventh view" },
   { src: "/images/PallaviShop8.jpeg", alt: "Pallavi Traders shop interior, eighth view" },
-  { src: "/images/PallaviShop9.jpeg", alt: "Pallavi Traders shop interior, ninth view" },
 ];
 
 function ShopSlideshow() {
@@ -140,7 +137,13 @@ export default function Home() {
     "PallaviTraders offers a wide range of iron, steel and construction materials. Browse our product catalogue and contact us for availability and quotations.",
   );
 
-  const { products: featured, loading: featuredLoading, error: featuredError, reload: reloadFeatured } = useFeaturedProducts(8);
+  const {
+    products,
+    loading: productsLoading,
+    error: productsError,
+    reload: reloadProducts,
+  } = usePublishedProducts();
+  const cataloguePreview = products.slice(0, 6);
 
   return (
     <>
@@ -206,8 +209,8 @@ export default function Home() {
           {/* Stats */}
           <div className="mt-6 grid w-full max-w-sm grid-cols-3 gap-2 sm:mt-12 sm:max-w-none sm:gap-14">
             {[
-              { value: "500+", label: "Products" },
-              { value: "2003", label: "Trusted Since" },
+              { value: "100+", label: "Products" },
+              { value: "2017", label: "Trusted Since" },
               { value: "Fast", label: "WhatsApp Response" },
             ].map((stat) => (
               <div key={stat.label} className="min-w-0 text-center">
@@ -231,26 +234,26 @@ export default function Home() {
         </ul>
       </div>
 
-      {/* ── FEATURED PRODUCTS ── */}
+      {/* ── PRODUCTS ── */}
       <section className="bg-surface-cream py-14 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            eyebrow="Handpicked"
-            title="Featured Products"
-            description="Popular materials frequently requested by our customers. Contact us for price and availability."
+            eyebrow="Catalogue"
+            title="Products"
+            description="A selection of materials from our catalogue. Contact us on WhatsApp for price and availability."
             to="/products"
             actionLabel="Browse all products"
             tone="light"
           />
-          {featuredLoading ? <ProductGridSkeleton count={8} />
-            : featuredError ? <ErrorState message={featuredError} onRetry={reloadFeatured} />
-            : featured.length > 0 ? (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {featured.map((product) => <ProductCard key={product.id} product={product} />)}
+          {productsLoading ? <ProductGridSkeleton count={6} />
+            : productsError ? <ErrorState message={productsError} onRetry={reloadProducts} />
+            : cataloguePreview.length > 0 ? (
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {cataloguePreview.map((product) => <ProductCard key={product.id} product={product} />)}
               </div>
             ) : (
-              <EmptyState title="No featured products yet"
-                description="Featured items will appear here once they are marked from the admin dashboard. Browse the full catalogue in the meantime.">
+              <EmptyState title="No products yet"
+                description="Products will appear here once they are added to the catalogue.">
                 <Link to="/products" className="btn-glass-primary">Browse all products</Link>
               </EmptyState>
             )}

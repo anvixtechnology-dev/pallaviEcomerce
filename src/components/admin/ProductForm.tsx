@@ -327,8 +327,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 </select>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <Toggle checked={values.featured} onChange={(checked) => set("featured", checked)}>Featured Product</Toggle>
+              <div className="grid gap-3 sm:grid-cols-2">
                 <Toggle checked={values.newArrival} onChange={(checked) => set("newArrival", checked)}>New Arrival</Toggle>
                 <Toggle checked={values.bestSeller} onChange={(checked) => set("bestSeller", checked)}>Best Seller</Toggle>
               </div>
@@ -505,8 +504,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 <FieldLabel htmlFor="product-keywords">Search Keywords</FieldLabel>
                 <input id="product-keywords" type="text" value={values.searchKeywords} onChange={update("searchKeywords")} placeholder="Separate keywords with commas" className={fieldClasses()} />
               </div>
-
-              <Toggle checked={values.showOnHomepage} onChange={(checked) => set("showOnHomepage", checked)}>Homepage Visibility (when featured)</Toggle>
             </div>
           </section>
         </div>

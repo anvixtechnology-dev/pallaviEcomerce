@@ -22,7 +22,6 @@ export interface ProductFormValues {
   shortDescription: string;
   description: string;
   status: ProductStatus;
-  featured: boolean;
   newArrival: boolean;
   bestSeller: boolean;
   categorySpecs: Record<string, string>;
@@ -39,7 +38,6 @@ export interface ProductFormValues {
   seoTitle: string;
   seoDescription: string;
   searchKeywords: string;
-  showOnHomepage: boolean;
 }
 
 function numberToField(value: number): string {
@@ -57,7 +55,6 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
     shortDescription: product.shortDescription,
     description: product.description,
     status: product.status,
-    featured: product.featured,
     newArrival: product.newArrival,
     bestSeller: product.bestSeller,
     categorySpecs: specs,
@@ -74,7 +71,6 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
     seoTitle: product.seoTitle,
     seoDescription: product.seoDescription,
     searchKeywords: product.searchKeywords.join(", "),
-    showOnHomepage: product.showOnHomepage,
   };
 }
 
@@ -106,7 +102,6 @@ export function formValuesToInput(values: ProductFormValues, status: ProductStat
     shortDescription: values.shortDescription.trim(),
     description: values.description.trim(),
     status,
-    featured: values.featured,
     newArrival: values.newArrival,
     bestSeller: values.bestSeller,
     specTemplate,
@@ -133,6 +128,5 @@ export function formValuesToInput(values: ProductFormValues, status: ProductStat
       .split(",")
       .map((keyword) => keyword.trim())
       .filter(Boolean),
-    showOnHomepage: values.showOnHomepage,
   };
 }

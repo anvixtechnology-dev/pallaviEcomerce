@@ -28,7 +28,6 @@ service cloud.firestore {
         && d.description.size() <= 20000
         && d.status in ['draft', 'active', 'inactive']
         && d.availability in ['in-stock', 'limited', 'out-of-stock']
-        && d.featured is bool
         && d.categorySpecs is map
         && d.customSpecs is list
         && d.imageUrl is string

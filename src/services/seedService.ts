@@ -12,7 +12,6 @@ interface SampleProduct {
   sizes: string;
   applications: string;
   availability: "in-stock" | "limited" | "out-of-stock";
-  featured: boolean;
 }
 
 export const SAMPLE_PRODUCTS: SampleProduct[] = [
@@ -25,7 +24,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "8mm, 10mm, 12mm, 16mm, 20mm, 25mm",
     applications: "RCC columns, beams, slabs, foundations and general concrete reinforcement",
     availability: "in-stock",
-    featured: true,
   },
   {
     name: "Fe 500D TMT Bar",
@@ -36,7 +34,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "8mm, 10mm, 12mm, 16mm, 20mm, 25mm",
     applications: "High rise buildings, bridges, seismic zones and critical RCC work",
     availability: "in-stock",
-    featured: true,
   },
   {
     name: "MS Angle 25x25",
@@ -47,7 +44,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "25x25x3mm, 25x25x4mm, 25x25x5mm",
     applications: "Light fabrication, window frames, supports and brackets",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Angle 40x40",
@@ -58,7 +54,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "40x40x3mm, 40x40x4mm, 40x40x5mm, 40x40x6mm",
     applications: "Frames, gates, shelving, standees and general fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Angle 50x50",
@@ -69,7 +64,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "50x50x4mm, 50x50x5mm, 50x50x6mm, 50x50x8mm",
     applications: "Structural supports, trusses, fabrication and industrial frames",
     availability: "in-stock",
-    featured: true,
   },
   {
     name: "MS Angle 65x65",
@@ -80,7 +74,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "65x65x5mm, 65x65x6mm, 65x65x8mm",
     applications: "Industrial structures, towers, heavy supports and fabrication",
     availability: "limited",
-    featured: false,
   },
   {
     name: "MS Channel 75",
@@ -91,7 +84,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "ISMC 75",
     applications: "Framing, panel supports, shutters and light structural work",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Channel 100",
@@ -102,7 +94,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "ISMC 100",
     applications: "Construction framing, equipment stands and fabrication",
     availability: "in-stock",
-    featured: true,
   },
   {
     name: "MS Channel 125",
@@ -113,7 +104,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "ISMC 125",
     applications: "Structural framing, platforms and heavy fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Plate 3mm",
@@ -124,7 +114,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "1250 x 2500 mm, 1220 x 2440 mm",
     applications: "Sheet metal work, covers, ducts and light fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Plate 5mm",
@@ -135,7 +124,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "1250 x 2500 mm, 1500 x 3000 mm",
     applications: "Base plates, general fabrication and engineering components",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Plate 6mm",
@@ -146,7 +134,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "1250 x 2500 mm, 1500 x 3000 mm",
     applications: "Machinery bases, heavy fabrication and structural use",
     availability: "limited",
-    featured: false,
   },
   {
     name: "Round MS Pipe",
@@ -157,7 +144,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "1/2 inch, 3/4 inch, 1 inch, 1.25 inch, 1.5 inch, 2 inch",
     applications: "Fencing, railings, plumbing lines and fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "Square MS Pipe",
@@ -168,7 +154,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "20x20x1.6mm, 25x25x1.6mm, 40x40x2mm, 50x50x2mm",
     applications: "Furniture frames, guards, canopies and structures",
     availability: "in-stock",
-    featured: true,
   },
   {
     name: "Rectangular MS Pipe",
@@ -179,7 +164,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "40x20x1.6mm, 60x40x2mm, 80x40x2mm, 100x50x3mm",
     applications: "Shutters, frames, partitions and fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "GI Sheet",
@@ -190,7 +174,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "8x4 ft, 8x3 ft, custom sizes",
     applications: "Roofing, cladding, ducting and protective covers",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "GI Pipe",
@@ -201,7 +184,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "1/2 inch, 3/4 inch, 1 inch, 1.25 inch, 1.5 inch, 2 inch",
     applications: "Water lines, outdoor fencing, gas lines and gardening",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Flat",
@@ -212,7 +194,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "25x6mm, 30x6mm, 40x8mm, 50x8mm, 50x10mm",
     applications: "Brackets, strips, gate fittings and general fabrication",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "MS Rod",
@@ -223,7 +204,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "6mm, 8mm, 10mm, 12mm, 16mm, 20mm, 25mm",
     applications: "Machining, pins, studs, axles and manufacturing",
     availability: "in-stock",
-    featured: false,
   },
   {
     name: "Binding Wire",
@@ -234,7 +214,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     sizes: "0.71mm, 0.9mm, 1.0mm, 1.2mm",
     applications: "Tying reinforcement steel, baling and general binding",
     availability: "in-stock",
-    featured: true,
   },
 ];
 
@@ -271,7 +250,6 @@ export async function seedSampleData(): Promise<SeedResult> {
       sizes: product.sizes,
       applications: product.applications,
       availability: product.availability,
-      featured: product.featured,
     });
 
     productsAdded += 1;

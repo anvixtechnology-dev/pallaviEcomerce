@@ -1,4 +1,4 @@
-import { Filter, PackageSearch, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Filter, PackageSearch, RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
@@ -7,7 +7,6 @@ import { ProductGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState } from "../components/StateMessage";
 import { useSeo } from "../hooks/useSeo";
 import { usePublishedProducts } from "../hooks/useProducts";
-import { cn } from "../lib/utils";
 import { filterProducts } from "../services/productService";
 import { AVAILABILITY_LABELS, type Availability } from "../types/product";
 
@@ -39,21 +38,19 @@ export default function Products() {
 
   const [search, setSearch] = useState("");
   const [availability, setAvailability] = useState<Availability | "all">("all");
-  const [featuredOnly, setFeaturedOnly] = useState(false);
   const [sort, setSort] = useState<SortOption>("newest");
 
   const filtered = useMemo(
-    () => filterProducts(products, { search, availability, featuredOnly, sort }),
-    [products, search, availability, featuredOnly, sort],
+    () => filterProducts(products, { search, availability, sort }),
+    [products, search, availability, sort],
   );
 
   const hasActiveFilters =
-    Boolean(search.trim()) || availability !== "all" || featuredOnly || sort !== "newest";
+    Boolean(search.trim()) || availability !== "all" || sort !== "newest";
 
   const resetFilters = () => {
     setSearch("");
     setAvailability("all");
-    setFeaturedOnly(false);
     setSort("newest");
   };
 
@@ -134,21 +131,6 @@ export default function Products() {
 
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border-light pt-4">
               <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFeaturedOnly((value) => !value)}
-                  aria-pressed={featuredOnly}
-                  className={cn(
-                    "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition",
-                    featuredOnly
-                      ? "border-brand-orange bg-brand-orange text-white"
-                      : "border-border-light bg-white text-text-secondary hover:border-brand-orange/50 hover:text-charcoal",
-                  )}
-                >
-                  <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
-                  Featured only
-                </button>
-
                 <p className="text-xs text-text-secondary" role="status">
                   Showing <span className="font-semibold text-charcoal">{filtered.length}</span> of{" "}
                   <span className="font-semibold text-charcoal">{products.length}</span> products

@@ -1,4 +1,4 @@
-import { Layers, MessageCircle, Ruler, Star } from "lucide-react";
+import { Layers, MessageCircle, Ruler } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "../lib/utils";
 import { openWhatsApp } from "../lib/whatsapp";
@@ -31,12 +31,6 @@ export default function ProductCard({ product }: { product: Product }) {
           {AVAILABILITY_LABELS[product.availability]}
         </span>
         <span className="absolute top-3 right-3 flex flex-col items-end gap-1">
-          {product.featured ? (
-            <span className="flex items-center gap-1 rounded bg-brand-orange px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">
-              <Star className="h-3 w-3 fill-white text-white" aria-hidden="true" />
-              Featured
-            </span>
-          ) : null}
           {product.newArrival ? (
             <span className="rounded bg-brand-orange-dark px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase text-white">New Arrival</span>
           ) : null}

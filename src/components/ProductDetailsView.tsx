@@ -197,9 +197,6 @@ export default function ProductDetailsView({
               <span className={`rounded border px-2.5 py-1 text-xs font-semibold tracking-wide uppercase ${AVAILABILITY_STYLES[product.availability]}`}>
                 {AVAILABILITY_LABELS[product.availability]}
               </span>
-              {product.featured ? (
-                <span className="rounded bg-brand-orange-dark px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">Featured</span>
-              ) : null}
               {product.newArrival ? (
                 <span className="rounded bg-brand-orange-dark px-2.5 py-1 text-xs font-semibold tracking-wide uppercase text-white">New Arrival</span>
               ) : null}

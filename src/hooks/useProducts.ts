@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getErrorMessage } from "../lib/utils";
 import {
-  getFeaturedProducts,
   getProduct,
   getProducts,
   getPublishedProduct,
@@ -62,11 +61,6 @@ export function usePublishedProducts(): AsyncState<Product[]> & { products: Prod
 
 export function usePublishedProduct(slugOrId: string | undefined): AsyncState<Product | null> {
   return useAsync(() => getPublishedProduct(slugOrId ?? ""), [slugOrId]);
-}
-
-export function useFeaturedProducts(limit = 8): AsyncState<Product[]> & { products: Product[] } {
-  const state = useAsync(() => getFeaturedProducts(limit), [limit]);
-  return { ...state, products: state.data ?? [] };
 }
 
 /** Any product regardless of status. Admin pages only. */

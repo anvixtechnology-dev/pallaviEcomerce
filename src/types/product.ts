@@ -64,7 +64,6 @@ export interface Product {
   /** Full description. */
   description: string;
   status: ProductStatus;
-  featured: boolean;
   newArrival: boolean;
   bestSeller: boolean;
 
@@ -99,7 +98,6 @@ export interface Product {
   seoTitle: string;
   seoDescription: string;
   searchKeywords: string[];
-  showOnHomepage: boolean;
 
   createdAt?: Timestamp | null;
   updatedAt?: Timestamp | null;
@@ -115,7 +113,6 @@ export interface ProductFilters {
   search?: string;
   availability?: Availability | "all";
   status?: ProductStatus | "all";
-  featuredOnly?: boolean;
   sort?: ProductSort;
 }
 
@@ -127,7 +124,6 @@ export const EMPTY_PRODUCT_INPUT: ProductInput = {
   shortDescription: "",
   description: "",
   status: "draft",
-  featured: false,
   newArrival: false,
   bestSeller: false,
   specTemplate: "custom",
@@ -151,5 +147,4 @@ export const EMPTY_PRODUCT_INPUT: ProductInput = {
   seoTitle: "",
   seoDescription: "",
   searchKeywords: [],
-  showOnHomepage: true,
 };

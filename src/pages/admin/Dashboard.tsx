@@ -14,7 +14,7 @@ export default function Dashboard() {
   const { products, loading: productsLoading } = useProducts();
   const { enquiries, loading: enquiriesLoading, error: enquiriesError } = useEnquiries();
 
-  const featuredCount = products.filter((p) => p.featured).length;
+  const draftCount = products.filter((p) => p.status === "draft").length;
   const inStockCount = products.filter((p) => p.availability === "in-stock").length;
   const recentEnquiries = enquiries.slice(0, 6);
 
@@ -22,7 +22,7 @@ export default function Dashboard() {
     {
       label: "Total Products",
       value: productsLoading ? "—" : products.length,
-      sub: productsLoading ? "" : `${featuredCount} featured · ${inStockCount} in stock`,
+      sub: productsLoading ? "" : `${draftCount} drafts · ${inStockCount} in stock`,
       icon: Package,
       to: "/admin/products",
     },
@@ -32,13 +32,6 @@ export default function Dashboard() {
       sub: enquiriesLoading ? "" : `${enquiries.filter((e) => e.status === "new").length} new · all time`,
       icon: MessageSquare,
       to: "/admin/enquiries",
-    },
-    {
-      label: "Featured",
-      value: productsLoading ? "—" : featuredCount,
-      sub: "Showcased on homepage",
-      icon: TrendingUp,
-      to: "/admin/products",
     },
   ];
 
@@ -60,7 +53,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {stats.map(({ label, value, sub, icon: Icon, to }) => (
           <Link
             key={label}

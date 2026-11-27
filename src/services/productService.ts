@@ -38,6 +38,8 @@ interface LegacyProductFields {
   categoryName?: string;
   subcategory?: string;
   showOnCategoryPage?: boolean;
+  featured?: boolean;
+  showOnHomepage?: boolean;
 }
 
 function toProduct(snapshot: DocumentSnapshot): Product {
@@ -47,6 +49,8 @@ function toProduct(snapshot: DocumentSnapshot): Product {
     categoryName,
     subcategory: _subcategory,
     showOnCategoryPage: _showOnCategoryPage,
+    featured: _featured,
+    showOnHomepage: _showOnHomepage,
     ...data
   } = raw;
   const name = data.name ?? "";
@@ -110,15 +114,6 @@ export async function getPublishedProduct(slugOrId: string): Promise<Product | n
     if ((caught as { code?: string }).code === "permission-denied") return null;
     throw caught;
   }
-}
-
-export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
-  const snapshot = await getDocs(query(productsCollection, isPublished, where("featured", "==", true)));
-  return snapshot.docs
-    .map(toProduct)
-    .filter((product) => product.showOnHomepage)
-    .sort(byNewest)
-    .slice(0, limit);
 }
 
 /** Reserves a document id, so files can be uploaded before the record exists. */
@@ -224,13 +219,12 @@ export function matchesSearch(product: Product, term: string): boolean {
 }
 
 export function filterProducts(products: Product[], filters: ProductFilters = {}): Product[] {
-  const { search, availability, status, featuredOnly, sort = "newest" } = filters;
+  const { search, availability, status, sort = "newest" } = filters;
 
   const result = products.filter((product) => {
     if (search && !matchesSearch(product, search)) return false;
     if (availability && availability !== "all" && product.availability !== availability) return false;
     if (status && status !== "all" && product.status !== status) return false;
-    if (featuredOnly && !product.featured) return false;
     return true;
   });
 
