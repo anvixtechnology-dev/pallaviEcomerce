@@ -4,14 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { ButtonSpinner } from "../Loading";
 import ProductDetailsView from "../ProductDetailsView";
 import { useToast } from "../Toast";
-import { useCategories } from "../../hooks/useCategories";
 import {
   emptyFormValues,
   formValuesToInput,
   productToFormValues,
   type ProductFormValues,
 } from "../../lib/productForm";
-import { defaultPipeMaterial, SPEC_TEMPLATES, type SpecField } from "../../lib/productSpecs";
+import { SPEC_TEMPLATE_IDS, SPEC_TEMPLATES, type SpecField } from "../../lib/productSpecs";
 import { validateProduct, type ProductErrors } from "../../lib/productValidation";
 import { cn, getErrorMessage, slugify } from "../../lib/utils";
 import {
@@ -35,6 +34,7 @@ import {
   type ProductDocument,
   type ProductInput,
   type ProductStatus,
+  type SpecTemplateId,
   type Unit,
 } from "../../types/product";
 import {
@@ -102,7 +102,6 @@ const SECONDARY_BUTTON =
 export default function ProductForm({ mode, product, productId }: ProductFormProps) {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const { categories } = useCategories();
 
   const [values, setValues] = useState<ProductFormValues>(() => (product ? productToFormValues(product) : emptyFormValues()));
   const [errors, setErrors] = useState<ProductErrors>({});
@@ -115,9 +114,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
   const [uploadPercent, setUploadPercent] = useState<number | null>(null);
   const [previewing, setPreviewing] = useState(false);
 
-  const selectedCategory = categories.find((category) => category.id === values.categoryId);
-  const specTemplate = selectedCategory?.specTemplate ?? product?.specTemplate ?? "custom";
-  const specFields = SPEC_TEMPLATES[specTemplate].fields;
+  const specFields = SPEC_TEMPLATES[values.specTemplate].fields;
 
   const set = <K extends keyof ProductFormValues>(field: K, value: ProductFormValues[K]) => {
     setValues((current) => ({ ...current, [field]: value }));
@@ -128,20 +125,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     set(field, event.target.value as never);
-  };
-
-  const handleCategoryChange = (categoryId: string) => {
-    const category = categories.find((item) => item.id === categoryId);
-    setValues((current) => {
-      const material = category?.specTemplate === "pipes" ? defaultPipeMaterial(category.name) : "";
-      return {
-        ...current,
-        categoryId,
-        subcategory: "",
-        categorySpecs: material ? { ...current.categorySpecs, material } : current.categorySpecs,
-      };
-    });
-    setErrors((current) => ({ ...current, categoryId: undefined }));
   };
 
   const specValue = (field: SpecField): string => {
@@ -164,15 +147,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
     );
   };
 
-  // Until categories load (or if the category was deleted), keep what the product already stores.
-  const categoryForSave =
-    selectedCategory ??
-    (product && product.categoryId === values.categoryId
-      ? { name: product.categoryName, specTemplate: product.specTemplate }
-      : undefined);
-
-  const buildInput = (status: ProductStatus): ProductInput =>
-    formValuesToInput(values, categoryForSave, status, specTemplate);
+  const buildInput = (status: ProductStatus): ProductInput => formValuesToInput(values, status);
 
   const previewProduct: Product = {
     ...buildInput(values.status),
@@ -312,33 +287,18 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 <FieldError message={errors.name} />
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <FieldLabel htmlFor="product-category" required>Product Category</FieldLabel>
-                  <select id="product-category" value={values.categoryId} onChange={(event) => handleCategoryChange(event.target.value)} className={fieldClasses(errors.categoryId)}>
-                    <option value="">Select a category</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                  <FieldError message={errors.categoryId} />
-                </div>
-
-                <div>
-                  <FieldLabel htmlFor="product-subcategory">Subcategory</FieldLabel>
-                  <select
-                    id="product-subcategory"
-                    value={values.subcategory}
-                    onChange={update("subcategory")}
-                    disabled={!selectedCategory?.subcategories.length}
-                    className={cn(fieldClasses(), "disabled:bg-steel-50 disabled:text-steel-400")}
-                  >
-                    <option value="">{selectedCategory?.subcategories.length ? "Select a subcategory" : "None available"}</option>
-                    {selectedCategory?.subcategories.map((subcategory) => (
-                      <option key={subcategory} value={subcategory}>{subcategory}</option>
-                    ))}
-                  </select>
-                </div>
+              <div className="sm:w-1/2 sm:pr-2">
+                <FieldLabel htmlFor="product-spec-template">Specification Type</FieldLabel>
+                <select
+                  id="product-spec-template"
+                  value={values.specTemplate}
+                  onChange={(event) => set("specTemplate", event.target.value as SpecTemplateId)}
+                  className={fieldClasses()}
+                >
+                  {SPEC_TEMPLATE_IDS.map((id) => (
+                    <option key={id} value={id}>{SPEC_TEMPLATES[id].label}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -377,9 +337,6 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
 
           <section className={SECTION}>
             <h2 className={SECTION_TITLE}>Specifications</h2>
-            {!selectedCategory ? (
-              <p className="mt-1 text-xs text-steel-500">Select a category to see its specification fields.</p>
-            ) : null}
 
             <div className="mt-4 space-y-4">
               {specFields.length > 0 ? (
@@ -549,10 +506,7 @@ export default function ProductForm({ mode, product, productId }: ProductFormPro
                 <input id="product-keywords" type="text" value={values.searchKeywords} onChange={update("searchKeywords")} placeholder="Separate keywords with commas" className={fieldClasses()} />
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Toggle checked={values.showOnHomepage} onChange={(checked) => set("showOnHomepage", checked)}>Homepage Visibility (when featured)</Toggle>
-                <Toggle checked={values.showOnCategoryPage} onChange={(checked) => set("showOnCategoryPage", checked)}>Category Page Visibility</Toggle>
-              </div>
+              <Toggle checked={values.showOnHomepage} onChange={(checked) => set("showOnHomepage", checked)}>Homepage Visibility (when featured)</Toggle>
             </div>
           </section>
         </div>

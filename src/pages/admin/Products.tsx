@@ -5,7 +5,6 @@ import SearchBar from "../../components/SearchBar";
 import { ProductGridSkeleton } from "../../components/Loading";
 import { EmptyState, ErrorState } from "../../components/StateMessage";
 import { useToast } from "../../components/Toast";
-import { useCategories } from "../../hooks/useCategories";
 import { useSeo } from "../../hooks/useSeo";
 import { useProducts } from "../../hooks/useProducts";
 import { validateProduct } from "../../lib/productValidation";
@@ -51,11 +50,9 @@ export default function AdminProducts() {
   useSeo("Manage Products | PallaviTraders Admin");
 
   const { products, loading, error, reload } = useProducts();
-  const { categories } = useCategories();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [categoryId, setCategoryId] = useState("all");
   const [status, setStatus] = useState<ProductStatus | "all">("all");
   const [sort, setSort] = useState<ProductSort>("newest");
   const [page, setPage] = useState(1);
@@ -64,18 +61,18 @@ export default function AdminProducts() {
   const [publishingId, setPublishingId] = useState<string | null>(null);
 
   const filtered = useMemo(
-    () => filterProducts(products, { search, categoryId, status, sort }),
-    [products, search, categoryId, status, sort],
+    () => filterProducts(products, { search, status, sort }),
+    [products, search, status, sort],
   );
 
   useEffect(() => {
     setPage(1);
-  }, [search, categoryId, status, sort]);
+  }, [search, status, sort]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
   const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-  const hasFilters = Boolean(search.trim()) || categoryId !== "all" || status !== "all";
+  const hasFilters = Boolean(search.trim()) || status !== "all";
 
   const togglePublished = async (product: Product) => {
     const publishing = product.status !== "active";
@@ -133,16 +130,10 @@ export default function AdminProducts() {
         </Link>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
         <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-          <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search by name, brand, category…" />
+          <SearchBar id="admin-product-search" value={search} onChange={setSearch} placeholder="Search by name, brand, material…" />
         </div>
-        <select value={categoryId} onChange={(event) => setCategoryId(event.target.value)} aria-label="Filter by category" className={FILTER_CLASSES}>
-          <option value="all">All categories</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>{category.name}</option>
-          ))}
-        </select>
         <select value={status} onChange={(event) => setStatus(event.target.value as ProductStatus | "all")} aria-label="Filter by status" className={FILTER_CLASSES}>
           <option value="all">All statuses</option>
           {(Object.keys(PRODUCT_STATUS_LABELS) as ProductStatus[]).map((key) => (
@@ -163,11 +154,10 @@ export default function AdminProducts() {
       ) : filtered.length > 0 ? (
         <div className="overflow-hidden rounded-lg border border-steel-200 bg-white">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1080px] text-left text-sm">
+            <table className="w-full min-w-[860px] text-left text-sm">
               <thead className="bg-steel-50 text-[11px] tracking-wider text-steel-500 uppercase">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-semibold">Product</th>
-                  <th scope="col" className="px-5 py-3 font-semibold">Category</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Stock</th>
                   <th scope="col" className="px-5 py-3 font-semibold">Status</th>
                   <th scope="col" className="px-5 py-3 text-right font-semibold">Actions</th>
@@ -193,7 +183,6 @@ export default function AdminProducts() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-steel-600">{product.categoryName || "—"}</td>
                     <td className="px-5 py-3.5">
                       <span
                         className={cn(

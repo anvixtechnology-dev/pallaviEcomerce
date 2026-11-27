@@ -48,7 +48,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="flex min-w-0 flex-1 flex-col p-4">
         <p className="text-[11px] font-semibold tracking-[0.14em] text-brand-orange uppercase">
-          {product.categoryName || "Iron & Steel"}
+          Iron &amp; Steel
         </p>
         <h3 className="mt-1 font-display text-xl leading-tight font-bold break-words text-charcoal uppercase">
           <Link to={detailsUrl} className="transition group-hover:text-brand-orange">

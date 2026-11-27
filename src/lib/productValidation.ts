@@ -32,8 +32,6 @@ export function validateProduct(product: ProductInput, intent: ValidationIntent)
   }
 
   if (intent === "publish") {
-    if (!product.categoryId) errors.categoryId = "Please select a category.";
-
     if (product.description.trim().length < 10 && product.shortDescription.trim().length < 10) {
       errors.description = "Add a description of at least 10 characters.";
     }

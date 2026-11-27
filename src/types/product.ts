@@ -30,7 +30,7 @@ export const UNIT_LABELS: Record<Unit, string> = {
   set: "Set",
 };
 
-/** Which group of specification fields a category uses. See lib/productSpecs.ts. */
+/** Which group of specification fields a product uses. See lib/productSpecs.ts. */
 export type SpecTemplateId = "pipes" | "roofing" | "reveting" | "hardware" | "scrap" | "custom";
 
 export interface CustomSpec {
@@ -59,9 +59,6 @@ export interface Product {
   // Basic information
   name: string;
   slug: string;
-  categoryId: string;
-  categoryName: string;
-  subcategory: string;
   brand: string;
   shortDescription: string;
   /** Full description. */
@@ -73,7 +70,7 @@ export interface Product {
 
   // Specifications
   specTemplate: SpecTemplateId;
-  /** Values of the category template's fields, keyed by field key. */
+  /** Values of the product's specification fields, keyed by field key. */
   categorySpecs: Record<string, string>;
   customSpecs: CustomSpec[];
   /** Summary fields derived from the specs, used by cards and search. */
@@ -103,7 +100,6 @@ export interface Product {
   seoDescription: string;
   searchKeywords: string[];
   showOnHomepage: boolean;
-  showOnCategoryPage: boolean;
 
   createdAt?: Timestamp | null;
   updatedAt?: Timestamp | null;
@@ -117,7 +113,6 @@ export type ProductSort = "newest" | "oldest" | "name-asc" | "name-desc";
 
 export interface ProductFilters {
   search?: string;
-  categoryId?: string;
   availability?: Availability | "all";
   status?: ProductStatus | "all";
   featuredOnly?: boolean;
@@ -128,9 +123,6 @@ export interface ProductFilters {
 export const EMPTY_PRODUCT_INPUT: ProductInput = {
   name: "",
   slug: "",
-  categoryId: "",
-  categoryName: "",
-  subcategory: "",
   brand: "",
   shortDescription: "",
   description: "",
@@ -160,5 +152,4 @@ export const EMPTY_PRODUCT_INPUT: ProductInput = {
   seoDescription: "",
   searchKeywords: [],
   showOnHomepage: true,
-  showOnCategoryPage: true,
 };

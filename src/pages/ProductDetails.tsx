@@ -4,13 +4,13 @@ import ProductDetailsView from "../components/ProductDetailsView";
 import { PageLoader } from "../components/Loading";
 import { ErrorState, SectionHeader } from "../components/StateMessage";
 import { useSeo } from "../hooks/useSeo";
-import { usePublishedProduct, useProductsByCategory } from "../hooks/useProducts";
+import { usePublishedProduct, usePublishedProducts } from "../hooks/useProducts";
 
 export default function ProductDetails() {
   const { productId: slugOrId } = useParams<{ productId: string }>();
   const { data: product, loading, error } = usePublishedProduct(slugOrId);
-  const { products: categoryProducts } = useProductsByCategory(product?.categoryId);
-  const related = categoryProducts.filter((p) => p.id !== product?.id).slice(0, 4);
+  const { products: publishedProducts } = usePublishedProducts();
+  const related = publishedProducts.filter((p) => p.id !== product?.id).slice(0, 4);
 
   useSeo(
     product ? `${product.seoTitle || product.name} | PallaviTraders` : "Product Details | PallaviTraders",

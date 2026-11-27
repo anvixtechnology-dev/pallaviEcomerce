@@ -7,7 +7,6 @@ import WhatsAppIcon from "./WhatsAppIcon";
 const QUICK_LINKS = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
-  { to: "/categories", label: "Categories" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
 ];
@@ -27,7 +26,7 @@ export default function Footer() {
               className="h-14 w-auto max-w-full object-contain sm:h-16 lg:h-20"
             />
             <p className="mt-3 text-sm leading-relaxed text-charcoal/60">
-              Pipes &amp; Roofing Sheets for Every Construction Need.
+              Pipes &amp; Roofing Sheets.
             </p>
             <a
               href={buildWhatsAppUrl()}
@@ -70,9 +69,10 @@ export default function Footer() {
             <ul className="mt-4 space-y-3 text-sm text-charcoal/60">
               <li className="flex items-start gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" aria-hidden="true" />
-                <a href={`tel:${BUSINESS.phoneDial}`} className="transition hover:text-brand-orange">
-                  {BUSINESS.phone}
+                <a  className="transition hover:text-brand-orange">
+                  {BUSINESS.phone} , {BUSINESS.phone2}
                 </a>
+                
               </li>
               <li className="flex items-start gap-2.5">
                 <WhatsAppIcon className="mt-0.5 h-4 w-4 shrink-0 text-whatsapp" />

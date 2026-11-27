@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Boxes,
   ChevronRight,
   LayoutDashboard,
   LogOut,
@@ -18,7 +17,6 @@ import { runCatalogSetup } from "../../services/catalogSetupService";
 const NAV_ITEMS = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
   { to: "/admin/products", icon: Package, label: "Products" },
-  { to: "/admin/categories", icon: Boxes, label: "Categories" },
   { to: "/admin/enquiries", icon: BarChart3, label: "Enquiries" },
 ];
 
@@ -47,7 +45,6 @@ export default function AdminLayout() {
     setDrawerOpen(false);
   }, [pathname]);
 
-  // Pages wait for this so they load the categories it may have just added.
   useEffect(() => {
     runCatalogSetup()
       .catch((caught) => {

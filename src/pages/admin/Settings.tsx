@@ -27,7 +27,7 @@ export default function Settings() {
       const result = await seedSampleData();
       setSeedResult(result);
       showToast(
-        `Sample data ready — ${result.categoriesAdded} categor${result.categoriesAdded === 1 ? "y" : "ies"} and ${result.productsAdded} product${result.productsAdded === 1 ? "" : "s"} added.`,
+        `Sample data ready — ${result.productsAdded} product${result.productsAdded === 1 ? "" : "s"} added.`,
         "success",
       );
     } catch (caught) {
@@ -46,6 +46,7 @@ export default function Settings() {
     { label: "Business name", value: BUSINESS.name },
     { label: "Tagline", value: BUSINESS.tagline },
     { label: "Phone", value: BUSINESS.phone },
+    { label: "Alternate phone", value: BUSINESS.phone2 },
     { label: "WhatsApp number", value: WHATSAPP_NUMBER },
     { label: "Email", value: BUSINESS.email },
     { label: "Address", value: BUSINESS.address },
@@ -101,8 +102,7 @@ export default function Settings() {
           </div>
 
           <p className="mt-3 text-sm leading-relaxed text-steel-600">
-            Load the initial catalogue — 14 iron &amp; steel categories and 20 sample products — into Firestore.
-            Existing records are never overwritten.
+            Load 20 sample iron &amp; steel products into Firestore. Existing records are never overwritten.
           </p>
 
           <button
@@ -116,14 +116,14 @@ export default function Settings() {
             ) : (
               <>
                 <UploadCloud className="h-4 w-4" aria-hidden="true" />
-                Load sample categories &amp; products
+                Load sample products
               </>
             )}
           </button>
 
           {seedResult ? (
             <p className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-relaxed text-emerald-800">
-              Added {seedResult.categoriesAdded} new categories and {seedResult.productsAdded} new products
+              Added {seedResult.productsAdded} new products
               {seedResult.skipped ? ` (${seedResult.skipped} already existed and were skipped)` : ""}.
             </p>
           ) : null}
@@ -178,7 +178,7 @@ export default function Settings() {
           <ul className="mt-4 space-y-2 text-xs leading-relaxed text-steel-600">
             <li className="flex gap-2">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" aria-hidden="true" />
-              Public visitors can only read categories and published products.
+              Public visitors can only read published products.
             </li>
             <li className="flex gap-2">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" aria-hidden="true" />
@@ -196,7 +196,7 @@ export default function Settings() {
       <div className="flex items-center gap-2.5 rounded-lg border border-navy-200 bg-navy-50 px-5 py-4 text-sm text-navy-800">
         <Database className="h-4.5 w-4.5 shrink-0" aria-hidden="true" />
         <p>
-          All products, categories and enquiries are stored in <strong>Cloud Firestore</strong>; images are stored in{" "}
+          All products and enquiries are stored in <strong>Cloud Firestore</strong>; images are stored in{" "}
           <strong>Firebase Storage</strong>.
         </p>
       </div>

@@ -6,7 +6,6 @@ import SearchBar from "../components/SearchBar";
 import { ProductGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState } from "../components/StateMessage";
 import { useSeo } from "../hooks/useSeo";
-import { useCategories } from "../hooks/useCategories";
 import { usePublishedProducts } from "../hooks/useProducts";
 import { cn } from "../lib/utils";
 import { filterProducts } from "../services/productService";
@@ -37,25 +36,22 @@ export default function Products() {
   );
 
   const { products, loading, error, reload } = usePublishedProducts();
-  const { categories } = useCategories();
 
   const [search, setSearch] = useState("");
-  const [categoryId, setCategoryId] = useState("all");
   const [availability, setAvailability] = useState<Availability | "all">("all");
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [sort, setSort] = useState<SortOption>("newest");
 
   const filtered = useMemo(
-    () => filterProducts(products, { search, categoryId, availability, featuredOnly, sort }),
-    [products, search, categoryId, availability, featuredOnly, sort],
+    () => filterProducts(products, { search, availability, featuredOnly, sort }),
+    [products, search, availability, featuredOnly, sort],
   );
 
   const hasActiveFilters =
-    Boolean(search.trim()) || categoryId !== "all" || availability !== "all" || featuredOnly || sort !== "newest";
+    Boolean(search.trim()) || availability !== "all" || featuredOnly || sort !== "newest";
 
   const resetFilters = () => {
     setSearch("");
-    setCategoryId("all");
     setAvailability("all");
     setFeaturedOnly(false);
     setSort("newest");
@@ -86,7 +82,7 @@ export default function Products() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Filters */}
           <div className="rounded-lg border border-border-light bg-white p-4 shadow-sm sm:p-5">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
               <div className="min-w-0 sm:col-span-2 lg:col-span-1">
                 <label htmlFor="product-search" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
                   Search
@@ -97,25 +93,6 @@ export default function Products() {
                   onChange={setSearch}
                   placeholder="Search by name, material, size (e.g. 50x50)…"
                 />
-              </div>
-
-              <div className="min-w-0">
-                <label htmlFor="category-filter" className="mb-1.5 block text-xs font-semibold tracking-wide text-text-secondary uppercase">
-                  Category
-                </label>
-                <select
-                  id="category-filter"
-                  value={categoryId}
-                  onChange={(event) => setCategoryId(event.target.value)}
-                  className={SELECT_CLASSES}
-                >
-                  <option value="all">All categories</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               <div className="min-w-0">

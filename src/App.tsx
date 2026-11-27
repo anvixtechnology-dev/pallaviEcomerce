@@ -4,15 +4,12 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./components/PublicLayout";
 import { ToastProvider } from "./components/Toast";
 import About from "./pages/About";
-import Categories from "./pages/Categories";
-import CategoryProducts from "./pages/CategoryProducts";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProductDetails from "./pages/ProductDetails";
 import Products from "./pages/Products";
 import AddProduct from "./pages/admin/AddProduct";
-import AdminCategories from "./pages/admin/Categories";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import EditProduct from "./pages/admin/EditProduct";
@@ -33,8 +30,6 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:productId" element={<ProductDetails />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/categories/:categoryId" element={<CategoryProducts />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
@@ -49,7 +44,6 @@ export default function App() {
                 <Route path="products/add" element={<AddProduct />} />
                 <Route path="products/:productId/edit" element={<EditProduct />} />
                 <Route path="products/:productId/preview" element={<PreviewProduct />} />
-                <Route path="categories" element={<AdminCategories />} />
                 <Route path="enquiries" element={<AdminEnquiries />} />
                 <Route path="settings" element={<Settings />} />
               </Route>

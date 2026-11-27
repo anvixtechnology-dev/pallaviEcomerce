@@ -31,7 +31,7 @@ const VALUES = [
   },
 ];
 
-const PRODUCT_CATEGORIES = [
+const PRODUCT_TYPES = [
   "Pipes",
 "MS Angles", "Channels & Beams",
 "MS Plates", "Flats & Rods",
@@ -179,12 +179,12 @@ export default function About() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {PRODUCT_CATEGORIES.map((cat) => (
+            {PRODUCT_TYPES.map((type) => (
               <span
-                key={cat}
+                key={type}
                 className="rounded-full border border-border-light bg-white px-4 py-1.5 text-sm font-medium text-text-secondary shadow-sm transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
               >
-                {cat}
+                {type}
               </span>
             ))}
           </div>

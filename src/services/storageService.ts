@@ -122,13 +122,6 @@ export function uploadProductDocument(
   return uploadWithProgress(`products/${productId}/documents/${kind}-${uniqueName()}.pdf`, file, onProgress);
 }
 
-/** Cloudinary: pallavi/categories/{categoryId}/main-image (overwritten on change;
- * the returned URL is versioned, so browsers pick up the new image). */
-export async function uploadCategoryImage(categoryId: string, file: File): Promise<string> {
-  assertValidImage(file);
-  return uploadToCloudinary(file, `${CLOUDINARY_ROOT}/categories/${categoryId}`, { publicId: "main-image" });
-}
-
 async function deleteFolderContents(folderRef: ReturnType<typeof ref>): Promise<void> {
   const result = await listAll(folderRef);
   await Promise.all(result.items.map((item) => deleteObject(item)));
@@ -157,13 +150,6 @@ export async function deleteProductImages(productId: string): Promise<void> {
   await Promise.all([
     deleteCloudinaryFolderQuietly(`${CLOUDINARY_ROOT}/products/${productId}`),
     deleteStorageFolder(`products/${productId}`),
-  ]);
-}
-
-export async function deleteCategoryImages(categoryId: string): Promise<void> {
-  await Promise.all([
-    deleteCloudinaryFolderQuietly(`${CLOUDINARY_ROOT}/categories/${categoryId}`),
-    deleteStorageFolder(`categories/${categoryId}`),
   ]);
 }
 

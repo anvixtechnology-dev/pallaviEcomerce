@@ -17,8 +17,7 @@ import { slugify } from "./utils";
 export interface ProductFormValues {
   name: string;
   slug: string;
-  categoryId: string;
-  subcategory: string;
+  specTemplate: SpecTemplateId;
   brand: string;
   shortDescription: string;
   description: string;
@@ -41,7 +40,6 @@ export interface ProductFormValues {
   seoDescription: string;
   searchKeywords: string;
   showOnHomepage: boolean;
-  showOnCategoryPage: boolean;
 }
 
 function numberToField(value: number): string {
@@ -54,8 +52,7 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
   return {
     name: product.name,
     slug: product.slug,
-    categoryId: product.categoryId,
-    subcategory: product.subcategory,
+    specTemplate: product.specTemplate,
     brand: product.brand,
     shortDescription: product.shortDescription,
     description: product.description,
@@ -78,7 +75,6 @@ export function productToFormValues(product: ProductInput | Product): ProductFor
     seoDescription: product.seoDescription,
     searchKeywords: product.searchKeywords.join(", "),
     showOnHomepage: product.showOnHomepage,
-    showOnCategoryPage: product.showOnCategoryPage,
   };
 }
 
@@ -91,13 +87,8 @@ function fieldToNumber(value: string): number {
 }
 
 /** Builds the record to store, excluding images and documents (added on save). */
-export function formValuesToInput(
-  values: ProductFormValues,
-  category: { name: string; specTemplate: SpecTemplateId } | undefined,
-  status: ProductStatus,
-  fallbackTemplate: SpecTemplateId,
-): ProductInput {
-  const specTemplate = category?.specTemplate ?? fallbackTemplate;
+export function formValuesToInput(values: ProductFormValues, status: ProductStatus): ProductInput {
+  const specTemplate = values.specTemplate;
   const categorySpecs = pickTemplateSpecs(specTemplate, values.categorySpecs);
   const customSpecs = values.customSpecs
     .map((spec) => ({ name: spec.name.trim(), value: spec.value.trim() }))
@@ -111,9 +102,6 @@ export function formValuesToInput(
     ...EMPTY_PRODUCT_INPUT,
     name: values.name.trim(),
     slug: slugify(values.slug || values.name),
-    categoryId: values.categoryId,
-    categoryName: category?.name ?? "",
-    subcategory: values.subcategory,
     brand: values.brand.trim(),
     shortDescription: values.shortDescription.trim(),
     description: values.description.trim(),
@@ -146,6 +134,5 @@ export function formValuesToInput(
       .map((keyword) => keyword.trim())
       .filter(Boolean),
     showOnHomepage: values.showOnHomepage,
-    showOnCategoryPage: values.showOnCategoryPage,
   };
 }

@@ -17,7 +17,7 @@ import { createHash } from "node:crypto";
 
 const FIREBASE_PROJECT_ID = "pallaviecomerce";
 const ROOT_FOLDER = "pallavi";
-const FOLDER_PATTERN = new RegExp(`^${ROOT_FOLDER}/(products|categories)/[A-Za-z0-9_-]{1,128}$`);
+const FOLDER_PATTERN = new RegExp(`^${ROOT_FOLDER}/products/[A-Za-z0-9_-]{1,128}$`);
 const PUBLIC_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
 const MAX_DELETE_IDS = 100;
 

@@ -112,8 +112,6 @@ export default function ProductDetailsView({
   const images = [product.imageUrl, ...product.additionalImages].filter(Boolean);
 
   const summary = [
-    { icon: Tag, label: "Category", value: product.categoryName },
-    { icon: Tag, label: "Subcategory", value: product.subcategory },
     { icon: Tag, label: "Brand", value: product.brand },
     { icon: Package, label: "Availability", value: AVAILABILITY_LABELS[product.availability] },
   ].filter((row) => Boolean(row.value));
@@ -137,14 +135,6 @@ export default function ProductDetailsView({
               <Link to="/products" className="transition hover:text-brand-orange">
                 Products
               </Link>
-              {product.categoryName ? (
-                <>
-                  <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-                  <Link to={`/categories/${product.categoryId}`} className="transition hover:text-brand-orange">
-                    {product.categoryName}
-                  </Link>
-                </>
-              ) : null}
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="min-w-0 max-w-[160px] truncate font-medium text-charcoal sm:max-w-xs">{product.name}</span>
             </nav>
@@ -193,9 +183,9 @@ export default function ProductDetailsView({
 
           {/* Info */}
           <div className="min-w-0">
-            {product.categoryName ? (
+            {product.type ? (
               <span className="inline-block rounded-full border border-brand-orange/30 bg-brand-orange/10 px-3 py-0.5 text-xs font-semibold tracking-wide text-brand-orange uppercase">
-                {product.categoryName}
+                {product.type}
               </span>
             ) : null}
 

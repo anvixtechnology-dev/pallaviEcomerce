@@ -48,22 +48,6 @@ export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
   );
 }
 
-export function CategoryGridSkeleton({ count = 8 }: { count?: number }) {
-  return (
-    <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-lg border border-border-grey bg-white">
-          <div className="skeleton aspect-[16/10] w-full" />
-          <div className="space-y-2 p-4">
-            <div className="skeleton h-4 w-2/3 rounded" />
-            <div className="skeleton h-3 w-full rounded" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function TableSkeleton({ rows = 6 }: { rows?: number }) {
   return (
     <div className="overflow-hidden rounded-lg border border-border-grey bg-white">

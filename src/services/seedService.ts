@@ -1,12 +1,10 @@
-import { inferSpecTemplate, normalizeCategoryName } from "../lib/productSpecs";
+import { inferSpecTemplate } from "../lib/productSpecs";
 import { slugify } from "../lib/utils";
 import { EMPTY_PRODUCT_INPUT } from "../types/product";
-import { createCategory, getCategories } from "./categoryService";
 import { addProduct, getProducts } from "./productService";
 
 interface SampleProduct {
   name: string;
-  category: string;
   description: string;
   material: string;
   type: string;
@@ -17,27 +15,9 @@ interface SampleProduct {
   featured: boolean;
 }
 
-export const SAMPLE_CATEGORIES: Array<{ name: string; description: string }> = [
-  { name: "TMT Bars", description: "High strength TMT reinforcement bars for concrete structures." },
-  { name: "MS Angles", description: "Mild steel angles for fabrication, framing and general construction." },
-  { name: "MS Channels", description: "Mild steel channels for structural and support applications." },
-  { name: "MS Beams", description: "Mild steel beams for heavy structural and industrial work." },
-  { name: "MS Plates", description: "Mild steel plates for machining, fabrication and engineering." },
-  { name: "MS Flats", description: "Mild steel flat bars for brackets, strips and general fabrication." },
-  { name: "MS Rods", description: "Mild steel round rods for machining and manufacturing." },
-  { name: "MS Pipes", description: "Mild steel pipes for plumbing, fencing and structural use." },
-  { name: "GI Pipes", description: "Galvanised iron pipes with corrosion resistant zinc coating." },
-  { name: "GI Sheets", description: "Galvanised iron sheets for roofing, cladding and fabrication." },
-  { name: "Binding Wire", description: "Annealed binding wire for concrete reinforcement fixing." },
-  { name: "Steel Sections", description: "Standard steel sections for engineering and construction." },
-  { name: "Structural Steel", description: "Structural steel members for buildings and infrastructure." },
-  { name: "Other Iron & Steel Materials", description: "Additional iron and steel material requirements." },
-];
-
 export const SAMPLE_PRODUCTS: SampleProduct[] = [
   {
     name: "Fe 500 TMT Bar",
-    category: "TMT Bars",
     description: "Fe 500 grade TMT reinforcement bar with uniform rib pattern for strong bonding with concrete.",
     material: "TMT Steel",
     type: "TMT Bar",
@@ -49,7 +29,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "Fe 500D TMT Bar",
-    category: "TMT Bars",
     description: "Fe 500D ductile TMT bar designed for earthquake resistant structures with higher elongation.",
     material: "TMT Steel",
     type: "TMT Bar",
@@ -61,7 +40,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Angle 25x25",
-    category: "MS Angles",
     description: "Equal leg mild steel angle for light fabrication, supports and brackets.",
     material: "Mild Steel",
     type: "Equal Angle",
@@ -73,7 +51,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Angle 40x40",
-    category: "MS Angles",
     description: "Equal leg mild steel angle widely used for frames, gates and structural supports.",
     material: "Mild Steel",
     type: "Equal Angle",
@@ -85,7 +62,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Angle 50x50",
-    category: "MS Angles",
     description: "High quality mild steel angle suitable for construction and fabrication work.",
     material: "Mild Steel",
     type: "Equal Angle",
@@ -97,7 +73,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Angle 65x65",
-    category: "MS Angles",
     description: "Heavy duty equal leg mild steel angle for structural and industrial applications.",
     material: "Mild Steel",
     type: "Equal Angle",
@@ -109,7 +84,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Channel 75",
-    category: "MS Channels",
     description: "Mild steel channel for framing, panel supports and light structural work.",
     material: "Mild Steel",
     type: "ISMC Channel",
@@ -121,7 +95,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Channel 100",
-    category: "MS Channels",
     description: "Mild steel channel commonly used in construction and fabrication projects.",
     material: "Mild Steel",
     type: "ISMC Channel",
@@ -133,7 +106,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Channel 125",
-    category: "MS Channels",
     description: "Heavy mild steel channel for structural framing and industrial applications.",
     material: "Mild Steel",
     type: "ISMC Channel",
@@ -145,7 +117,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Plate 3mm",
-    category: "MS Plates",
     description: "Mild steel plate for sheet metal work, covers and light fabrication.",
     material: "Mild Steel",
     type: "Hot Rolled Plate",
@@ -157,7 +128,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Plate 5mm",
-    category: "MS Plates",
     description: "Mild steel plate for general fabrication, base plates and engineering work.",
     material: "Mild Steel",
     type: "Hot Rolled Plate",
@@ -169,7 +139,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Plate 6mm",
-    category: "MS Plates",
     description: "Mild steel plate for heavy fabrication, machinery bases and structural use.",
     material: "Mild Steel",
     type: "Hot Rolled Plate",
@@ -181,7 +150,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "Round MS Pipe",
-    category: "MS Pipes",
     description: "Circular mild steel pipe for fencing, railings, plumbing and fabrication.",
     material: "Mild Steel",
     type: "Round Pipe",
@@ -193,7 +161,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "Square MS Pipe",
-    category: "MS Pipes",
     description: "Square mild steel hollow section for frames, guards and structures.",
     material: "Mild Steel",
     type: "Square Hollow Section",
@@ -205,7 +172,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "Rectangular MS Pipe",
-    category: "MS Pipes",
     description: "Rectangular mild steel hollow section for frames, shutters and fabrication.",
     material: "Mild Steel",
     type: "Rectangular Hollow Section",
@@ -217,7 +183,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "GI Sheet",
-    category: "GI Sheets",
     description: "Galvanised iron sheet for roofing, cladding and weather protected fabrication.",
     material: "Galvanised Iron",
     type: "GI Sheet",
@@ -229,7 +194,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "GI Pipe",
-    category: "GI Pipes",
     description: "Galvanised iron pipe with corrosion resistant coating for water and outdoor use.",
     material: "Galvanised Iron",
     type: "GI Pipe",
@@ -241,7 +205,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Flat",
-    category: "MS Flats",
     description: "Mild steel flat bar for brackets, strips, keys and general fabrication.",
     material: "Mild Steel",
     type: "Flat Bar",
@@ -253,7 +216,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "MS Rod",
-    category: "MS Rods",
     description: "Mild steel round rod for machining, pins, studs and manufacturing use.",
     material: "Mild Steel",
     type: "Round Bar",
@@ -265,7 +227,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
   },
   {
     name: "Binding Wire",
-    category: "Binding Wire",
     description: "Annealed soft binding wire for tying reinforcement bars on construction sites.",
     material: "Mild Steel",
     type: "Annealed Binding Wire",
@@ -278,33 +239,14 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
 ];
 
 export interface SeedResult {
-  categoriesAdded: number;
   productsAdded: number;
   skipped: number;
 }
 
-/** Loads the initial sample categories and products into Firestore.
- * Runs from the admin dashboard (authenticated admin only). */
+/** Loads the sample products into Firestore.
+ * Runs from admin settings (authenticated admin only). */
 export async function seedSampleData(): Promise<SeedResult> {
-  const [existingCategories, existingProducts] = await Promise.all([getCategories(), getProducts()]);
-
-  const categoryIdByName = new Map(
-    existingCategories.map((category) => [normalizeCategoryName(category.name), category.id]),
-  );
-  let categoriesAdded = 0;
-
-  for (const category of SAMPLE_CATEGORIES) {
-    if (categoryIdByName.has(normalizeCategoryName(category.name))) continue;
-    const id = await createCategory({
-      ...category,
-      imageUrl: "",
-      subcategories: [],
-      specTemplate: inferSpecTemplate(category.name),
-    });
-    categoryIdByName.set(normalizeCategoryName(category.name), id);
-    categoriesAdded += 1;
-  }
-
+  const existingProducts = await getProducts();
   const existingNames = new Set(existingProducts.map((product) => product.name.toLowerCase()));
   let productsAdded = 0;
   let skipped = 0;
@@ -315,20 +257,12 @@ export async function seedSampleData(): Promise<SeedResult> {
       continue;
     }
 
-    const categoryId = categoryIdByName.get(normalizeCategoryName(product.category)) ?? "";
-    if (!categoryId) {
-      skipped += 1;
-      continue;
-    }
-
     await addProduct({
       ...EMPTY_PRODUCT_INPUT,
       name: product.name,
       slug: slugify(product.name),
       status: "active",
-      categoryId,
-      categoryName: product.category,
-      specTemplate: inferSpecTemplate(product.category),
+      specTemplate: inferSpecTemplate(product.type),
       shortDescription: product.description,
       description: product.description,
       material: product.material,
@@ -343,5 +277,5 @@ export async function seedSampleData(): Promise<SeedResult> {
     productsAdded += 1;
   }
 
-  return { categoriesAdded, productsAdded, skipped };
+  return { productsAdded, skipped };
 }

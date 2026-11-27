@@ -4,7 +4,6 @@ import {
   getFeaturedProducts,
   getProduct,
   getProducts,
-  getProductsByCategory,
   getPublishedProduct,
   getPublishedProducts,
 } from "../services/productService";
@@ -73,11 +72,4 @@ export function useFeaturedProducts(limit = 8): AsyncState<Product[]> & { produc
 /** Any product regardless of status. Admin pages only. */
 export function useProduct(productId: string | undefined): AsyncState<Product | null> {
   return useAsync(() => getProduct(productId ?? ""), [productId]);
-}
-
-export function useProductsByCategory(categoryId: string | undefined): AsyncState<Product[]> & {
-  products: Product[];
-} {
-  const state = useAsync(() => getProductsByCategory(categoryId ?? ""), [categoryId]);
-  return { ...state, products: state.data ?? [] };
 }

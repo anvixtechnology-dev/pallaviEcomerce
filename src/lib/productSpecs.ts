@@ -7,7 +7,7 @@ export interface SpecField {
   input: "text" | "number" | "select" | "combo";
   options?: string[];
   unit?: string;
-  /** Stored on the product itself rather than in categorySpecs, so the field
+  /** Stored on the product itself rather than in spec values, so the field
    * stays in sync with the matching field elsewhere on the form. */
   linkedTo?: "brand";
 }
@@ -109,10 +109,10 @@ export const SPEC_TEMPLATES: Record<SpecTemplateId, { label: string; fields: Spe
 
 export const SPEC_TEMPLATE_IDS = Object.keys(SPEC_TEMPLATES) as SpecTemplateId[];
 
-/** Picks the spec template for a category from its name, e.g. for categories
- * that existed before templates were introduced. */
-export function inferSpecTemplate(categoryName: string): SpecTemplateId {
-  const name = categoryName.toLowerCase();
+/** Picks the spec template from a product name for records saved before
+ * templates were introduced. */
+export function inferSpecTemplate(productName: string): SpecTemplateId {
+  const name = productName.toLowerCase();
   if (name.includes("pipe")) return "pipes";
   if (name.includes("roof")) return "roofing";
   if (name.includes("revet") || name.includes("rivet")) return "reveting";
@@ -121,21 +121,8 @@ export function inferSpecTemplate(categoryName: string): SpecTemplateId {
   return "custom";
 }
 
-/** "G.I. Pipes" and "GI Pipes" are the same category. */
-export function normalizeCategoryName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
-/** Pre-selects GI or MS when a pipe category is chosen. */
-export function defaultPipeMaterial(categoryName: string): string {
-  const name = normalizeCategoryName(categoryName);
-  if (name.startsWith("gi")) return "GI";
-  if (name.startsWith("ms")) return "MS";
-  return "";
-}
-
-/** Keeps only the values belonging to the template, so switching category
- * does not leave stale attributes behind. */
+/** Keeps only the values belonging to the template, so switching it does not
+ * leave stale attributes behind. */
 export function pickTemplateSpecs(template: SpecTemplateId, specs: Record<string, string>): Record<string, string> {
   const picked: Record<string, string> = {};
   for (const field of SPEC_TEMPLATES[template].fields) {

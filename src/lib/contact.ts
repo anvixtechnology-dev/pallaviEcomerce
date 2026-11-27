@@ -10,6 +10,8 @@ export const BUSINESS = {
   tagline: "Quality Pipes and Roofing Sheets for Every Construction Need",
   phone: "+91 99635 22888",
   phoneDial: "+919963522888",
+  phone2: "+91 97050 11208",
+  phone2Dial: "+919705011208",
   whatsappNumber: WHATSAPP_NUMBER,
   whatsappDisplay: "+91 99635 22888",
   email: "pallaviirontradersbvrm@gmail.com",

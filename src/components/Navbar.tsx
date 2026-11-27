@@ -8,7 +8,6 @@ import WhatsAppIcon from "./WhatsAppIcon";
 const DESKTOP_NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
-  { to: "/categories", label: "Categories" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
@@ -16,7 +15,6 @@ const DESKTOP_NAV_LINKS = [
 const MOBILE_NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Products" },
-  { to: "/categories", label: "Categories" },
   { to: "/about", label: "About" },
 ];
 

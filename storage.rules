@@ -37,12 +37,6 @@ service firebase.storage {
       allow delete: if isAdmin();
     }
 
-    // Category images: admin managed, images only, max 5 MB.
-    match /categories/{categoryId}/{fileName} {
-      allow create, update: if isAdmin() && validImage();
-      allow delete: if isAdmin();
-    }
-
     // Every object in this bucket is a public catalogue file, so reads
     // (get and list) are public. The multi-segment wildcard matches both
     // individual file paths and folder list/listAll requests.

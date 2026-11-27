@@ -1,13 +1,11 @@
-import { ArrowRight, Boxes, ChevronLeft, ChevronRight, HardHat, MessageCircle, PackageSearch, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, HardHat, MessageCircle, PackageSearch, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import CategoryCard from "../components/CategoryCard";
 import ProductCard from "../components/ProductCard";
-import { CategoryGridSkeleton, ProductGridSkeleton } from "../components/Loading";
+import { ProductGridSkeleton } from "../components/Loading";
 import { EmptyState, ErrorState, SectionHeader } from "../components/StateMessage";
 import WhatsAppIcon from "../components/WhatsAppIcon";
 import { useSeo } from "../hooks/useSeo";
-import { useCategories } from "../hooks/useCategories";
 import { useFeaturedProducts } from "../hooks/useProducts";
 import { openWhatsApp } from "../lib/whatsapp";
 
@@ -142,9 +140,7 @@ export default function Home() {
     "PallaviTraders offers a wide range of iron, steel and construction materials. Browse our product catalogue and contact us for availability and quotations.",
   );
 
-  const { categories, loading: categoriesLoading, error: categoriesError, reload: reloadCategories } = useCategories();
   const { products: featured, loading: featuredLoading, error: featuredError, reload: reloadFeatured } = useFeaturedProducts(8);
-  const visibleCategories = categories.slice(0, 8);
 
   return (
     <>
@@ -177,11 +173,8 @@ export default function Home() {
           </span>
 
           {/* Heading */}
-          <h1 className="max-w-full font-display text-[1.75rem] font-bold leading-[1.1] break-words text-charcoal uppercase xs:text-3xl sm:text-5xl md:text-6xl">
-            Quality{" "}
-            <span className="text-brand-orange">Pipes</span>
-            <br className="hidden sm:block" />
-            {" "}and Roofing Sheets
+          <h1 className="max-w-full whitespace-nowrap font-display text-[1.4rem] font-bold leading-[1.1] text-charcoal uppercase xs:text-2xl sm:text-5xl md:text-6xl">
+            <span className="text-brand-orange">Quality Pipes</span> and Roofing Sheets
           </h1>
 
           {/* Advertisement thumbnails */}
@@ -214,7 +207,7 @@ export default function Home() {
           <div className="mt-6 grid w-full max-w-sm grid-cols-3 gap-2 sm:mt-12 sm:max-w-none sm:gap-14">
             {[
               { value: "500+", label: "Products" },
-              { value: "10+", label: "Categories" },
+              { value: "2003", label: "Trusted Since" },
               { value: "Fast", label: "WhatsApp Response" },
             ].map((stat) => (
               <div key={stat.label} className="min-w-0 text-center">
@@ -237,34 +230,6 @@ export default function Home() {
           <li>Binding Wire</li>
         </ul>
       </div>
-
-      {/* ── CATEGORIES ── */}
-      <section className="bg-white py-14 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="Product Catalogue"
-            title="Shop by Category"
-            description="Browse iron and steel materials by category. Select a category to view the full range."
-            to="/categories"
-            actionLabel="View all categories"
-            tone="light"
-          />
-          {categoriesLoading ? <CategoryGridSkeleton count={8} />
-            : categoriesError ? <ErrorState message={categoriesError} onRetry={reloadCategories} />
-            : visibleCategories.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {visibleCategories.map((category) => <CategoryCard key={category.id} category={category} />)}
-              </div>
-            ) : (
-              <EmptyState icon={Boxes} title="Categories coming soon"
-                description="Our catalogue is being updated. Contact us on WhatsApp for the materials you need.">
-                <button type="button" onClick={() => openWhatsApp()} className="btn-glass-whatsapp">
-                  <WhatsAppIcon className="h-4 w-4" />Contact on WhatsApp
-                </button>
-              </EmptyState>
-            )}
-        </div>
-      </section>
 
       {/* ── FEATURED PRODUCTS ── */}
       <section className="bg-surface-cream py-14 sm:py-16">

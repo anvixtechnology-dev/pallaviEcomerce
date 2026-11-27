@@ -1,9 +1,8 @@
-import { Boxes, MessageSquare, Package, Plus, TrendingUp } from "lucide-react";
+import { MessageSquare, Package, Plus, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { TableSkeleton } from "../../components/Loading";
 import { ErrorState } from "../../components/StateMessage";
 import { useSeo } from "../../hooks/useSeo";
-import { useCategories } from "../../hooks/useCategories";
 import { useEnquiries } from "../../hooks/useEnquiries";
 import { useProducts } from "../../hooks/useProducts";
 import { formatTimestamp } from "../../lib/utils";
@@ -13,7 +12,6 @@ export default function Dashboard() {
   useSeo("Dashboard | PallaviTraders Admin", "");
 
   const { products, loading: productsLoading } = useProducts();
-  const { categories, loading: categoriesLoading } = useCategories();
   const { enquiries, loading: enquiriesLoading, error: enquiriesError } = useEnquiries();
 
   const featuredCount = products.filter((p) => p.featured).length;
@@ -27,13 +25,6 @@ export default function Dashboard() {
       sub: productsLoading ? "" : `${featuredCount} featured · ${inStockCount} in stock`,
       icon: Package,
       to: "/admin/products",
-    },
-    {
-      label: "Categories",
-      value: categoriesLoading ? "—" : categories.length,
-      sub: "Product categories",
-      icon: Boxes,
-      to: "/admin/categories",
     },
     {
       label: "Enquiries",
@@ -57,7 +48,7 @@ export default function Dashboard() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold uppercase text-charcoal sm:text-3xl">Dashboard</h1>
-          <p className="mt-1 text-sm text-steel-grey">Overview of products, categories and enquiries.</p>
+          <p className="mt-1 text-sm text-steel-grey">Overview of products and enquiries.</p>
         </div>
         <Link
           to="/admin/products/add"
@@ -100,13 +91,6 @@ export default function Dashboard() {
           >
             <Package className="h-4 w-4" aria-hidden="true" />
             New Product
-          </Link>
-          <Link
-            to="/admin/categories"
-            className="inline-flex items-center gap-2 rounded-md border border-border-grey bg-white px-4 py-2.5 text-sm font-semibold text-charcoal transition hover:border-brand-orange hover:bg-brand-orange hover:text-white"
-          >
-            <Boxes className="h-4 w-4" aria-hidden="true" />
-            Manage Categories
           </Link>
           <Link
             to="/admin/enquiries"

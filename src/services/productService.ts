@@ -33,8 +33,22 @@ const isPublished = where("status", "==", "active");
 
 const BATCH_LIMIT = 400;
 
+interface LegacyProductFields {
+  categoryId?: string;
+  categoryName?: string;
+  subcategory?: string;
+  showOnCategoryPage?: boolean;
+}
+
 function toProduct(snapshot: DocumentSnapshot): Product {
-  const data = (snapshot.data() ?? {}) as Partial<Product>;
+  const raw = (snapshot.data() ?? {}) as Partial<Product> & LegacyProductFields;
+  const {
+    categoryId: _categoryId,
+    categoryName,
+    subcategory: _subcategory,
+    showOnCategoryPage: _showOnCategoryPage,
+    ...data
+  } = raw;
   const name = data.name ?? "";
   const description = data.description ?? "";
 
@@ -46,7 +60,7 @@ function toProduct(snapshot: DocumentSnapshot): Product {
     description,
     // Records saved before the pricing module were live and enquiry based.
     status: data.status ?? "active",
-    specTemplate: data.specTemplate ?? inferSpecTemplate(data.categoryName ?? ""),
+    specTemplate: data.specTemplate ?? inferSpecTemplate(categoryName ?? name),
     categorySpecs: data.categorySpecs ?? {},
     customSpecs: Array.isArray(data.customSpecs) ? data.customSpecs : [],
     additionalImages: Array.isArray(data.additionalImages) ? data.additionalImages : [],
@@ -107,14 +121,6 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
     .slice(0, limit);
 }
 
-export async function getProductsByCategory(categoryId: string): Promise<Product[]> {
-  const snapshot = await getDocs(query(productsCollection, isPublished, where("categoryId", "==", categoryId)));
-  return snapshot.docs
-    .map(toProduct)
-    .filter((product) => product.showOnCategoryPage)
-    .sort(byNewest);
-}
-
 /** Reserves a document id, so files can be uploaded before the record exists. */
 export function newProductId(): string {
   return doc(productsCollection).id;
@@ -146,18 +152,6 @@ export async function updateProduct(productId: string, patch: ProductPatch): Pro
 
 export async function deleteProduct(productId: string): Promise<void> {
   await deleteDoc(doc(db, "products", productId));
-}
-
-/** Keeps the name stored on each product in step with a renamed category. */
-export async function syncProductCategoryName(categoryId: string, categoryName: string): Promise<void> {
-  const snapshot = await getDocs(query(productsCollection, where("categoryId", "==", categoryId)));
-  for (let start = 0; start < snapshot.docs.length; start += BATCH_LIMIT) {
-    const batch = writeBatch(db);
-    for (const item of snapshot.docs.slice(start, start + BATCH_LIMIT)) {
-      batch.update(item.ref, { categoryName });
-    }
-    await batch.commit();
-  }
 }
 
 /** Adds a numeric suffix if another product already uses the slug. */
@@ -212,8 +206,6 @@ export function matchesSearch(product: Product, term: string): boolean {
   const haystack = [
     product.name,
     product.brand,
-    product.categoryName,
-    product.subcategory,
     product.material,
     product.type,
     product.shortDescription,
@@ -232,11 +224,10 @@ export function matchesSearch(product: Product, term: string): boolean {
 }
 
 export function filterProducts(products: Product[], filters: ProductFilters = {}): Product[] {
-  const { search, categoryId, availability, status, featuredOnly, sort = "newest" } = filters;
+  const { search, availability, status, featuredOnly, sort = "newest" } = filters;
 
   const result = products.filter((product) => {
     if (search && !matchesSearch(product, search)) return false;
-    if (categoryId && categoryId !== "all" && product.categoryId !== categoryId) return false;
     if (availability && availability !== "all" && product.availability !== availability) return false;
     if (status && status !== "all" && product.status !== status) return false;
     if (featuredOnly && !product.featured) return false;

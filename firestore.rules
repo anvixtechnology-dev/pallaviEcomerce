@@ -22,7 +22,6 @@ service cloud.firestore {
         && d.name.size() >= 3
         && d.name.size() <= 200
         && d.slug is string
-        && d.categoryId is string
         && d.shortDescription is string
         && d.shortDescription.size() <= 1000
         && d.description is string
@@ -35,9 +34,7 @@ service cloud.firestore {
         && d.imageUrl is string
         && d.additionalImages is list
         && d.documents is list
-        && nonNegative(d.availableQuantity)
-        // A live product must be complete enough for customers to see it.
-        && (d.status != 'active' || d.categoryId.size() > 0);
+        && nonNegative(d.availableQuantity);
     }
 
     // ------------------------------------------------------------------
@@ -62,25 +59,6 @@ service cloud.firestore {
       allow list: if resource.data.status == 'active' || isAdmin();
 
       allow create, update: if isAdmin() && validProduct();
-
-      allow delete: if isAdmin();
-    }
-
-    // ------------------------------------------------------------------
-    // Categories — public catalogue, admin managed
-    // ------------------------------------------------------------------
-    match /categories/{categoryId} {
-      allow read: if true;
-
-      allow create: if isAdmin()
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 3
-        && request.resource.data.name.size() <= 100;
-
-      allow update: if isAdmin()
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 3
-        && request.resource.data.name.size() <= 100;
 
       allow delete: if isAdmin();
     }
